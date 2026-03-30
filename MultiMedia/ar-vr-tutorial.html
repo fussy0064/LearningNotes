@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AR & VR in Multimedia — Interactive Tutorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@300;400;600;700&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #03050a;
+  --deep: #070d18;
+  --surface: #0d1525;
+  --panel: #111e35;
+  --vr: #00e5ff;
+  --vr-dim: rgba(0,229,255,0.12);
+  --vr-glow: rgba(0,229,255,0.4);
+  --ar: #ff6b2b;
+  --ar-dim: rgba(255,107,43,0.12);
+  --ar-glow: rgba(255,107,43,0.4);
+  --xr: #a855f7;
+  --xr-dim: rgba(168,85,247,0.12);
+  --text: #c8d8f0;
+  --text-dim: rgba(200,216,240,0.45);
+  --border: rgba(200,216,240,0.08);
+  --border-vr: rgba(0,229,255,0.2);
+  --border-ar: rgba(255,107,43,0.2);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--void);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CUSTOM CURSOR ── */
+#cursor {
+  position: fixed; width: 10px; height: 10px;
+  background: var(--vr); border-radius: 50%; pointer-events: none;
+  z-index: 9999; transform: translate(-50%, -50%);
+  transition: transform 0.1s, background 0.2s;
+  box-shadow: 0 0 12px var(--vr), 0 0 24px var(--vr-glow);
+  mix-blend-mode: screen;
+}
+#cursor-ring {
+  position: fixed; width: 32px; height: 32px;
+  border: 1px solid rgba(0,229,255,0.4); border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.18s ease-out, width 0.2s, height 0.2s, border-color 0.2s;
+}
+
+/* ── PROGRESS BAR ── */
+#progress {
+  position: fixed; top: 0; left: 0; height: 2px;
+  background: linear-gradient(90deg, var(--vr), var(--ar));
+  z-index: 1000; width: 0;
+  box-shadow: 0 0 10px var(--vr);
+  transition: width 0.1s;
+}
+
+/* ── GRID BACKGROUND ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 60px;
+  background: linear-gradient(180deg, rgba(3,5,10,0.95) 0%, transparent 100%);
+  backdrop-filter: blur(4px);
+}
+.nav-logo {
+  font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
+  letter-spacing: 4px; color: var(--vr);
+  text-shadow: 0 0 20px var(--vr-glow);
+}
+.nav-links { display: flex; gap: 32px; }
+.nav-links a {
+  font-family: 'Syne Mono', monospace; font-size: 11px; letter-spacing: 2px;
+  color: var(--text-dim); text-decoration: none; text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--vr); }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  padding: 120px 40px 80px; position: relative; overflow: hidden;
+}
+
+.hero-orb {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  animation: pulse 6s ease-in-out infinite;
+}
+.orb-vr {
+  width: 600px; height: 600px; left: -200px; top: 50%; transform: translateY(-50%);
+  background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
+  animation-delay: 0s;
+}
+.orb-ar {
+  width: 500px; height: 500px; right: -150px; top: 50%; transform: translateY(-50%);
+  background: radial-gradient(circle, rgba(255,107,43,0.08) 0%, transparent 70%);
+  animation-delay: -3s;
+}
+@keyframes pulse {
+  0%, 100% { transform: translateY(-50%) scale(1); opacity: 1; }
+  50% { transform: translateY(-50%) scale(1.15); opacity: 0.7; }
+}
+
+.hero-eyebrow {
+  font-family: 'Syne Mono', monospace; font-size: 11px; letter-spacing: 4px;
+  color: var(--vr); text-transform: uppercase; margin-bottom: 32px;
+  opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+}
+.hero-title {
+  font-family: 'Orbitron', monospace; font-size: clamp(48px, 8vw, 110px);
+  font-weight: 900; line-height: 1.0; margin-bottom: 8px;
+  opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+}
+.hero-title .vr-text {
+  color: var(--vr);
+  text-shadow: 0 0 40px var(--vr-glow), 0 0 80px rgba(0,229,255,0.2);
+}
+.hero-title .ar-text {
+  color: var(--ar);
+  text-shadow: 0 0 40px var(--ar-glow), 0 0 80px rgba(255,107,43,0.2);
+}
+.hero-title .sep {
+  color: rgba(200,216,240,0.2); font-size: 0.6em;
+}
+.hero-sub {
+  font-size: 17px; color: var(--text-dim); max-width: 560px;
+  margin: 24px auto 56px; line-height: 1.8;
+  opacity: 0; animation: fadeUp 0.9s 0.7s forwards;
+}
+.hero-badges {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.9s 0.9s forwards;
+}
+.badge {
+  font-family: 'Syne Mono', monospace; font-size: 11px; letter-spacing: 2px;
+  padding: 10px 22px; border: 1px solid; border-radius: 2px;
+  text-transform: uppercase; cursor: pointer; transition: all 0.25s; text-decoration: none;
+}
+.badge-vr { border-color: var(--border-vr); color: var(--vr); background: var(--vr-dim); }
+.badge-vr:hover { background: var(--vr); color: var(--void); box-shadow: 0 0 20px var(--vr-glow); }
+.badge-ar { border-color: var(--border-ar); color: var(--ar); background: var(--ar-dim); }
+.badge-ar:hover { background: var(--ar); color: var(--void); box-shadow: 0 0 20px var(--ar-glow); }
+.badge-xr { border-color: rgba(168,85,247,0.3); color: var(--xr); background: var(--xr-dim); }
+.badge-xr:hover { background: var(--xr); color: white; box-shadow: 0 0 20px rgba(168,85,247,0.5); }
+.badge-quiz { border-color: var(--border); color: var(--text-dim); }
+.badge-quiz:hover { border-color: var(--text-dim); color: var(--text); }
+
+.scroll-hint {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  font-family: 'Syne Mono', monospace; font-size: 10px; letter-spacing: 3px;
+  color: var(--text-dim); text-transform: uppercase;
+  opacity: 0; animation: fadeIn 1s 1.5s forwards;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(180deg, var(--vr), transparent);
+  animation: scrollAnim 2s ease-in-out infinite;
+}
+@keyframes scrollAnim {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ── SECTIONS ── */
+.section {
+  padding: 100px 60px; max-width: 1200px; margin: 0 auto;
+  position: relative; z-index: 1;
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.7s, transform 0.7s;
+}
+.section.visible { opacity: 1; transform: translateY(0); }
+.section-full { max-width: none; padding: 100px 0; }
+
+.section-tag {
+  font-family: 'Syne Mono', monospace; font-size: 10px; letter-spacing: 4px;
+  text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;
+}
+.section-tag::after {
+  content: ''; flex: 1; height: 1px; max-width: 80px;
+  background: currentColor; opacity: 0.3;
+}
+.section-title {
+  font-family: 'Orbitron', monospace; font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700; line-height: 1.1; margin-bottom: 32px;
+}
+
+/* ── VR SECTION ── */
+#vr-sec { border-left: 1px solid var(--border-vr); padding-left: 60px; margin-left: 60px; }
+#vr-sec .section-tag { color: var(--vr); }
+#vr-sec .section-title { color: white; }
+#vr-sec .section-title span { color: var(--vr); text-shadow: 0 0 30px var(--vr-glow); }
+
+/* ── AR SECTION ── */
+#ar-sec { border-left: 1px solid var(--border-ar); padding-left: 60px; margin-left: 60px; }
+#ar-sec .section-tag { color: var(--ar); }
+#ar-sec .section-title { color: white; }
+#ar-sec .section-title span { color: var(--ar); text-shadow: 0 0 30px var(--ar-glow); }
+
+/* ── XR SECTION ── */
+#xr-sec .section-tag { color: var(--xr); }
+#xr-sec .section-title span { color: var(--xr); }
+
+/* ── PANELS ── */
+.panels { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin: 40px 0; }
+.panel {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 28px; border-radius: 4px; position: relative; overflow: hidden;
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.panel::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+}
+.panel:hover { transform: translateY(-6px); }
+.panel-vr::before { background: var(--vr); }
+.panel-ar::before { background: var(--ar); }
+.panel-xr::before { background: var(--xr); }
+.panel-vr:hover { border-color: var(--border-vr); box-shadow: 0 20px 60px rgba(0,229,255,0.08); }
+.panel-ar:hover { border-color: var(--border-ar); box-shadow: 0 20px 60px rgba(255,107,43,0.08); }
+.panel-xr:hover { border-color: rgba(168,85,247,0.2); }
+.panel:hover::before { transform: scaleX(1); }
+.panel-icon { font-size: 30px; margin-bottom: 16px; }
+.panel-title { font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700; margin-bottom: 10px; letter-spacing: 1px; }
+.panel-text { font-size: 14px; color: var(--text-dim); line-height: 1.75; }
+
+/* ── HOW IT WORKS ── */
+.how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; margin: 40px 0; }
+@media (max-width: 800px) { .how-grid { grid-template-columns: 1fr; } }
+
+.step-chain { display: flex; flex-direction: column; gap: 0; }
+.chain-step {
+  display: flex; gap: 20px; position: relative; padding-bottom: 28px;
+}
+.chain-step:last-child { padding-bottom: 0; }
+.chain-left { display: flex; flex-direction: column; align-items: center; }
+.chain-dot {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne Mono', monospace; font-size: 11px; font-weight: 700;
+}
+.dot-vr { background: var(--vr-dim); border: 1px solid var(--border-vr); color: var(--vr); }
+.dot-ar { background: var(--ar-dim); border: 1px solid var(--border-ar); color: var(--ar); }
+.chain-line {
+  width: 1px; flex: 1; margin-top: 4px;
+  background: linear-gradient(180deg, var(--border-vr), transparent);
+}
+.chain-line-ar { background: linear-gradient(180deg, var(--border-ar), transparent); }
+.chain-content { padding-top: 6px; }
+.chain-label { font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+.chain-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+
+/* ── VISUAL DIAGRAM ── */
+.diagram {
+  background: var(--deep); border: 1px solid var(--border);
+  border-radius: 8px; padding: 40px; text-align: center; position: relative;
+  overflow: hidden;
+}
+.diagram-vr { border-color: var(--border-vr); }
+.diagram-ar { border-color: var(--border-ar); }
+.diagram::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,229,255,0.04) 0%, transparent 70%);
+}
+.diagram-ar::before {
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(255,107,43,0.05) 0%, transparent 70%);
+}
+.diagram-label {
+  font-family: 'Syne Mono', monospace; font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; margin-bottom: 28px;
+}
+.diagram-label-vr { color: var(--vr); }
+.diagram-label-ar { color: var(--ar); }
+
+/* VR Headset SVG diagram */
+.vr-visual { position: relative; display: inline-block; }
+.vr-headset {
+  width: 180px; height: 90px; background: linear-gradient(135deg, #1a2535, #0d1525);
+  border: 2px solid rgba(0,229,255,0.4); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  margin: 0 auto 20px; position: relative;
+  box-shadow: 0 0 30px rgba(0,229,255,0.15), inset 0 0 20px rgba(0,229,255,0.05);
+}
+.vr-lens {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,229,255,0.3), rgba(0,229,255,0.05));
+  border: 2px solid rgba(0,229,255,0.5);
+  animation: lensGlow 2s ease-in-out infinite;
+}
+@keyframes lensGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(0,229,255,0.4); }
+  50% { box-shadow: 0 0 30px rgba(0,229,255,0.7), 0 0 60px rgba(0,229,255,0.3); }
+}
+.vr-arrows {
+  display: flex; justify-content: center; gap: 24px; font-size: 12px;
+  font-family: 'Syne Mono', monospace; color: var(--text-dim);
+}
+.arrow-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.arrow-line {
+  width: 2px; height: 30px;
+  background: linear-gradient(180deg, var(--vr), transparent);
+  animation: flow 1.5s ease-in-out infinite;
+}
+.arrow-line:nth-child(2) { animation-delay: 0.3s; }
+.arrow-line:nth-child(3) { animation-delay: 0.6s; }
+@keyframes flow {
+  0% { opacity: 0.3; transform: scaleY(0.6); }
+  50% { opacity: 1; transform: scaleY(1); }
+  100% { opacity: 0.3; transform: scaleY(0.6); }
+}
+.arrow-label { font-size: 9px; color: var(--text-dim); letter-spacing: 1px; }
+
+/* AR camera visual */
+.ar-visual { position: relative; }
+.ar-frame {
+  width: 160px; height: 110px; border: 2px solid rgba(255,107,43,0.4);
+  border-radius: 8px; margin: 0 auto 16px; position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #1a1008, #0d0a05);
+}
+.ar-scanline {
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: rgba(255,107,43,0.6);
+  animation: scan 2s linear infinite;
+  box-shadow: 0 0 10px var(--ar-glow);
+}
+@keyframes scan {
+  0% { top: 0; opacity: 1; }
+  95% { top: calc(100% - 2px); opacity: 1; }
+  100% { top: calc(100% - 2px); opacity: 0; }
+}
+.ar-corners::before, .ar-corners::after {
+  content: ''; position: absolute; width: 16px; height: 16px;
+  border-color: var(--ar); border-style: solid;
+}
+.ar-corners::before { top: 6px; left: 6px; border-width: 2px 0 0 2px; }
+.ar-corners::after { bottom: 6px; right: 6px; border-width: 0 2px 2px 0; }
+.ar-object {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 50px; height: 50px;
+  background: rgba(255,107,43,0.15); border: 1px solid rgba(255,107,43,0.5);
+  border-radius: 4px; display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  animation: arFloat 3s ease-in-out infinite;
+}
+@keyframes arFloat {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -52%) scale(1.05); }
+}
+
+/* ── COMPARISON TABLE ── */
+.compare-wrap { overflow-x: auto; margin: 40px 0; }
+.compare {
+  width: 100%; border-collapse: collapse;
+  font-size: 14px;
+}
+.compare th {
+  padding: 14px 24px; text-align: left;
+  font-family: 'Syne Mono', monospace; font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.th-feature { color: var(--text-dim); }
+.th-vr { color: var(--vr); }
+.th-ar { color: var(--ar); }
+.compare td { padding: 14px 24px; border-bottom: 1px solid var(--border); color: var(--text-dim); }
+.compare td:first-child { color: var(--text); font-weight: 600; }
+.compare tr:hover td { background: rgba(255,255,255,0.02); }
+.compare tr:last-child td { border-bottom: none; }
+.pill {
+  display: inline-block; padding: 3px 10px; border-radius: 2px;
+  font-family: 'Syne Mono', monospace; font-size: 10px; letter-spacing: 1px;
+}
+.pill-vr { background: var(--vr-dim); color: var(--vr); border: 1px solid var(--border-vr); }
+.pill-ar { background: var(--ar-dim); color: var(--ar); border: 1px solid var(--border-ar); }
+.pill-both {
+  background: rgba(168,85,247,0.1); color: var(--xr);
+  border: 1px solid rgba(168,85,247,0.25);
+}
+
+/* ── APPLICATIONS GRID ── */
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2px; margin: 40px 0;
+}
+.app-tile {
+  background: var(--panel); padding: 28px 24px; cursor: default;
+  transition: all 0.2s; position: relative; overflow: hidden;
+}
+.app-tile::after {
+  content: ''; position: absolute; inset: 0; opacity: 0;
+  transition: opacity 0.3s;
+}
+.app-vr::after { background: linear-gradient(135deg, var(--vr-dim), transparent); }
+.app-ar::after { background: linear-gradient(135deg, var(--ar-dim), transparent); }
+.app-tile:hover::after { opacity: 1; }
+.app-tile:hover { transform: scale(1.02); z-index: 2; }
+.app-icon { font-size: 28px; margin-bottom: 14px; position: relative; z-index: 1; }
+.app-name {
+  font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
+  letter-spacing: 1px; margin-bottom: 8px; position: relative; z-index: 1;
+}
+.app-name-vr { color: var(--vr); }
+.app-name-ar { color: var(--ar); }
+.app-desc { font-size: 13px; color: var(--text-dim); line-height: 1.65; position: relative; z-index: 1; }
+
+/* ── XR BANNER ── */
+.xr-banner {
+  margin: 80px 60px;
+  background: linear-gradient(135deg, rgba(168,85,247,0.08) 0%, rgba(0,229,255,0.04) 50%, rgba(255,107,43,0.05) 100%);
+  border: 1px solid rgba(168,85,247,0.2);
+  padding: 60px; border-radius: 8px; text-align: center; position: relative; overflow: hidden;
+}
+.xr-banner::before {
+  content: 'XR'; position: absolute;
+  font-family: 'Orbitron', monospace; font-size: 200px; font-weight: 900;
+  color: rgba(168,85,247,0.04); line-height: 1;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  pointer-events: none; user-select: none;
+}
+.xr-banner h2 {
+  font-family: 'Orbitron', monospace; font-size: clamp(24px, 3vw, 40px);
+  font-weight: 700; color: white; margin-bottom: 20px;
+}
+.xr-banner h2 span { color: var(--xr); text-shadow: 0 0 30px rgba(168,85,247,0.5); }
+.xr-banner p { font-size: 16px; color: var(--text-dim); max-width: 680px; margin: 0 auto 32px; line-height: 1.8; }
+.xr-trio { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; }
+.xr-item { text-align: center; }
+.xr-item-icon { font-size: 32px; margin-bottom: 10px; }
+.xr-item-label {
+  font-family: 'Orbitron', monospace; font-size: 12px; font-weight: 700;
+  letter-spacing: 2px; margin-bottom: 6px;
+}
+.xr-item-sub { font-size: 12px; color: var(--text-dim); }
+
+/* ── PRESENCE BOX ── */
+.presence-box {
+  margin: 40px 0;
+  border: 1px solid rgba(168,85,247,0.25); padding: 40px;
+  background: linear-gradient(135deg, rgba(168,85,247,0.05), transparent);
+  border-radius: 4px; position: relative; overflow: hidden;
+}
+.presence-box::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, var(--vr), var(--xr), var(--ar));
+}
+.presence-title {
+  font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 700;
+  color: var(--xr); letter-spacing: 2px; margin-bottom: 16px;
+}
+.presence-text { font-size: 15px; color: var(--text-dim); line-height: 1.85; }
+.presence-text strong { color: var(--text); }
+
+/* ── QUIZ ── */
+#quiz-sec {
+  padding: 100px 60px;
+  background: var(--deep);
+  position: relative; overflow: hidden; z-index: 1;
+}
+#quiz-sec::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.quiz-wrap { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+.quiz-header { text-align: center; margin-bottom: 48px; }
+.quiz-card {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 40px; border-radius: 6px; position: relative; overflow: hidden;
+}
+.quiz-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--vr), var(--ar));
+}
+.quiz-q {
+  font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 600;
+  margin-bottom: 28px; line-height: 1.6; color: white;
+}
+.quiz-opts { display: flex; flex-direction: column; gap: 10px; }
+.quiz-opt {
+  padding: 14px 20px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 3px;
+  cursor: pointer; font-family: 'Syne', sans-serif; font-size: 14px;
+  color: var(--text-dim); text-align: left; transition: all 0.2s;
+}
+.quiz-opt:hover:not(:disabled) { border-color: rgba(0,229,255,0.3); color: var(--vr); background: var(--vr-dim); }
+.quiz-opt.correct { background: rgba(0,255,128,0.08); border-color: rgba(0,255,128,0.4); color: #00ff80; }
+.quiz-opt.wrong { background: rgba(255,60,60,0.08); border-color: rgba(255,60,60,0.3); color: #ff6060; }
+.quiz-fb {
+  margin-top: 20px; padding: 14px 18px; border-radius: 3px;
+  font-size: 13px; line-height: 1.7; display: none;
+  font-family: 'Syne', sans-serif;
+}
+.quiz-fb.correct { background: rgba(0,255,128,0.07); border: 1px solid rgba(0,255,128,0.2); color: rgba(0,255,128,0.9); display: block; }
+.quiz-fb.wrong { background: rgba(255,96,96,0.07); border: 1px solid rgba(255,96,96,0.2); color: rgba(255,96,96,0.9); display: block; }
+.quiz-next {
+  margin-top: 20px; padding: 12px 28px;
+  background: transparent; border: 1px solid var(--vr);
+  color: var(--vr); font-family: 'Syne Mono', monospace; font-size: 12px;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+  transition: all 0.2s; display: none;
+}
+.quiz-next:hover { background: var(--vr); color: var(--void); box-shadow: 0 0 20px var(--vr-glow); }
+.quiz-meta {
+  margin-top: 20px; font-family: 'Syne Mono', monospace; font-size: 11px;
+  color: var(--text-dim); display: flex; justify-content: space-between;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--void); border-top: 1px solid var(--border);
+  padding: 40px 60px; display: flex; justify-content: space-between; align-items: center;
+  font-family: 'Syne Mono', monospace; font-size: 11px; color: var(--text-dim);
+  letter-spacing: 2px; flex-wrap: wrap; gap: 12px; position: relative; z-index: 1;
+}
+footer span.v { color: var(--vr); }
+footer span.a { color: var(--ar); }
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn { to { opacity: 1; } }
+
+/* ── UTILITY ── */
+p { margin-bottom: 16px; font-size: 15px; color: var(--text-dim); }
+strong { color: var(--text); font-weight: 600; }
+h3 {
+  font-family: 'Orbitron', monospace; font-size: 16px; font-weight: 700;
+  letter-spacing: 1px; margin: 40px 0 16px; color: white;
+}
+.mt { margin-top: 40px; }
+.mb { margin-bottom: 40px; }
+
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .section, #vr-sec, #ar-sec { padding: 60px 24px; margin-left: 0; border-left: none; padding-left: 24px; }
+  .xr-banner { margin: 40px 24px; padding: 40px 24px; }
+  #quiz-sec { padding: 60px 24px; }
+  footer { padding: 28px 24px; }
+  .apps-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<div id="progress"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">AR/VR — TUTORIAL</div>
+  <div class="nav-links">
+    <a href="#vr-sec">Virtual Reality</a>
+    <a href="#ar-sec">Augmented Reality</a>
+    <a href="#compare">Compare</a>
+    <a href="#xr-banner">Extended Reality</a>
+    <a href="#quiz-sec">Quiz</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-orb orb-vr"></div>
+  <div class="hero-orb orb-ar"></div>
+  <div class="hero-eyebrow">Multimedia Technologies — Immersive Realities</div>
+  <h1 class="hero-title">
+    <span class="vr-text">VR</span>
+    <span class="sep"> &amp; </span>
+    <span class="ar-text">AR</span>
+  </h1>
+  <p class="hero-sub">From virtual environments that replace reality to digital overlays that enhance it — a complete guide to immersive technologies in multimedia.</p>
+  <div class="hero-badges">
+    <a class="badge badge-vr" href="#vr-sec">Virtual Reality</a>
+    <a class="badge badge-ar" href="#ar-sec">Augmented Reality</a>
+    <a class="badge badge-xr" href="#xr-banner">Extended Reality</a>
+    <a class="badge badge-quiz" href="#quiz-sec">↓ Take Quiz</a>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- VR SECTION -->
+<div class="section visible" id="vr-sec">
+  <div class="section-tag">Module 01 — Virtual Reality</div>
+  <h2 class="section-title"><span>Virtual</span> Reality</h2>
+  <p>VR creates a <strong>fully synthetic, immersive digital environment</strong> that completely replaces the user's real-world surroundings. The user wears a headset that tracks head movement and renders a 360° scene in real time — creating the sensation of being physically inside another world.</p>
+  <p>Unlike watching a video on a screen, VR puts you <em>inside</em> the content. Your movements, direction of gaze, and position are all tracked and reflected in the virtual environment in real time.</p>
+
+  <div class="how-grid">
+    <div>
+      <h3>HOW VR WORKS</h3>
+      <div class="step-chain">
+        <div class="chain-step">
+          <div class="chain-left"><div class="chain-dot dot-vr">01</div><div class="chain-line"></div></div>
+          <div class="chain-content"><div class="chain-label">Stereoscopic Rendering</div><div class="chain-desc">Two slightly offset images are rendered — one per eye — creating the illusion of 3D depth, just like natural human binocular vision.</div></div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-left"><div class="chain-dot dot-vr">02</div><div class="chain-line"></div></div>
+          <div class="chain-content"><div class="chain-label">Head Tracking</div><div class="chain-desc">Gyroscopes, accelerometers, and cameras track every rotation and movement of the head, updating the rendered scene instantly to maintain immersion.</div></div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-left"><div class="chain-dot dot-vr">03</div><div class="chain-line"></div></div>
+          <div class="chain-content"><div class="chain-label">Spatial Audio</div><div class="chain-desc">Binaural audio makes sounds appear to come from specific directions in 3D space — footsteps from the left, voices from above — reinforcing presence.</div></div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-left"><div class="chain-dot dot-vr">04</div></div>
+          <div class="chain-content"><div class="chain-label">Controller Interaction</div><div class="chain-desc">Hand controllers or hand-tracking cameras allow the user to reach out and manipulate virtual objects naturally within the environment.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="diagram diagram-vr">
+      <div class="diagram-label diagram-label-vr">VR HEADSET SYSTEM</div>
+      <div class="vr-visual">
+        <div class="vr-headset">
+          <div class="vr-lens"></div>
+          <div class="vr-lens"></div>
+        </div>
+        <div class="vr-arrows">
+          <div class="arrow-item">
+            <div class="arrow-line"></div>
+            <div class="arrow-label">DISPLAY</div>
+          </div>
+          <div class="arrow-item">
+            <div class="arrow-line"></div>
+            <div class="arrow-label">TRACKING</div>
+          </div>
+          <div class="arrow-item">
+            <div class="arrow-line"></div>
+            <div class="arrow-label">AUDIO</div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:24px; font-size:12px; color:var(--text-dim); text-align:center; margin-bottom:0;">360° environment rendered at 90+ FPS to prevent motion sickness</p>
+    </div>
+  </div>
+
+  <h3>VR HARDWARE</h3>
+  <div class="panels">
+    <div class="panel panel-vr">
+      <div class="panel-icon">🥽</div>
+      <div class="panel-title" style="color:var(--vr);">Standalone Headsets</div>
+      <div class="panel-text">Self-contained units with built-in processing. No PC or cables required. <strong>Examples:</strong> Meta Quest 3, PlayStation VR2</div>
+    </div>
+    <div class="panel panel-vr">
+      <div class="panel-icon">💻</div>
+      <div class="panel-title" style="color:var(--vr);">PC-Tethered Headsets</div>
+      <div class="panel-text">Connected to a powerful PC for maximum graphical fidelity. <strong>Examples:</strong> HTC Vive Pro, Valve Index</div>
+    </div>
+    <div class="panel panel-vr">
+      <div class="panel-icon">🎮</div>
+      <div class="panel-title" style="color:var(--vr);">Motion Controllers</div>
+      <div class="panel-text">Hand-tracked wands with buttons, triggers, and haptic feedback for natural object interaction in virtual space.</div>
+    </div>
+    <div class="panel panel-vr">
+      <div class="panel-icon">🏃</div>
+      <div class="panel-title" style="color:var(--vr);">Movement Systems</div>
+      <div class="panel-text">Room-scale tracking, omnidirectional treadmills, and haptic suits that translate full-body movement into the virtual world.</div>
+    </div>
+  </div>
+
+  <h3>VR APPLICATIONS IN MULTIMEDIA</h3>
+  <div class="apps-grid">
+    <div class="app-tile app-vr"><div class="app-icon">🎮</div><div class="app-name app-name-vr">Gaming</div><div class="app-desc">Fully immersive game worlds where the player exists inside the environment, not just controls a character on screen.</div></div>
+    <div class="app-tile app-vr"><div class="app-icon">🎓</div><div class="app-name app-name-vr">Education</div><div class="app-desc">Students practice surgery, explore ancient civilizations, or conduct chemistry experiments — all risk-free in virtual environments.</div></div>
+    <div class="app-tile app-vr"><div class="app-icon">✈️</div><div class="app-name app-name-vr">Training</div><div class="app-desc">Flight simulators, military scenarios, emergency response — high-stakes training at zero real-world risk or cost.</div></div>
+    <div class="app-tile app-vr"><div class="app-icon">🏗️</div><div class="app-name app-name-vr">Architecture</div><div class="app-desc">Clients walk through a building before a single brick is laid. Design flaws caught early save enormous costs.</div></div>
+    <div class="app-tile app-vr"><div class="app-icon">🎬</div><div class="app-name app-name-vr">Entertainment</div><div class="app-desc">Cinematic VR, 360° films, virtual concerts, and social spaces where audiences attend events from anywhere on earth.</div></div>
+    <div class="app-tile app-vr"><div class="app-icon">🧠</div><div class="app-name app-name-vr">Therapy</div><div class="app-desc">Exposure therapy for phobias, PTSD treatment, pain management, and anxiety reduction through controlled virtual scenarios.</div></div>
+  </div>
+</div>
+
+<!-- AR SECTION -->
+<div class="section" id="ar-sec">
+  <div class="section-tag">Module 02 — Augmented Reality</div>
+  <h2 class="section-title"><span>Augmented</span> Reality</h2>
+  <p>AR <strong>overlays digital content onto the real world</strong> rather than replacing it. The user continues to see their physical environment, but computer-generated images, animations, data, or 3D objects are superimposed on top — through a phone camera, smart glasses, or a mixed-reality headset.</p>
+  <p>The key distinction from VR: <strong>you never leave the real world.</strong> AR enhances your existing environment rather than constructing a new one.</p>
+
+  <div class="how-grid">
+    <div>
+      <h3>HOW AR WORKS</h3>
+      <div class="step-chain">
+        <div class="chain-step">
+          <div class="chain-left"><div class="chain-dot dot-ar">01</div><div class="chain-line chain-line-ar"></div></div>
+          <div class="chain-content"><div class="chain-label">Scene Capture</div><div class="chain-desc">The device camera continuously captures the real-world environment as live video, feeding it into the AR processing pipeline.</div></div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-left"><div class="chain-dot dot-ar">02</div><div class="chain-line chain-line-ar"></div></div>
+          <div class="chain-content"><div class="chain-label">World Understanding</div><div class="chain-desc">Computer vision algorithms detect surfaces, planes, objects, lighting conditions, and spatial anchors in the real scene in real time.</div></div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-left"><div class="chain-dot dot-ar">03</div><div class="chain-line chain-line-ar"></div></div>
+          <div class="chain-content"><div class="chain-label">Digital Rendering</div><div class="chain-desc">3D objects, animations, text, or UI elements are rendered and precisely anchored to real-world positions — respecting lighting and perspective.</div></div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-left"><div class="chain-dot dot-ar">04</div></div>
+          <div class="chain-content"><div class="chain-label">Composite Display</div><div class="chain-desc">The real-world camera feed and rendered digital elements are composited together into a single view and shown on screen or through optical lenses.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="diagram diagram-ar">
+      <div class="diagram-label" style="color:var(--ar);">AR CAMERA PIPELINE</div>
+      <div class="ar-visual">
+        <div class="ar-frame">
+          <div class="ar-corners"></div>
+          <div class="ar-scanline"></div>
+          <div class="ar-object">📦</div>
+        </div>
+      </div>
+      <p style="margin-top:16px; font-size:12px; color:var(--text-dim); text-align:center; margin-bottom:0;">Real-world camera feed + anchored 3D objects rendered at 60+ FPS</p>
+    </div>
+  </div>
+
+  <h3>AR HARDWARE</h3>
+  <div class="panels">
+    <div class="panel panel-ar">
+      <div class="panel-icon">📱</div>
+      <div class="panel-title" style="color:var(--ar);">Smartphones & Tablets</div>
+      <div class="panel-text">The most accessible form. ARKit (Apple) and ARCore (Google) enable AR on billions of existing devices. No special hardware needed.</div>
+    </div>
+    <div class="panel panel-ar">
+      <div class="panel-icon">👓</div>
+      <div class="panel-title" style="color:var(--ar);">Smart Glasses</div>
+      <div class="panel-text">Optical see-through displays that overlay content onto real-world vision. <strong>Examples:</strong> Microsoft HoloLens 2, Magic Leap 2</div>
+    </div>
+    <div class="panel panel-ar">
+      <div class="panel-icon">🚗</div>
+      <div class="panel-title" style="color:var(--ar);">HUD Displays</div>
+      <div class="panel-text">Heads-Up Displays in cars, aircraft, and military equipment project navigation, speed, and targeting data onto the windshield or visor.</div>
+    </div>
+    <div class="panel panel-ar">
+      <div class="panel-icon">🖥️</div>
+      <div class="panel-title" style="color:var(--ar);">WebAR</div>
+      <div class="panel-text">AR experiences delivered directly through web browsers without app installation, using WebXR API for maximum reach.</div>
+    </div>
+  </div>
+
+  <h3>AR APPLICATIONS IN MULTIMEDIA</h3>
+  <div class="apps-grid">
+    <div class="app-tile app-ar"><div class="app-icon">🛋️</div><div class="app-name app-name-ar">Retail</div><div class="app-desc">IKEA, Wayfair, and Amazon let shoppers place virtual furniture in their actual rooms before buying — eliminating purchase uncertainty.</div></div>
+    <div class="app-tile app-ar"><div class="app-icon">📚</div><div class="app-name app-name-ar">Education</div><div class="app-desc">Anatomy apps overlay 3D organs onto textbook pages. History apps bring museum artifacts to life with contextual information.</div></div>
+    <div class="app-tile app-ar"><div class="app-icon">🎮</div><div class="app-name app-name-ar">Gaming</div><div class="app-desc">Pokémon GO placed virtual creatures in real streets, pioneering location-based AR gaming played by hundreds of millions globally.</div></div>
+    <div class="app-tile app-ar"><div class="app-icon">🗺️</div><div class="app-name app-name-ar">Navigation</div><div class="app-desc">AR directions displayed on the road ahead through a windshield or phone screen, replacing abstract 2D maps with contextual real-world guidance.</div></div>
+    <div class="app-tile app-ar"><div class="app-icon">🏥</div><div class="app-name app-name-ar">Medicine</div><div class="app-desc">Surgeons overlay pre-operative imaging onto the patient in real time. Nurses locate veins with AR-assisted vascular displays.</div></div>
+    <div class="app-tile app-ar"><div class="app-icon">📣</div><div class="app-name app-name-ar">Marketing</div><div class="app-desc">Product packaging that triggers 3D animations. Try-on apps for glasses, makeup, and clothing. AR-powered print advertising.</div></div>
+  </div>
+</div>
+
+<!-- COMPARISON -->
+<div class="section" id="compare">
+  <div class="section-tag" style="color:var(--text-dim);">Module 03 — Side by Side</div>
+  <h2 class="section-title" style="color:white;">AR <span style="color:var(--text-dim)">vs</span> VR <span style="font-size:0.6em; color:var(--text-dim)">— At a Glance</span></h2>
+
+  <div class="compare-wrap">
+    <table class="compare">
+      <thead>
+        <tr>
+          <th class="th-feature">Feature</th>
+          <th class="th-vr">Virtual Reality</th>
+          <th class="th-ar">Augmented Reality</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Environment</td><td>Fully synthetic, replaces reality</td><td>Real world with digital overlay</td></tr>
+        <tr><td>Hardware Required</td><td><span class="pill pill-vr">Headset Required</span></td><td><span class="pill pill-ar">Smartphone / Glasses</span></td></tr>
+        <tr><td>Immersion Level</td><td>Total — 100% virtual</td><td>Partial — real + digital</td></tr>
+        <tr><td>Real-World Visibility</td><td>None — completely blocked</td><td>Full — user sees surroundings</td></tr>
+        <tr><td>Content Type</td><td>3D environments, worlds</td><td>Overlaid objects, text, animations</td></tr>
+        <tr><td>Mobility</td><td>Limited — tethered or room-scale</td><td>High — phone-based, always-on</td></tr>
+        <tr><td>Technical Complexity</td><td>High — rendering full worlds</td><td>Medium — compositing over video</td></tr>
+        <tr><td>Primary Use</td><td>Training, gaming, therapy, simulation</td><td>Retail, navigation, education, marketing</td></tr>
+        <tr><td>Mass Consumer Adoption</td><td>Growing — headset market expanding</td><td>High — billions of AR-capable phones</td></tr>
+        <tr><td>Shared in XR?</td><td><span class="pill pill-both">Yes — Extended Reality</span></td><td><span class="pill pill-both">Yes — Extended Reality</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- XR BANNER -->
+<div class="xr-banner" id="xr-banner">
+  <h2>Extended Reality — <span>The XR Spectrum</span></h2>
+  <p>AR and VR are not opposites — they exist on a continuum called <strong>Extended Reality (XR)</strong>. Between fully physical reality and fully virtual reality sits Mixed Reality (MR), where digital and physical objects coexist and interact.</p>
+  <div class="xr-trio">
+    <div class="xr-item">
+      <div class="xr-item-icon">🌍</div>
+      <div class="xr-item-label" style="color:var(--ar);">AUGMENTED REALITY</div>
+      <div class="xr-item-sub">Real world + digital overlay</div>
+    </div>
+    <div class="xr-item">
+      <div class="xr-item-icon">✦</div>
+      <div class="xr-item-label" style="color:var(--xr);">MIXED REALITY</div>
+      <div class="xr-item-sub">Digital objects interact with real ones</div>
+    </div>
+    <div class="xr-item">
+      <div class="xr-item-icon">🌐</div>
+      <div class="xr-item-label" style="color:var(--vr);">VIRTUAL REALITY</div>
+      <div class="xr-item-sub">Fully synthetic environment</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRESENCE SECTION -->
+<div class="section" id="presence-sec">
+  <div class="section-tag" style="color:var(--xr);">Module 04 — Core Concept</div>
+  <h2 class="section-title" style="color:white;">The Concept of <span style="color:var(--xr);">Presence</span></h2>
+
+  <div class="presence-box">
+    <div class="presence-title">↯ PRESENCE DEFINED</div>
+    <div class="presence-text">
+      <strong>Presence</strong> is the psychological sensation of actually <em>being somewhere</em> or experiencing something, rather than simply viewing it on a screen. It is the defining goal of both VR and AR design — and the reason immersive technologies are fundamentally different from traditional media.<br><br>
+      A well-designed VR experience doesn't feel like watching a film in a headset. It feels like you are <strong>physically standing in another place</strong>. When presence is achieved, users instinctively duck to avoid virtual objects flying at them, feel vertigo when standing on a virtual ledge, and form genuine emotional connections with virtual characters — because the brain responds to presence much as it does to real experience.
+    </div>
+  </div>
+
+  <h3>FACTORS THAT CREATE PRESENCE</h3>
+  <div class="panels">
+    <div class="panel panel-xr">
+      <div class="panel-icon">👀</div>
+      <div class="panel-title" style="color:var(--xr);">Visual Fidelity</div>
+      <div class="panel-text">High resolution, wide field of view, and realistic rendering reduce the perceptual gap between the virtual and real. Modern headsets target 4K per eye.</div>
+    </div>
+    <div class="panel panel-xr">
+      <div class="panel-icon">⚡</div>
+      <div class="panel-title" style="color:var(--xr);">Low Latency</div>
+      <div class="panel-text">Tracking-to-display latency must stay below 20ms. Any perceptible lag between head movement and visual update breaks presence and causes nausea.</div>
+    </div>
+    <div class="panel panel-xr">
+      <div class="panel-icon">🎵</div>
+      <div class="panel-title" style="color:var(--xr);">Spatial Audio</div>
+      <div class="panel-text">3D positional audio is as important as visuals for presence. Sound should convincingly originate from virtual objects and spaces.</div>
+    </div>
+    <div class="panel panel-xr">
+      <div class="panel-icon">🤲</div>
+      <div class="panel-title" style="color:var(--xr);">Natural Interaction</div>
+      <div class="panel-text">When virtual objects respond to touch and manipulation in physically plausible ways, the brain accepts the environment as real.</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<section id="quiz-sec">
+  <div class="quiz-wrap">
+    <div class="quiz-header section">
+      <div class="section-tag" style="color:var(--vr); justify-content:center;">Final Assessment</div>
+      <h2 class="section-title" style="text-align:center; color:white;">Knowledge <span style="color:var(--vr)">Check</span></h2>
+      <p style="text-align:center; color:var(--text-dim);">Test your understanding of AR and VR in multimedia.</p>
+    </div>
+    <div class="quiz-card" id="quiz-card">
+      <div class="quiz-q" id="quiz-q"></div>
+      <div class="quiz-opts" id="quiz-opts"></div>
+      <div class="quiz-fb" id="quiz-fb"></div>
+      <button class="quiz-next" id="quiz-next" onclick="nextQ()">Next →</button>
+    </div>
+    <div class="quiz-meta">
+      <span>Question <span id="qnum">1</span> of <span id="qtot">7</span></span>
+      <span>Score: <span id="qscore">0</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>AR / VR MULTIMEDIA TUTORIAL</div>
+  <div><span class="v">Virtual Reality</span> · <span class="a">Augmented Reality</span> · Extended Reality</div>
+</footer>
+
+<script>
+// ── CURSOR ──
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+});
+(function animRing() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a, button, .app-tile, .panel').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cur.style.transform = 'translate(-50%,-50%) scale(2)';
+    ring.style.width = '48px'; ring.style.height = '48px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cur.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.width = '32px'; ring.style.height = '32px';
+  });
+});
+
+// ── PROGRESS ──
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+});
+
+// ── INTERSECTION OBSERVER ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.section').forEach(s => obs.observe(s));
+
+// ── QUIZ ──
+const questions = [
+  {
+    q: "VR achieves the illusion of depth by rendering two slightly offset images — one per eye. What is this technique called?",
+    opts: ["Parallax rendering", "Stereoscopic rendering", "Anaglyph projection", "Depth-field synthesis"],
+    ans: 1,
+    exp: "Stereoscopic rendering mimics human binocular vision by presenting two offset images — one per eye — creating convincing 3D depth perception."
+  },
+  {
+    q: "Which of the following is the most accurate definition of Augmented Reality?",
+    opts: ["A fully virtual environment that replaces the real world", "Digital content overlaid on the user's real-world view", "A 3D animation rendered inside a headset", "A simulated training environment with no real elements"],
+    ans: 1,
+    exp: "AR overlays digital content (3D objects, text, animations) onto the real world — the user always sees their actual environment enhanced with digital layers."
+  },
+  {
+    q: "Which mobile AR frameworks allow billions of existing smartphones to support augmented reality without special hardware?",
+    opts: ["OpenVR and SteamVR", "ARKit (Apple) and ARCore (Google)", "DirectX and OpenGL", "WebGL and Three.js"],
+    ans: 1,
+    exp: "ARKit (Apple) and ARCore (Google) are the dominant mobile AR platforms enabling phone-based AR on iOS and Android devices respectively."
+  },
+  {
+    q: "The psychological sensation of 'actually being somewhere' in a virtual environment is called:",
+    opts: ["Immersion", "Presence", "Embodiment", "Simulation fidelity"],
+    ans: 1,
+    exp: "Presence is the key psychological concept — it's the feeling of genuinely inhabiting a virtual space, causing real emotional and physiological responses."
+  },
+  {
+    q: "What is the maximum acceptable latency (delay) between head movement and visual update to prevent breaking presence and causing nausea in VR?",
+    opts: ["100ms", "50ms", "20ms", "5ms"],
+    ans: 2,
+    exp: "VR systems must achieve motion-to-photon latency below 20ms. Above this threshold, the mismatch between movement and visual response causes disorientation and motion sickness."
+  },
+  {
+    q: "Mixed Reality (MR) differs from AR in that:",
+    opts: ["MR uses headsets while AR uses phones only", "In MR, digital and physical objects interact with each other in real time", "MR is only used for gaming while AR is for education", "MR requires no cameras or sensors"],
+    ans: 1,
+    exp: "In Mixed Reality, digital and physical objects don't just coexist visually — they interact. A virtual ball can bounce off a real desk, for example. AR merely overlays without interaction."
+  },
+  {
+    q: "Which umbrella term encompasses VR, AR, and MR as a spectrum of immersive technologies?",
+    opts: ["Digital Reality (DR)", "Immersive Media (IM)", "Extended Reality (XR)", "Spatial Computing (SC)"],
+    ans: 2,
+    exp: "Extended Reality (XR) is the accepted umbrella term covering the full spectrum from Augmented Reality (real world + digital) through Mixed Reality to full Virtual Reality."
+  }
+];
+
+let qi = 0, score = 0, answered = false;
+
+function loadQ() {
+  const q = questions[qi];
+  document.getElementById('quiz-q').textContent = q.q;
+  document.getElementById('qnum').textContent = qi + 1;
+  document.getElementById('qtot').textContent = questions.length;
+  document.getElementById('qscore').textContent = score;
+  const optsEl = document.getElementById('quiz-opts');
+  optsEl.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt'; btn.textContent = opt;
+    btn.onclick = () => answer(i);
+    optsEl.appendChild(btn);
+  });
+  document.getElementById('quiz-fb').className = 'quiz-fb';
+  document.getElementById('quiz-fb').textContent = '';
+  document.getElementById('quiz-next').style.display = 'none';
+  answered = false;
+}
+
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  const q = questions[qi];
+  document.querySelectorAll('.quiz-opt').forEach((b, idx) => {
+    b.disabled = true;
+    if (idx === q.ans) b.classList.add('correct');
+    else if (idx === i) b.classList.add('wrong');
+  });
+  const fb = document.getElementById('quiz-fb');
+  if (i === q.ans) { score++; fb.className = 'quiz-fb correct'; fb.textContent = '✓ Correct! ' + q.exp; }
+  else { fb.className = 'quiz-fb wrong'; fb.textContent = '✗ ' + q.exp; }
+  document.getElementById('qscore').textContent = score;
+  const nb = document.getElementById('quiz-next');
+  nb.style.display = 'inline-block';
+  nb.textContent = qi < questions.length - 1 ? 'Next Question →' : 'View Final Score →';
+}
+
+function nextQ() {
+  qi++;
+  if (qi >= questions.length) {
+    const pct = Math.round(score / questions.length * 100);
+    const grade = pct >= 85 ? ['🏆', 'Excellent Mastery', var_vr] : pct >= 60 ? ['⚡', 'Good Understanding', var_ar] : ['📖', 'Review Recommended', '#888'];
+    document.getElementById('quiz-card').innerHTML = `
+      <div style="text-align:center; padding:20px 0;">
+        <div style="font-size:64px; margin-bottom:8px;">${pct >= 85 ? '🏆' : pct >= 60 ? '⚡' : '📖'}</div>
+        <div style="font-family:'Orbitron',monospace; font-size:56px; font-weight:900; color:${pct >= 85 ? 'var(--vr)' : pct >= 60 ? 'var(--ar)' : '#888'}; text-shadow: 0 0 40px currentColor;">${pct}%</div>
+        <div style="font-size:18px; font-weight:600; color:white; margin:12px 0;">${score} / ${questions.length} Correct</div>
+        <div style="color:var(--text-dim); margin-bottom:28px; font-size:14px;">${pct >= 85 ? 'Excellent mastery of AR &amp; VR concepts.' : pct >= 60 ? 'Good understanding — review any missed concepts.' : 'Revisit the tutorial modules above.'}</div>
+        <button class="quiz-next" style="display:inline-block;" onclick="restartQuiz()">↺ Retake Quiz</button>
+      </div>`;
+  } else loadQ();
+}
+
+function restartQuiz() {
+  qi = 0; score = 0;
+  document.getElementById('quiz-card').innerHTML = `
+    <div class="quiz-q" id="quiz-q"></div>
+    <div class="quiz-opts" id="quiz-opts"></div>
+    <div class="quiz-fb" id="quiz-fb"></div>
+    <button class="quiz-next" id="quiz-next" onclick="nextQ()">Next →</button>`;
+  loadQ();
+}
+
+loadQ();
+</script>
+</body>
+</html>
