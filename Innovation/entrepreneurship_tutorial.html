@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrepreneurship & Innovation — Interactive Tutorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d0d14;
+    --cream: #f5f0e8;
+    --gold: #e8a030;
+    --gold-light: #f5c96a;
+    --teal: #1a7a72;
+    --teal-light: #23a89c;
+    --rose: #c94040;
+    --rose-light: #e05555;
+    --sky: #2060c8;
+    --sky-light: #4080e8;
+    --success: #1a7a40;
+    --success-bg: #e6f7ee;
+    --fail: #c94040;
+    --fail-bg: #fdeaea;
+    --card: #ffffff;
+    --border: #e0d8cc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand-icon {
+    width: 42px; height: 42px;
+    background: var(--gold);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .brand h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+  .brand span { font-size: 0.72rem; opacity: 0.55; font-weight: 300; display: block; }
+  .score-pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-size: 0.85rem;
+    display: flex; gap: 20px; align-items: center;
+  }
+  .score-pill strong { color: var(--gold); font-size: 1.1rem; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    background: rgba(255,255,255,0.08);
+    height: 4px;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--teal-light));
+    transition: width 0.4s ease;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 60px 28px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(232,160,48,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(26,122,114,0.12) 0%, transparent 60%);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--ink);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 50px;
+    margin-bottom: 20px;
+  }
+  .hero h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .hero h2 em { color: var(--gold); font-style: normal; }
+  .hero p {
+    font-size: 1.05rem;
+    opacity: 0.7;
+    max-width: 560px;
+    margin: 0 auto 36px;
+    line-height: 1.65;
+    position: relative;
+  }
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.75rem; opacity: 0.5; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* ── SECTION TABS ── */
+  .tabs-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 28px 0;
+  }
+  .tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0;
+  }
+  .tab-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #888;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    border-radius: 6px 6px 0 0;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tab-btn.active {
+    color: var(--ink);
+    font-weight: 700;
+    border-bottom-color: var(--gold);
+    background: rgba(232,160,48,0.06);
+  }
+  .tab-btn .tab-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.4;
+  }
+  .tab-btn.active .tab-dot { opacity: 1; }
+  .tab-btn:hover:not(.active) { color: var(--ink); background: rgba(0,0,0,0.04); }
+
+  /* ── MAIN CONTENT ── */
+  .main { max-width: 1100px; margin: 0 auto; padding: 32px 28px 60px; }
+
+  .section-panel { display: none; }
+  .section-panel.active { display: block; animation: fadeIn 0.3s ease; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .section-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .section-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .section-icon.tf { background: #fff3dc; }
+  .section-icon.mc { background: #dff2f0; }
+  .section-icon.mi { background: #fce8e8; }
+  .section-icon.sa { background: #e8f0ff; }
+  .section-heading-text h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+  .section-heading-text p { font-size: 0.88rem; color: #666; margin-top: 2px; }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+    transition: box-shadow 0.2s;
+  }
+  .q-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+
+  .q-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .q-text {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 20px;
+  }
+
+  /* True/False */
+  .tf-btns { display: flex; gap: 12px; }
+  .tf-btn {
+    flex: 1;
+    padding: 14px 20px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: white;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .tf-btn:hover:not(:disabled) { border-color: var(--gold); background: #fffaf0; }
+  .tf-btn.selected-true { border-color: var(--teal); background: #e6f7f5; color: var(--teal); }
+  .tf-btn.selected-false { border-color: var(--rose); background: #fdeaea; color: var(--rose); }
+  .tf-btn.correct { border-color: var(--success); background: var(--success-bg); color: var(--success); }
+  .tf-btn.wrong { border-color: var(--fail); background: var(--fail-bg); color: var(--fail); }
+
+  /* Multiple Choice */
+  .mc-options { display: flex; flex-direction: column; gap: 10px; }
+  .mc-option {
+    padding: 14px 18px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    transition: all 0.2s;
+    display: flex; align-items: flex-start; gap: 12px;
+    text-align: left;
+  }
+  .mc-option:hover:not(:disabled) { border-color: var(--sky); background: #f0f5ff; }
+  .mc-option .opt-letter {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    min-width: 26px; height: 26px;
+    border-radius: 8px;
+    background: #f0f0f0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .mc-option.selected { border-color: var(--sky); background: #eef3ff; }
+  .mc-option.selected .opt-letter { background: var(--sky); color: white; }
+  .mc-option.correct { border-color: var(--success); background: var(--success-bg); }
+  .mc-option.correct .opt-letter { background: var(--success); color: white; }
+  .mc-option.wrong { border-color: var(--fail); background: var(--fail-bg); }
+  .mc-option.wrong .opt-letter { background: var(--fail); color: white; }
+
+  /* Matching */
+  .match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 600px) { .match-grid { grid-template-columns: 1fr; } }
+  .match-col-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 8px;
+  }
+  .match-item {
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .match-item:hover:not(.matched):not(.disabled) { border-color: var(--rose); background: #fff8f8; }
+  .match-item.selected { border-color: var(--rose); background: #fdeaea; font-weight: 500; }
+  .match-item.matched { border-color: var(--success); background: var(--success-bg); opacity: 0.7; cursor: default; }
+  .match-item.wrong-match { border-color: var(--fail); background: var(--fail-bg); animation: shake 0.4s; }
+  .match-item.disabled { cursor: default; }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  /* Short Answer */
+  .sa-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 0.2s;
+    background: white;
+    color: var(--ink);
+  }
+  .sa-textarea:focus { outline: none; border-color: var(--sky); }
+  .sa-textarea:disabled { background: #f8f8f8; }
+
+  /* Submit / Check buttons */
+  .q-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+
+  .btn-check {
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: white;
+  }
+  .btn-primary:hover:not(:disabled) { background: #222; transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 2px solid var(--border) !important;
+  }
+  .btn-secondary:hover:not(:disabled) { background: #f5f5f5; }
+  .btn-check:disabled { opacity: 0.4; cursor: default; transform: none !important; }
+
+  /* Feedback */
+  .feedback {
+    margin-top: 14px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    display: none;
+  }
+  .feedback.show { display: block; animation: fadeIn 0.3s ease; }
+  .feedback.correct { background: var(--success-bg); border-left: 4px solid var(--success); color: #145a30; }
+  .feedback.wrong { background: var(--fail-bg); border-left: 4px solid var(--fail); color: #7a1a1a; }
+  .feedback.info { background: #eef5ff; border-left: 4px solid var(--sky); color: #1a3a7a; }
+  .feedback strong { font-weight: 700; display: block; margin-bottom: 4px; }
+
+  /* Result card */
+  .result-section {
+    text-align: center;
+    padding: 60px 28px;
+    background: white;
+    border-radius: 24px;
+    border: 1.5px solid var(--border);
+    margin-top: 40px;
+  }
+  .result-emoji { font-size: 4rem; margin-bottom: 16px; }
+  .result-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .result-sub { color: #666; margin-bottom: 28px; }
+  .result-score-big {
+    font-family: 'Syne', sans-serif;
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 520px;
+    margin: 24px auto;
+  }
+  @media (max-width: 500px) { .result-grid { grid-template-columns: repeat(2, 1fr); } }
+  .result-cell {
+    background: #f8f8f8;
+    border-radius: 12px;
+    padding: 16px 10px;
+  }
+  .result-cell-num { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; }
+  .result-cell-label { font-size: 0.72rem; color: #999; text-transform: uppercase; letter-spacing: 0.06em; }
+  .btn-restart {
+    margin-top: 16px;
+    padding: 14px 36px;
+    background: var(--ink);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-restart:hover { background: #333; transform: translateY(-2px); }
+
+  /* floating nav */
+  .float-nav {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    gap: 8px;
+    z-index: 99;
+  }
+  .float-btn {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: var(--ink);
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .float-btn:hover { background: var(--gold); color: var(--ink); transform: translateY(-2px); }
+
+  .badge-count {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--ink);
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 50px;
+    padding: 2px 8px;
+    margin-left: 6px;
+  }
+
+  /* Essay specific */
+  .essay-prompt {
+    background: #f0f5ff;
+    border-left: 4px solid var(--sky);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    font-size: 0.88rem;
+    color: #1a3a7a;
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+  .word-count { font-size: 0.8rem; color: #999; margin-top: 6px; text-align: right; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-icon">🚀</div>
+      <div>
+        <h1>Entrepreneurship & Innovation</h1>
+        <span>BAU 07313 · Interactive Tutorial</span>
+      </div>
+    </div>
+    <div class="score-pill">
+      <span>Score <strong id="score-display">0</strong></span>
+      <span>|</span>
+      <span>Answered <strong id="answered-display">0</strong>/50</span>
+    </div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-badge">📚 50 Live Questions</div>
+  <h2>Test Your Knowledge on<br><em>Entrepreneurship & Innovation</em></h2>
+  <p>Work through all four question types. Get instant feedback on every answer and track your score in real time.</p>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">True / False</div></div>
+    <div class="stat"><div class="stat-num">16</div><div class="stat-label">Multiple Choice</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">Matching Items</div></div>
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">Short Answer & Essay</div></div>
+  </div>
+</section>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('tf')"><div class="tab-dot"></div>True / False <span class="badge-count">12</span></button>
+    <button class="tab-btn" onclick="switchTab('mc')"><div class="tab-dot"></div>Multiple Choice <span class="badge-count">16</span></button>
+    <button class="tab-btn" onclick="switchTab('mi')"><div class="tab-dot"></div>Matching <span class="badge-count">10</span></button>
+    <button class="tab-btn" onclick="switchTab('sa')"><div class="tab-dot"></div>Short Answer & Essay <span class="badge-count">12</span></button>
+  </div>
+</div>
+
+<main class="main">
+
+<!-- ══════════════════════════════════════════════ TRUE / FALSE ══ -->
+<div class="section-panel active" id="panel-tf">
+  <div class="section-heading">
+    <div class="section-icon tf">✅</div>
+    <div class="section-heading-text">
+      <h3>True or False</h3>
+      <p>Read each statement and decide whether it is TRUE or FALSE.</p>
+    </div>
+  </div>
+  <div id="tf-questions"></div>
+</div>
+
+<!-- ════════════════════════════════════════ MULTIPLE CHOICE ══ -->
+<div class="section-panel" id="panel-mc">
+  <div class="section-heading">
+    <div class="section-icon mc">🎯</div>
+    <div class="section-heading-text">
+      <h3>Multiple Choice</h3>
+      <p>Choose the single best answer for each question.</p>
+    </div>
+  </div>
+  <div id="mc-questions"></div>
+</div>
+
+<!-- ════════════════════════════════════════ MATCHING ══ -->
+<div class="section-panel" id="panel-mi">
+  <div class="section-heading">
+    <div class="section-icon mi">🔗</div>
+    <div class="section-heading-text">
+      <h3>Matching Items</h3>
+      <p>Click a term on the left, then click its matching definition on the right.</p>
+    </div>
+  </div>
+  <div id="mi-questions"></div>
+</div>
+
+<!-- ════════════════════════════════════════ SHORT ANSWER ══ -->
+<div class="section-panel" id="panel-sa">
+  <div class="section-heading">
+    <div class="section-icon sa">✍️</div>
+    <div class="section-heading-text">
+      <h3>Short Answer & Essay</h3>
+      <p>Write your answer in the box. Click "Show Answer" to compare with the model answer.</p>
+    </div>
+  </div>
+  <div id="sa-questions"></div>
+</div>
+
+</main>
+
+<div class="float-nav">
+  <button class="float-btn" onclick="scrollToTop()" title="Back to top">↑</button>
+</div>
+
+<script>
+/* ─────────────────────────── DATA ─────────────────────────── */
+const TF = [
+  { q:"Entrepreneurship involves identifying opportunities and taking risks to develop a business.", ans:true, exp:"Entrepreneurship is defined as identifying opportunities, creating ventures, and taking risks to generate value or profit." },
+  { q:"Innovation only refers to creating completely new products — improving existing ones does not count as innovation.", ans:false, exp:"Innovation includes both creation of new products AND significant improvements to existing products, services, or processes." },
+  { q:"The lean startup method encourages building a Minimum Viable Product (MVP) to test ideas before large investments.", ans:true, exp:"MVP testing is a core principle of lean startup methodology — it validates ideas quickly with minimal cost." },
+  { q:"The Industrial Revolution (18th–19th century) shifted entrepreneurship away from mass production toward small craft-based work.", ans:false, exp:"The Industrial Revolution actually introduced large-scale manufacturing and mass production, not small craftsmanship." },
+  { q:"The 7Ps of the marketing mix include People, Process, and Physical Evidence in addition to the 4Ps.", ans:true, exp:"Service businesses extend the 4Ps (Product, Price, Place, Promotion) with People, Process, and Physical Evidence." },
+  { q:"An innovation portfolio allows entrepreneurs to manage only one idea at a time to reduce distraction.", ans:false, exp:"An innovation portfolio is specifically designed to manage MULTIPLE ideas simultaneously across different risk levels." },
+  { q:"Radical innovation involves small, continuous improvements to existing products.", ans:false, exp:"Radical innovation involves breakthrough, disruptive changes. Incremental innovation describes small, continuous improvements." },
+  { q:"Succession planning is an exit strategy where a business is transferred to a family member, trusted employee, or management team.", ans:true, exp:"Succession planning ensures business continuity by transferring leadership and ownership to a chosen successor." },
+  { q:"Entrepreneurial Assessment Criteria (EOAC) help SMEs identify strengths, weaknesses, and strategic gaps.", ans:true, exp:"EOAC provides a systematic framework to evaluate an enterprise's capability, readiness, and growth potential." },
+  { q:"Angel investors are professionally managed investment funds that focus exclusively on publicly listed companies.", ans:false, exp:"Angel investors are wealthy individuals who personally invest in promising early-stage SMEs — not professionally managed funds (that describes Venture Capital)." },
+  { q:"Design thinking begins with deeply understanding the user's needs before generating solutions.", ans:true, exp:"The first stage of design thinking is 'Empathize' — deeply understanding user experiences, feelings, and challenges." },
+  { q:"Open innovation restricts entrepreneurs to using only internal knowledge and resources for innovation.", ans:false, exp:"Open innovation explicitly encourages using both internal AND external ideas, knowledge, and pathways to advance innovation." },
+];
+
+const MC = [
+  {
+    q:"Which of the following BEST defines entrepreneurship?",
+    opts:["A process of managing large corporations efficiently","The act of identifying opportunities, creating ventures, and taking risks to generate value","A government policy for supporting public enterprises","The practice of improving existing business processes only"],
+    ans:1, exp:"Entrepreneurship is defined as the process of identifying opportunities, creating new ideas or ventures, and taking risks to develop and manage a business to generate value or profit."
+  },
+  {
+    q:"Which type of innovation is BEST described as a breakthrough that creates an entirely new market or transforms an industry?",
+    opts:["Incremental innovation","Process innovation","Radical innovation","Product refinement"],
+    ans:2, exp:"Radical (disruptive) innovation creates entirely new products, services, or technologies that fundamentally transform industries — e.g., the internet, smartphones."
+  },
+  {
+    q:"In the innovation portfolio framework, what does the 'transformational' category (10%) represent?",
+    opts:["Small improvements to current offerings","Entry into adjacent markets","High-risk, disruptive innovations with breakthrough potential","Cost reduction initiatives"],
+    ans:2, exp:"Transformational innovations are high-risk, disruptive ideas that can create major breakthroughs — they represent about 10% of a balanced innovation portfolio."
+  },
+  {
+    q:"What is the PRIMARY purpose of a Minimum Viable Product (MVP)?",
+    opts:["To launch a fully complete product to the market","To test assumptions and validate ideas with minimal investment","To attract major investors before development begins","To comply with government regulations"],
+    ans:1, exp:"An MVP allows entrepreneurs to test assumptions, reduce uncertainty, and identify the most promising ideas early — saving time and money."
+  },
+  {
+    q:"Which stage of the design thinking process involves testing prototypes with real users to gather feedback?",
+    opts:["Empathize","Define","Ideate","Test"],
+    ans:3, exp:"The 'Test' stage is the fifth step in design thinking, where entrepreneurs gather user feedback on prototypes to refine and improve the solution."
+  },
+  {
+    q:"The 'P' in the 7Ps marketing mix that focuses on employees and customer service is called:",
+    opts:["Promotion","Process","People","Physical Evidence"],
+    ans:2, exp:"'People' in the 7Ps refers to employees and customer service — critical for service quality and customer satisfaction."
+  },
+  {
+    q:"Which exit strategy involves the existing management team purchasing the business?",
+    opts:["Initial Public Offering (IPO)","Management Buyout (MBO)","Franchise Model Exit","Liquidation"],
+    ans:1, exp:"A Management Buyout (MBO) is when the existing management team purchases the business — ensuring continuity as the same team already knows operations."
+  },
+  {
+    q:"What does EOAC stand for in the context of SME management?",
+    opts:["Economic Output and Accounting Criteria","Entrepreneurial Operations and Advancement Criteria","Entrepreneurial Assessment Criteria","Enterprise Opportunity and Acquisition Criteria"],
+    ans:2, exp:"EOAC stands for Entrepreneurial Assessment Criteria — tools used to evaluate an enterprise's capability, readiness, and potential for sustainable growth."
+  },
+  {
+    q:"Which financing option involves selling invoices to receive immediate cash?",
+    opts:["Trade credit","Crowdfunding","Invoice financing/factoring","Angel investment"],
+    ans:2, exp:"Invoice financing/factoring allows SMEs to sell their invoices immediately for cash, improving liquidity and managing cash flow when payments are delayed."
+  },
+  {
+    q:"Which era of entrepreneurship is characterized by sustainability, social impact, AI, and the gig economy?",
+    opts:["Industrial Revolution","20th-Century Corporate Era","Technological & Digital Era","Contemporary Entrepreneurship (21st Century)"],
+    ans:3, exp:"Contemporary Entrepreneurship (21st century) is characterized by sustainability, social entrepreneurship, and heavy reliance on AI, robotics, cloud computing, and big data."
+  },
+  {
+    q:"An entrepreneur protecting their brand name and logo should apply for a:",
+    opts:["Patent","Copyright","Trademark","Trade secret"],
+    ans:2, exp:"Trademarks protect logos, brand names, and symbols that identify a business. Patents protect inventions; copyrights protect creative works."
+  },
+  {
+    q:"Which of the following is a CORE benefit of joining an innovation cluster (e.g., Silicon Valley)?",
+    opts:["Guaranteed government subsidies","Knowledge spillovers, talent pools, and collaborative networks","Elimination of all business risks","Automatic intellectual property protection"],
+    ans:1, exp:"Geographic clusters create environments where companies innovate faster due to knowledge spillovers, talent availability, and collaborative networks."
+  },
+  {
+    q:"In the Business Model Canvas, which building block focuses on how a company creates and delivers value to customers?",
+    opts:["Cost Structure","Revenue Streams","Value Propositions","Key Activities"],
+    ans:2, exp:"The Value Propositions block describes the unique value that a business offers to its customer segments — what problem it solves and why customers choose it."
+  },
+  {
+    q:"Which entrepreneurial principle helps reduce waste and speed up time-to-market through short development cycles?",
+    opts:["Customer-centric thinking","Lean Startup & Agile Methods","Strategic risk-taking","Resource leveraging"],
+    ans:1, exp:"Lean Startup and Agile Methods excel at reducing waste and speeding time-to-market through short sprints, frequent reviews, and iterative improvements based on data."
+  },
+  {
+    q:"An Employee Stock Ownership Plan (ESOP) exit strategy primarily benefits the business by:",
+    opts:["Selling the company to the highest external bidder","Giving employees ownership to increase commitment and ensure continuity","Converting the business into a publicly listed company","Merging with a competitor for market dominance"],
+    ans:1, exp:"ESOP transfers shares to employees over time, creating a motivated workforce with increased commitment who continue the business legacy — ensuring high continuity."
+  },
+  {
+    q:"Which of the following BEST describes 'open innovation'?",
+    opts:["Conducting all R&D exclusively inside the company","Publishing company secrets to competitors","Using both internal and external ideas, knowledge, and pathways to advance innovation","Allowing government agencies to control product development"],
+    ans:2, exp:"Open innovation (Chesbrough) is the model where organizations use both internal AND external ideas, knowledge, and pathways — collaborating with customers, suppliers, universities, and more."
+  },
+];
+
+const MI_SETS = [
+  {
+    title:"Match each entrepreneurship concept to its correct description.",
+    pairs:[
+      { term:"Incremental Innovation", def:"Small, continuous improvements to existing products or processes" },
+      { term:"Radical Innovation", def:"A breakthrough that creates an entirely new market or fundamentally transforms an industry" },
+      { term:"MVP (Minimum Viable Product)", def:"A basic version of a product used to test assumptions with minimum investment" },
+      { term:"Design Thinking", def:"A 5-stage human-centered problem-solving methodology (Empathize, Define, Ideate, Prototype, Test)" },
+      { term:"Innovation Ecosystem", def:"A network of organizations, institutions, and individuals that collectively support entrepreneurial innovation" },
+    ]
+  },
+  {
+    title:"Match each financing type to its correct description.",
+    pairs:[
+      { term:"Angel Investors", def:"Wealthy individuals who personally invest in promising early-stage SMEs, often providing mentorship" },
+      { term:"Venture Capital", def:"Professionally managed investment funds targeting high-growth SMEs with strong ROI potential" },
+      { term:"Crowdfunding", def:"Raising small amounts of money from many people via online platforms" },
+      { term:"Trade Credit", def:"Suppliers allow SMEs to purchase goods now and pay later, improving cash flow" },
+      { term:"Management Buyout (MBO)", def:"The existing management team purchases the business, ensuring operational continuity" },
+    ]
+  },
+];
+
+const SA = [
+  {
+    type:"short",
+    q:"Define entrepreneurship in your own words and identify TWO key characteristics of an entrepreneur.",
+    hint:"Your answer should include: what entrepreneurship is + 2 traits (e.g., risk-taking, opportunity recognition).",
+    model:"Entrepreneurship is the process of identifying opportunities, creating new ventures, and taking calculated risks to generate value or profit. Two key characteristics of an entrepreneur are: (1) Risk-taking — willingness to invest resources in uncertain ventures; (2) Opportunity recognition — the ability to identify unmet needs or market gaps and act on them."
+  },
+  {
+    type:"short",
+    q:"Explain the difference between a business plan and a Business Model Canvas (BMC).",
+    hint:"Focus on format, purpose, and depth of each tool.",
+    model:"A Business Plan is a detailed, comprehensive written document that outlines business goals, strategies, financial projections, and implementation steps — used for investors and banks. The Business Model Canvas (BMC) is a one-page visual framework with 9 building blocks that shows how a business creates, delivers, and captures value. The Business Plan focuses on HOW to grow; the BMC shows HOW the business works."
+  },
+  {
+    type:"short",
+    q:"State THREE barriers to innovation that entrepreneurs commonly face.",
+    hint:"Think: financial, regulatory, cultural, talent, or market-related barriers.",
+    model:"Three common barriers to innovation are: (1) Financial constraints — insufficient funds for R&D, prototyping, and market testing; (2) Regulatory barriers — complex legal frameworks that slow or restrict new solutions in sectors like healthcare or finance; (3) Risk aversion — reluctance by entrepreneurs and investors to fund uncertain innovation projects with unclear returns."
+  },
+  {
+    type:"short",
+    q:"Identify FOUR of the nine building blocks of the Business Model Canvas.",
+    hint:"The BMC has 9 blocks covering customers, value, operations, and finances.",
+    model:"Four building blocks of the BMC include: (1) Customer Segments — the groups of people or organizations the business serves; (2) Value Propositions — the unique value offered to solve customer problems; (3) Revenue Streams — the income sources from each customer segment; (4) Key Partnerships — alliances with suppliers, distributors, or investors that support the business model."
+  },
+  {
+    type:"short",
+    q:"What is succession planning as an exit strategy, and why is it important for SMEs?",
+    hint:"Include: what it is, who is involved, and its benefit for continuity.",
+    model:"Succession planning is an exit strategy where the business is transferred to a family member, trusted employee, or management team when the founder wishes to exit. It involves early identification of successors, leadership training, knowledge transfer, and gradual transition of responsibilities. It is important for SMEs because it ensures long-term leadership stability, preserves the founder's vision, and prevents business disruption when the owner departs."
+  },
+  {
+    type:"short",
+    q:"Name and briefly explain THREE stages of the design thinking process.",
+    hint:"Design thinking has 5 stages — choose any 3 and explain each.",
+    model:"Three stages of design thinking are: (1) Empathize — deeply understanding the user's experiences and challenges through observation and interviews; (2) Ideate — generating a wide range of creative solutions without judgment, encouraging bold thinking; (3) Prototype — building simple, low-cost representations of potential solutions to test concepts before full development."
+  },
+  {
+    type:"essay",
+    q:"Discuss the role of innovation in entrepreneurship and explain why it is considered a key driver of competitive advantage. Use examples to support your answer.",
+    hint:"Write at least 200 words. Cover: definition of innovation, its role in entrepreneurship, how it creates competitive advantage, and at least 2 real-world examples.",
+    model:"Innovation is the creation or improvement of products, services, processes, or ideas that add value or solve problems. In entrepreneurship, innovation serves as the engine of growth and differentiation — enabling entrepreneurs to identify market gaps, develop creative solutions, and build businesses that stand apart from competitors.\n\nInnovation drives competitive advantage in several ways. First, product innovation allows businesses to offer superior solutions that competitors cannot easily replicate. Apple's iPhone revolutionized the smartphone market by combining a phone, camera, and internet device in a seamless design — giving Apple a dominant, enduring competitive position. Second, process innovation improves efficiency and reduces costs. Toyota's lean manufacturing system made production significantly more efficient than rivals, giving it a lasting cost advantage. Third, business model innovation redefines how value is delivered. Netflix disrupted the entertainment industry by shifting from DVD rentals to a subscription streaming model — capturing massive market share before competitors could respond.\n\nInnovation also builds barriers to entry. Once a company establishes proprietary technology or a strong innovation culture, rivals find it difficult to replicate. Amazon's continuous investment in logistics innovation — same-day delivery, drone delivery, AWS cloud — creates compounding competitive advantages.\n\nIn conclusion, innovation is inseparable from entrepreneurship because it transforms ideas into market opportunities and allows businesses to deliver unique value that competitors cannot easily copy, sustaining growth and relevance over time."
+  },
+  {
+    type:"essay",
+    q:"Analyze how economic, cultural, and political environments influence entrepreneurial emergence in an economy.",
+    hint:"Write at least 200 words. Discuss each of the three factors with examples.",
+    model:"Entrepreneurship does not emerge in a vacuum — it is profoundly shaped by the broader environment in which individuals operate.\n\nEconomic factors are foundational. Access to capital is critical: economies with developed venture capital ecosystems and accessible bank lending see higher rates of entrepreneurship — Silicon Valley's dominance in technology is partly attributable to its deep risk capital pool. Market size and infrastructure quality also matter — large growing markets create more opportunities, while good transport and telecommunications enable efficient operation and scaling.\n\nCultural factors shape attitudes toward risk and failure. In the United States, entrepreneurial success is celebrated and failure is viewed as a learning experience, making individuals more likely to start businesses. In contrast, cultures with high risk aversion or strong social stigma around business failure discourage entrepreneurial attempts. Countries like Israel and Singapore thrive entrepreneurially due to cultural tolerance for risk and admiration for innovation and individual initiative.\n\nPolitical and regulatory environments determine the ease of doing business. Stable governance with rule of law and strong intellectual property protection creates the predictability entrepreneurs need to innovate and invest. Simple business registration processes, low corruption, and supportive government policies — such as tax incentives, R&D subsidies, or SME loan programs — directly stimulate entrepreneurial activity. Political instability and excessive bureaucracy suppress it.\n\nIn summary, a thriving entrepreneurial economy requires aligned economic conditions, a supportive culture, and stable, enabling political frameworks working together."
+  },
+  {
+    type:"essay",
+    q:"Evaluate the impact of technological innovation on entrepreneurial ventures. How have digital technologies transformed entrepreneurship in the 21st century?",
+    hint:"Write at least 200 words. Include: barriers reduced, new business models, marketing changes, global reach.",
+    model:"Technological innovation has profoundly transformed entrepreneurship, lowering barriers to entry, enabling global reach, and accelerating the pace of business creation.\n\nBefore the digital era, starting a business required significant capital for physical infrastructure and distribution. Cloud computing, open-source software, and digital platforms have dramatically reduced these costs. A software startup today can launch globally using AWS for computing power and Shopify for e-commerce with minimal upfront investment.\n\nDigital technologies have also enabled entirely new business models. The platform economy (Uber, Airbnb), subscription model (Netflix, Spotify), and freemium model (LinkedIn, Dropbox) were impossible before digital infrastructure existed. These models allow entrepreneurs to monetize at scale without owning physical assets.\n\nMarketing and customer acquisition have been transformed. Social media, SEO, and targeted digital advertising allow small startups to compete for customer attention with large corporations at a fraction of the traditional cost. A founder in Dar es Salaam can now reach customers in New York with a well-targeted digital campaign.\n\nArtificial intelligence, big data, and automation allow entrepreneurs to iterate rapidly, test ideas at low cost, and make data-driven decisions. The lean startup methodology is enabled by digital tools that let entrepreneurs build, measure, and learn faster than ever. Remote work tools further allow entrepreneurs to build global teams without physical offices.\n\nIn conclusion, digital technologies have democratized entrepreneurship — enabling more people in more places to create businesses with lower risk and greater potential for scale."
+  },
+  {
+    type:"essay",
+    q:"Discuss the importance of open innovation for startups and small businesses. How can collaboration with external partners enhance innovative capacity?",
+    hint:"Write at least 150 words. Include: definition, why it matters for startups, examples of collaboration.",
+    model:"Open innovation, popularized by Henry Chesbrough, is a model where organizations use both internal and external ideas, knowledge, and pathways to advance innovation. Unlike traditional 'closed' innovation where all R&D occurs internally, open innovation embraces collaboration with customers, suppliers, universities, startups, and sometimes even competitors.\n\nFor startups and small businesses, open innovation is particularly valuable because they lack the large R&D budgets of multinational corporations. By accessing external knowledge, startups can innovate at levels previously only achievable by large organizations. A health tech startup can partner with a university research department to access cutting-edge medical science without hiring full-time researchers — dramatically reducing cost and time.\n\nCollaboration brings diverse perspectives that break cognitive biases within teams, leading to more creative solutions. Lego's LEGO Ideas platform invites fans to submit product ideas, turning customer collaboration into product innovation without large internal R&D investment. Corporate-startup partnerships — like Unilever Foundry or BMW Startup Garage — pair established companies with innovative startups, giving startups access to resources and market knowledge while providing corporations with fresh innovation.\n\nIn summary, open innovation multiplies innovative capacity and accelerates growth by accessing knowledge, talent, technology, and markets beyond a company's own boundaries."
+  },
+  {
+    type:"essay",
+    q:"Applying the EOAC framework, explain how an SME in any sector can manage and improve its growth performance.",
+    hint:"Write at least 150 words. Reference specific EOAC dimensions and give a practical example.",
+    model:"Entrepreneurial Assessment Criteria (EOAC) are evaluation tools that help SMEs identify strengths, weaknesses, and strategic gaps to manage growth systematically. EOAC assesses SMEs across seven dimensions: entrepreneurial competence, business model strength, market analysis, financial health, operational capacity, growth readiness, and risk management.\n\nConsider an SME in fashion production. Applying EOAC reveals: strong creative skills but weak financial management (entrepreneurial competence gap) → the solution is financial management training. High market demand but inconsistent supply (business model weakness) → the solution is improved production planning. High competition in the market (market analysis) → the solution is digital marketing and niche branding. Low profit margins (financial weakness) → the solution is cost reduction and supplier contract renegotiation. Manual production processes (operational gap) → the solution is technology adoption for efficiency.\n\nBy applying EOAC regularly, SMEs transform growth from trial-and-error into a structured, strategic process. They focus resources on the most critical improvement areas, strengthen their business model, improve financial stability, and reduce risks — achieving sustainable, measurable growth rather than accidental expansion."
+  },
+  {
+    type:"essay",
+    q:"Using examples, discuss how an innovation portfolio helps entrepreneurs creatively pursue new business ideas and sustain long-term growth.",
+    hint:"Write at least 150 words. Define innovation portfolio, explain core/adjacent/transformational split, give examples.",
+    model:"An innovation portfolio is a strategic tool that helps entrepreneurs manage multiple ideas, experiments, and opportunities simultaneously. Instead of relying on a single idea, entrepreneurs invest across a range of innovations with different risk levels and time horizons — similar to a financial portfolio, but investing in ideas rather than money.\n\nThe portfolio is typically divided into three categories: Core innovations (70%) — incremental improvements to existing offerings that keep the business strong today, e.g., improving customer service quality or adding features to a current product. Adjacent innovations (20%) — expanding into new customer segments or launching related products with moderate risk, e.g., a food startup launching a premium product line. Transformational innovations (10%) — high-risk, disruptive ideas with breakthrough potential, e.g., developing an AI-powered ordering platform.\n\nA tech startup exploring mobile apps, AI tools, and digital training products simultaneously exemplifies portfolio thinking. Each idea is tested through rapid prototyping and MVPs. Weak ideas are dropped early; promising ones receive increased resources.\n\nThis approach benefits entrepreneurs by spreading risk across multiple bets, encouraging continuous creativity, enabling strategic resource allocation, and building a dynamic pipeline of innovations that sustains long-term competitive advantage rather than depending on a single idea's success."
+  },
+];
+
+/* ─────────────────────────── STATE ─────────────────────────── */
+let score = 0;
+let answered = 0;
+const total = 50;
+
+function updateStats() {
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('answered-display').textContent = answered;
+  document.getElementById('progress-bar').style.width = (answered / total * 100) + '%';
+}
+
+/* ─────────────────────────── TRUE / FALSE ─────────────────────────── */
+function renderTF() {
+  const container = document.getElementById('tf-questions');
+  TF.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.innerHTML = `
+      <div class="q-num">Question ${i+1} of 12 — True or False</div>
+      <div class="q-text">${item.q}</div>
+      <div class="tf-btns">
+        <button class="tf-btn" onclick="checkTF(this, ${i}, true)" id="tf-${i}-T">✅ True</button>
+        <button class="tf-btn" onclick="checkTF(this, ${i}, false)" id="tf-${i}-F">❌ False</button>
+      </div>
+      <div class="feedback" id="tf-fb-${i}"></div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function checkTF(btn, idx, chosen) {
+  const item = TF[idx];
+  const tBtn = document.getElementById(`tf-${idx}-T`);
+  const fBtn = document.getElementById(`tf-${idx}-F`);
+  if (tBtn.disabled) return;
+  tBtn.disabled = true; fBtn.disabled = true;
+  const correct = chosen === item.ans;
+  const fb = document.getElementById(`tf-fb-${idx}`);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className = 'feedback correct show';
+    fb.innerHTML = `<strong>✅ Correct!</strong>${item.exp}`;
+    score++;
+  } else {
+    btn.classList.add('wrong');
+    const rightBtn = item.ans ? tBtn : fBtn;
+    rightBtn.classList.add('correct');
+    fb.className = 'feedback wrong show';
+    fb.innerHTML = `<strong>❌ Incorrect.</strong>The correct answer is <strong>${item.ans ? 'TRUE' : 'FALSE'}</strong>. ${item.exp}`;
+  }
+  answered++; updateStats();
+}
+
+/* ─────────────────────────── MULTIPLE CHOICE ─────────────────────────── */
+function renderMC() {
+  const container = document.getElementById('mc-questions');
+  MC.forEach((item, i) => {
+    const letters = ['A','B','C','D'];
+    const optHtml = item.opts.map((o, j) => `
+      <button class="mc-option" onclick="checkMC(this, ${i}, ${j})" id="mc-${i}-${j}">
+        <span class="opt-letter">${letters[j]}</span>
+        <span>${o}</span>
+      </button>`).join('');
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.innerHTML = `
+      <div class="q-num">Question ${i+1} of 16 — Multiple Choice</div>
+      <div class="q-text">${item.q}</div>
+      <div class="mc-options">${optHtml}</div>
+      <div class="feedback" id="mc-fb-${i}"></div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function checkMC(btn, qIdx, optIdx) {
+  const item = MC[qIdx];
+  const opts = document.querySelectorAll(`[id^="mc-${qIdx}-"]`);
+  opts.forEach(o => o.disabled = true);
+  if (optIdx === item.ans) {
+    btn.classList.add('correct');
+    document.getElementById(`mc-fb-${qIdx}`).className = 'feedback correct show';
+    document.getElementById(`mc-fb-${qIdx}`).innerHTML = `<strong>✅ Correct!</strong>${item.exp}`;
+    score++;
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById(`mc-${qIdx}-${item.ans}`).classList.add('correct');
+    document.getElementById(`mc-fb-${qIdx}`).className = 'feedback wrong show';
+    document.getElementById(`mc-fb-${qIdx}`).innerHTML = `<strong>❌ Incorrect.</strong>${item.exp}`;
+  }
+  answered++; updateStats();
+}
+
+/* ─────────────────────────── MATCHING ─────────────────────────── */
+let matchState = {};
+
+function renderMatching() {
+  const container = document.getElementById('mi-questions');
+  MI_SETS.forEach((set, si) => {
+    matchState[si] = { selected: null, matched: new Set(), score: 0, done: false };
+    const shuffledDefs = [...set.pairs].sort(() => Math.random() - 0.5);
+    const termsHtml = set.pairs.map((p, pi) =>
+      `<div class="match-item" id="mi-${si}-t-${pi}" onclick="selectTerm(${si},${pi})">${p.term}</div>`
+    ).join('');
+    const defsHtml = shuffledDefs.map((p, di) => {
+      const origIdx = set.pairs.findIndex(x => x.def === p.def);
+      return `<div class="match-item" id="mi-${si}-d-${di}" data-orig="${origIdx}" onclick="selectDef(${si},${di},${origIdx})">${p.def}</div>`;
+    }).join('');
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.innerHTML = `
+      <div class="q-num">Set ${si+1} of 2 — Matching (5 pairs)</div>
+      <div class="q-text">${set.title}</div>
+      <div class="match-grid">
+        <div>
+          <div class="match-col-label">📌 Terms</div>
+          ${termsHtml}
+        </div>
+        <div>
+          <div class="match-col-label">📋 Definitions</div>
+          ${defsHtml}
+        </div>
+      </div>
+      <div class="feedback" id="mi-fb-${si}"></div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function selectTerm(si, ti) {
+  const state = matchState[si];
+  if (state.done) return;
+  const set = MI_SETS[si];
+  if (state.matched.has(`t-${ti}`)) return;
+  // deselect previous
+  if (state.selected && state.selected.type === 'term') {
+    document.getElementById(`mi-${si}-t-${state.selected.idx}`).classList.remove('selected');
+  }
+  state.selected = { type: 'term', idx: ti };
+  document.getElementById(`mi-${si}-t-${ti}`).classList.add('selected');
+}
+
+function selectDef(si, di, origIdx) {
+  const state = matchState[si];
+  if (state.done) return;
+  const dEl = document.getElementById(`mi-${si}-d-${di}`);
+  if (dEl.classList.contains('matched')) return;
+  if (!state.selected || state.selected.type !== 'term') {
+    dEl.classList.add('selected');
+    setTimeout(() => dEl.classList.remove('selected'), 600);
+    return;
+  }
+  const ti = state.selected.idx;
+  const tEl = document.getElementById(`mi-${si}-t-${ti}`);
+  // check match
+  if (ti === origIdx) {
+    // correct
+    tEl.classList.remove('selected'); tEl.classList.add('matched');
+    dEl.classList.add('matched');
+    state.matched.add(`t-${ti}`); state.matched.add(`d-${di}`);
+    state.score++;
+    state.selected = null;
+    if (state.matched.size === MI_SETS[si].pairs.length * 2) {
+      // all matched
+      const fb = document.getElementById(`mi-fb-${si}`);
+      fb.className = 'feedback correct show';
+      fb.innerHTML = `<strong>🎉 Perfect! All 5 pairs matched correctly!</strong>You earned ${state.score} point(s) for this set.`;
+      score += state.score;
+      answered += MI_SETS[si].pairs.length;
+      state.done = true;
+      updateStats();
+    }
+  } else {
+    // wrong
+    tEl.classList.remove('selected'); tEl.classList.add('wrong-match');
+    dEl.classList.add('wrong-match');
+    setTimeout(() => { tEl.classList.remove('wrong-match'); dEl.classList.remove('wrong-match'); }, 600);
+    state.selected = null;
+  }
+}
+
+/* ─────────────────────────── SHORT ANSWER ─────────────────────────── */
+function renderSA() {
+  const container = document.getElementById('sa-questions');
+  SA.forEach((item, i) => {
+    const isEssay = item.type === 'essay';
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.innerHTML = `
+      <div class="q-num">Question ${i+1} of 12 — ${isEssay ? 'Essay' : 'Short Answer'}</div>
+      <div class="q-text">${item.q}</div>
+      <div class="essay-prompt">💡 <strong>Hint:</strong> ${item.hint}</div>
+      <textarea class="sa-textarea" id="sa-ta-${i}" placeholder="Type your answer here..." oninput="updateWordCount(${i})"></textarea>
+      <div class="word-count" id="sa-wc-${i}">0 words</div>
+      <div class="q-actions">
+        <button class="btn-check btn-primary" onclick="showModel(${i})">Show Model Answer</button>
+        <button class="btn-check btn-secondary" onclick="markSelf(${i})">Mark as Correct (+1)</button>
+      </div>
+      <div class="feedback" id="sa-fb-${i}"></div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function updateWordCount(i) {
+  const val = document.getElementById(`sa-ta-${i}`).value.trim();
+  const words = val ? val.split(/\s+/).length : 0;
+  document.getElementById(`sa-wc-${i}`).textContent = `${words} word${words !== 1 ? 's' : ''}`;
+}
+
+function showModel(i) {
+  const fb = document.getElementById(`sa-fb-${i}`);
+  const modelText = SA[i].model.replace(/\n/g, '<br>');
+  fb.className = 'feedback info show';
+  fb.innerHTML = `<strong>📖 Model Answer:</strong><br>${modelText}`;
+}
+
+function markSelf(i) {
+  const fb = document.getElementById(`sa-fb-${i}`);
+  const btn = document.querySelectorAll(`#sa-fb-${i}`)[0].previousElementSibling.querySelectorAll('button')[1];
+  btn.disabled = true;
+  score++; answered++; updateStats();
+  const existing = fb.innerHTML;
+  const msg = `<br><span style="color:var(--success);font-weight:700;">✅ Marked as correct (+1 point)</span>`;
+  if (fb.classList.contains('show')) {
+    fb.innerHTML += msg;
+  } else {
+    fb.className = 'feedback correct show';
+    fb.innerHTML = `<strong>✅ Self-marked correct!</strong>Remember to compare your answer with the model answer to ensure accuracy.`;
+  }
+}
+
+/* ─────────────────────────── TABS ─────────────────────────── */
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById(`panel-${id}`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ─────────────────────────── INIT ─────────────────────────── */
+renderTF();
+renderMC();
+renderMatching();
+renderSA();
+updateStats();
+</script>
+</body>
+</html>

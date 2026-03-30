@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Entrepreneurship & Innovation — 5 Topics</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0f14;--surface:#16181f;--surface2:#1e2029;--border:#2a2d3a;
+  --amber:#f5a623;--amber-dim:#c47d10;--amber-glow:rgba(245,166,35,0.12);
+  --teal:#00c9a7;--teal-dim:#008f77;--teal-glow:rgba(0,201,167,0.1);
+  --coral:#ff6b6b;--coral-glow:rgba(255,107,107,0.1);
+  --sky:#4da6ff;--sky-glow:rgba(77,166,255,0.1);
+  --violet:#a78bfa;--violet-glow:rgba(167,139,250,0.1);
+  --text:#f0f0f0;--text-dim:#8a8fa8;--text-muted:#5a5f72;
+  --success:#22c55e;--success-bg:rgba(34,197,94,0.1);
+  --fail:#ff5252;--fail-bg:rgba(255,82,82,0.1);
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{-webkit-box-sizing:border-box;box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+body{font-family:'Outfit',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+/* ── HEADER ── */
+header{background:rgba(14,15,20,0.95);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:-webkit-sticky;position:sticky;top:0;z-index:200;padding-top:var(--safe-top);-webkit-transform:translateZ(0);transform:translateZ(0);}
+.header-inner{max-width:1140px;margin:0 auto;padding:14px 20px;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:space-between;justify-content:space-between;gap:12px;-webkit-flex-wrap:wrap;flex-wrap:wrap;}
+.logo{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:12px;}
+.logo-mark{width:38px;height:38px;background:linear-gradient(135deg,var(--amber),var(--amber-dim));border-radius:10px;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;font-size:18px;-webkit-flex-shrink:0;flex-shrink:0;}
+.logo-text h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(0.85rem,3vw,1rem);font-weight:700;line-height:1.2;color:var(--text);}
+.logo-text span{font-size:0.68rem;color:var(--text-dim);display:block;margin-top:1px;}
+.score-bar{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:16px;background:var(--surface2);border:1px solid var(--border);border-radius:50px;padding:7px 16px;font-size:0.8rem;color:var(--text-dim);}
+.score-bar strong{color:var(--amber);font-size:1rem;font-weight:700;}
+.prog-track{height:3px;background:var(--border);}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--teal));-webkit-transition:width 0.5s ease;transition:width 0.5s ease;width:0;}
+
+/* ── HERO ── */
+.hero{max-width:1140px;margin:0 auto;padding:56px 20px 48px;position:relative;}
+.hero-tag{display:inline-block;font-size:0.7rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--amber);background:var(--amber-glow);border:1px solid rgba(245,166,35,0.25);border-radius:50px;padding:5px 14px;margin-bottom:18px;}
+.hero h2{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.8rem,5vw,3.2rem);font-weight:900;line-height:1.1;margin-bottom:14px;color:var(--text);}
+.hero h2 span{color:var(--amber);}
+.hero p{font-size:0.98rem;color:var(--text-dim);max-width:540px;line-height:1.7;margin-bottom:36px;}
+.topic-pills{display:-webkit-flex;display:flex;gap:10px;-webkit-flex-wrap:wrap;flex-wrap:wrap;}
+.topic-pill{padding:8px 16px;border-radius:50px;border:1px solid var(--border);background:var(--surface);font-size:0.8rem;font-weight:500;color:var(--text-dim);display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:7px;cursor:pointer;-webkit-transition:all 0.2s;transition:all 0.2s;-webkit-user-select:none;user-select:none;touch-action:manipulation;}
+.topic-pill:hover,.topic-pill.active{border-color:var(--amber);color:var(--amber);background:var(--amber-glow);}
+.topic-pill .num{width:20px;height:20px;border-radius:50%;background:var(--border);font-size:0.67rem;font-weight:700;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;}
+.topic-pill.active .num{background:var(--amber);color:var(--bg);}
+
+/* ── LAYOUT ── */
+.layout{max-width:1140px;margin:0 auto;padding:0 20px 80px;display:-webkit-flex;display:flex;gap:28px;-webkit-align-items:flex-start;align-items:flex-start;}
+.sidebar{width:220px;-webkit-flex-shrink:0;flex-shrink:0;position:-webkit-sticky;position:sticky;top:80px;}
+@media(max-width:768px){.layout{-webkit-flex-direction:column;flex-direction:column;}.sidebar{width:100%;position:static;}}
+.side-nav{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+.side-nav-title{font-size:0.67rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);padding:14px 16px 8px;}
+.side-item{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:10px;padding:12px 16px;border-left:3px solid transparent;cursor:pointer;-webkit-transition:all 0.2s;transition:all 0.2s;-webkit-user-select:none;user-select:none;touch-action:manipulation;}
+.side-item:hover{background:var(--surface2);}
+.side-item.active{border-left-color:var(--amber);background:var(--amber-glow);}
+.side-item .si-icon{font-size:16px;width:28px;text-align:center;-webkit-flex-shrink:0;flex-shrink:0;}
+.side-item .si-text{font-size:0.82rem;font-weight:500;color:var(--text-dim);line-height:1.3;}
+.side-item.active .si-text{color:var(--amber);}
+.side-item .si-check{margin-left:auto;font-size:0.75rem;color:var(--success);-webkit-flex-shrink:0;flex-shrink:0;}
+.content{-webkit-flex:1;flex:1;min-width:0;}
+
+/* ── TOPIC PANEL ── */
+.topic-panel{display:none;}
+.topic-panel.active{display:block;-webkit-animation:fadeUp 0.35s ease;animation:fadeUp 0.35s ease;}
+@-webkit-keyframes fadeUp{from{opacity:0;-webkit-transform:translateY(12px);transform:translateY(12px);}to{opacity:1;-webkit-transform:none;transform:none;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+
+/* ── NOTES CARD ── */
+.notes-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;margin-bottom:28px;overflow:hidden;}
+.notes-header{padding:24px 24px 0;}
+.topic-label{font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px;}
+.notes-header h3{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.4rem,4vw,1.9rem);font-weight:900;line-height:1.2;color:var(--text);margin-bottom:8px;}
+.notes-header p{font-size:0.92rem;color:var(--text-dim);line-height:1.65;margin-bottom:20px;}
+.notes-divider{height:1px;background:var(--border);margin:0 24px;}
+.notes-body{padding:24px;}
+.note-block{margin-bottom:22px;}
+.note-block:last-child{margin-bottom:0;}
+.note-title{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:8px;}
+.note-title::after{content:'';-webkit-flex:1;flex:1;height:1px;background:var(--border);}
+.note-text{font-size:0.92rem;color:var(--text-dim);line-height:1.72;}
+.note-text strong{color:var(--text);font-weight:600;}
+.key-points{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;gap:8px;margin-top:10px;}
+.kp{display:-webkit-flex;display:flex;gap:12px;-webkit-align-items:flex-start;align-items:flex-start;padding:12px 14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);}
+.kp-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;-webkit-flex-shrink:0;flex-shrink:0;}
+.kp-text{font-size:0.88rem;color:var(--text-dim);line-height:1.6;}
+.kp-text strong{color:var(--text);}
+.two-col{display:-webkit-flex;display:flex;gap:12px;-webkit-flex-wrap:wrap;flex-wrap:wrap;margin-top:10px;}
+.col-card{-webkit-flex:1;flex:1;min-width:140px;padding:14px;background:var(--surface2);border-radius:12px;border:1px solid var(--border);}
+.col-card-title{font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.col-card-list{list-style:none;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;gap:5px;}
+.col-card-list li{font-size:0.84rem;color:var(--text-dim);padding-left:14px;position:relative;line-height:1.5;}
+.col-card-list li::before{content:'›';position:absolute;left:0;color:var(--amber);}
+.info-grid{display:-webkit-flex;display:flex;gap:10px;-webkit-flex-wrap:wrap;flex-wrap:wrap;margin-top:10px;}
+.info-tile{-webkit-flex:1;flex:1;min-width:120px;padding:14px;border-radius:12px;text-align:center;}
+.info-tile-num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;line-height:1;}
+.info-tile-label{font-size:0.72rem;color:var(--text-dim);margin-top:4px;line-height:1.4;}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:10px;}
+table{width:100%;border-collapse:collapse;font-size:0.86rem;}
+th{background:var(--surface2);color:var(--text);font-weight:600;padding:10px 14px;text-align:left;border-bottom:2px solid var(--border);white-space:nowrap;}
+td{padding:10px 14px;color:var(--text-dim);border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5;}
+tr:last-child td{border-bottom:none;}
+tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+
+/* ── QUESTIONS SECTION ── */
+.q-section-title{font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:10px;}
+.q-section-title::after{content:'';-webkit-flex:1;flex:1;height:1px;background:var(--border);}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:14px;}
+.q-meta{font-size:0.67rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;}
+.q-text{font-size:0.95rem;font-weight:500;line-height:1.62;color:var(--text);margin-bottom:16px;}
+
+/* TF */
+.tf-row{display:-webkit-flex;display:flex;gap:10px;}
+.tf-btn{-webkit-appearance:none;appearance:none;-webkit-flex:1;flex:1;padding:12px 10px;border:1.5px solid var(--border);border-radius:12px;background:var(--surface2);font-family:'Outfit',-apple-system,sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;-webkit-transition:all 0.2s;transition:all 0.2s;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;gap:6px;color:var(--text-dim);touch-action:manipulation;-webkit-user-select:none;user-select:none;}
+.tf-btn:disabled{cursor:default;}
+.tf-btn.correct{border-color:var(--success);background:var(--success-bg);color:var(--success);}
+.tf-btn.wrong{border-color:var(--fail);background:var(--fail-bg);color:var(--fail);}
+
+/* MC */
+.mc-opts{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;gap:8px;}
+.mc-opt{-webkit-appearance:none;appearance:none;padding:12px 14px;border:1.5px solid var(--border);border-radius:11px;background:var(--surface2);cursor:pointer;font-size:0.88rem;line-height:1.5;-webkit-transition:all 0.2s;transition:all 0.2s;display:-webkit-flex;display:flex;-webkit-align-items:flex-start;align-items:flex-start;gap:10px;text-align:left;width:100%;font-family:'Outfit',-apple-system,sans-serif;color:var(--text-dim);touch-action:manipulation;-webkit-user-select:none;user-select:none;}
+.mc-opt:disabled{cursor:default;}
+.opt-badge{font-weight:700;font-size:0.76rem;min-width:23px;height:23px;border-radius:6px;background:var(--border);display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;-webkit-flex-shrink:0;flex-shrink:0;-webkit-transition:all 0.2s;transition:all 0.2s;}
+.mc-opt.correct{border-color:var(--success);background:var(--success-bg);color:var(--success);}
+.mc-opt.correct .opt-badge{background:var(--success);color:white;}
+.mc-opt.wrong{border-color:var(--fail);background:var(--fail-bg);color:var(--fail);}
+.mc-opt.wrong .opt-badge{background:var(--fail);color:white;}
+.mc-opt.reveal{border-color:var(--success);background:var(--success-bg);color:var(--success);}
+.mc-opt.reveal .opt-badge{background:var(--success);color:white;}
+
+/* SA */
+.hint-box{background:rgba(77,166,255,0.07);border-left:3px solid var(--sky);border-radius:0 10px 10px 0;padding:10px 13px;font-size:0.84rem;color:rgba(77,166,255,0.9);line-height:1.6;margin-bottom:12px;}
+.sa-area{-webkit-appearance:none;appearance:none;width:100%;min-height:100px;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--surface2);font-family:'Outfit',-apple-system,sans-serif;font-size:0.92rem;line-height:1.6;resize:vertical;color:var(--text);-webkit-transition:border-color 0.2s;transition:border-color 0.2s;display:block;-webkit-text-size-adjust:100%;}
+.sa-area:focus{outline:none;border-color:var(--sky);}
+.sa-area:disabled{opacity:0.6;}
+.wc{font-size:0.75rem;color:var(--text-muted);text-align:right;margin-top:5px;}
+.q-actions{display:-webkit-flex;display:flex;gap:8px;margin-top:12px;-webkit-flex-wrap:wrap;flex-wrap:wrap;}
+.btn{-webkit-appearance:none;appearance:none;padding:9px 18px;border-radius:10px;font-family:'Outfit',-apple-system,sans-serif;font-weight:600;font-size:0.83rem;cursor:pointer;-webkit-transition:all 0.2s;transition:all 0.2s;touch-action:manipulation;-webkit-user-select:none;user-select:none;letter-spacing:0.02em;border:none;display:inline-block;}
+.btn-amber{background:var(--amber);color:var(--bg);}
+.btn-outline{background:transparent;border:1.5px solid var(--border) !important;color:var(--text-dim);}
+.btn:disabled{opacity:0.4;cursor:default;}
+
+/* FEEDBACK */
+.feedback{margin-top:11px;padding:12px 15px;border-radius:12px;font-size:0.87rem;line-height:1.65;display:none;}
+.feedback.show{display:block;-webkit-animation:fadeUp 0.3s ease;animation:fadeUp 0.3s ease;}
+.feedback.ok{background:var(--success-bg);border-left:3px solid var(--success);color:rgba(134,239,172,0.9);}
+.feedback.no{background:var(--fail-bg);border-left:3px solid var(--fail);color:rgba(255,180,180,0.9);}
+.feedback.info{background:rgba(77,166,255,0.07);border-left:3px solid var(--sky);color:rgba(147,197,253,0.9);}
+.feedback strong{font-weight:700;display:block;margin-bottom:3px;font-size:0.9rem;}
+
+/* NAVIGATION ROW */
+.nav-row{display:-webkit-flex;display:flex;-webkit-justify-content:space-between;justify-content:space-between;-webkit-align-items:center;align-items:center;margin-bottom:28px;gap:12px;-webkit-flex-wrap:wrap;flex-wrap:wrap;}
+.nav-btn{-webkit-appearance:none;appearance:none;padding:10px 20px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-dim);font-family:'Outfit',-apple-system,sans-serif;font-weight:600;font-size:0.84rem;cursor:pointer;-webkit-transition:all 0.2s;transition:all 0.2s;touch-action:manipulation;-webkit-user-select:none;user-select:none;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:7px;}
+.nav-btn:hover{border-color:var(--amber);color:var(--amber);}
+.nav-btn:disabled{opacity:0.3;cursor:default;}
+.nav-progress{font-size:0.8rem;color:var(--text-muted);}
+
+/* FLOAT */
+.float-up{position:fixed;bottom:calc(22px + var(--safe-bottom));right:18px;z-index:99;-webkit-appearance:none;appearance:none;width:42px;height:42px;border-radius:50%;border:none;background:var(--amber);color:var(--bg);font-size:0.95rem;cursor:pointer;box-shadow:0 4px 18px rgba(245,166,35,0.35);touch-action:manipulation;-webkit-user-select:none;user-select:none;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;}
+@-webkit-keyframes shake{0%,100%{-webkit-transform:translateX(0);transform:translateX(0);}25%{-webkit-transform:translateX(-5px);transform:translateX(-5px);}75%{-webkit-transform:translateX(5px);transform:translateX(5px);}}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+.shake{-webkit-animation:shake 0.35s ease;animation:shake 0.35s ease;}
+
+/* COLOR ACCENTS PER TOPIC */
+.t1 .topic-label,.t1 .note-title{color:var(--amber);}
+.t2 .topic-label,.t2 .note-title{color:var(--teal);}
+.t3 .topic-label,.t3 .note-title{color:var(--coral);}
+.t4 .topic-label,.t4 .note-title{color:var(--sky);}
+.t5 .topic-label,.t5 .note-title{color:var(--violet);}
+.t1 .kp-dot{background:var(--amber);}
+.t2 .kp-dot{background:var(--teal);}
+.t3 .kp-dot{background:var(--coral);}
+.t4 .kp-dot{background:var(--sky);}
+.t5 .kp-dot{background:var(--violet);}
+.t1 .info-tile{background:var(--amber-glow);}.t1 .info-tile-num{color:var(--amber);}
+.t2 .info-tile{background:var(--teal-glow);}.t2 .info-tile-num{color:var(--teal);}
+.t3 .info-tile{background:var(--coral-glow);}.t3 .info-tile-num{color:var(--coral);}
+.t4 .info-tile{background:var(--sky-glow);}.t4 .info-tile-num{color:var(--sky);}
+.t5 .info-tile{background:var(--violet-glow);}.t5 .info-tile-num{color:var(--violet);}
+.t1 .col-card-title{color:var(--amber);}
+.t2 .col-card-title{color:var(--teal);}
+.t3 .col-card-title{color:var(--coral);}
+.t4 .col-card-title{color:var(--sky);}
+.t5 .col-card-title{color:var(--violet);}
+.t1 .q-meta{color:rgba(245,166,35,0.6);}
+.t2 .q-meta{color:rgba(0,201,167,0.6);}
+.t3 .q-meta{color:rgba(255,107,107,0.6);}
+.t4 .q-meta{color:rgba(77,166,255,0.6);}
+.t5 .q-meta{color:rgba(167,139,250,0.6);}
+
+@media(max-width:480px){
+  .tf-btn{font-size:0.84rem;padding:11px 8px;}
+  .q-card{padding:16px 14px;}
+  .notes-header{padding:18px 16px 0;}
+  .notes-body{padding:18px 16px;}
+  .notes-divider{margin:0 16px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-mark">🎓</div>
+      <div class="logo-text">
+        <h1>Entrepreneurship &amp; Innovation</h1>
+        <span>BAU 07313 · Notes &amp; Practice Questions</span>
+      </div>
+    </div>
+    <div class="score-bar">
+      <span>Score&nbsp;<strong id="sd">0</strong></span>
+      <span style="color:var(--border)">|</span>
+      <span>Done&nbsp;<strong id="ad">0</strong>/30</span>
+    </div>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="pf"></div></div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">📖 5 Core Topics</div>
+  <h2>Study Notes <span>&amp; Practice</span><br>Question Bank</h2>
+  <p>Read the notes for each topic, then test yourself with questions. Tap a topic below to begin.</p>
+  <div class="topic-pills">
+    <div class="topic-pill active" onclick="goTopic(0)"><span class="num">1</span>Business Model Canvas</div>
+    <div class="topic-pill" onclick="goTopic(1)"><span class="num">2</span>Competitive Advantage</div>
+    <div class="topic-pill" onclick="goTopic(2)"><span class="num">3</span>Innovation Portfolio</div>
+    <div class="topic-pill" onclick="goTopic(3)"><span class="num">4</span>Global Entrepreneurship</div>
+    <div class="topic-pill" onclick="goTopic(4)"><span class="num">5</span>Digital Technologies</div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="side-nav">
+      <div class="side-nav-title">Topics</div>
+      <div class="side-item active" id="si-0" onclick="goTopic(0)"><div class="si-icon">🗺️</div><div class="si-text">Business Model Canvas</div></div>
+      <div class="side-item" id="si-1" onclick="goTopic(1)"><div class="si-icon">⚡</div><div class="si-text">Competitive Advantage</div></div>
+      <div class="side-item" id="si-2" onclick="goTopic(2)"><div class="si-icon">📂</div><div class="si-text">Innovation Portfolio</div></div>
+      <div class="side-item" id="si-3" onclick="goTopic(3)"><div class="si-icon">🌍</div><div class="si-text">Global Entrepreneurship</div></div>
+      <div class="side-item" id="si-4" onclick="goTopic(4)"><div class="si-icon">💻</div><div class="si-text">Digital Technologies</div></div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ══════════════ TOPIC 1: BMC ══════════════ -->
+    <div class="topic-panel active t1" id="tp-0">
+      <!-- NOTES -->
+      <div class="notes-card">
+        <div class="notes-header">
+          <div class="topic-label">Topic I · Business Model Canvas</div>
+          <h3>Business Model Canvas (BMC)</h3>
+          <p>A single-page visual framework with 9 building blocks that maps out how a business creates, delivers, and captures value — giving entrepreneurs a strategic overview at a glance.</p>
+        </div>
+        <div class="notes-divider"></div>
+        <div class="notes-body">
+          <div class="note-block">
+            <div class="note-title">What is the BMC?</div>
+            <div class="note-text">Developed by Alexander Osterwalder, the BMC is a strategic management tool used to describe, design, challenge, and pivot a business model. Unlike a traditional business plan (a long document), the BMC is a <strong>one-page visual template</strong> that gives a complete picture of the business. It helps entrepreneurs identify relationships between different parts of the business and spot weaknesses or opportunities quickly.</div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">The 9 Building Blocks</div>
+            <div class="key-points">
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>1. Customer Segments</strong> — Who are the specific groups of people or organizations the business creates value for? e.g., mass market, niche, multi-sided platforms.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>2. Value Propositions</strong> — What unique value does the business offer to solve customer problems or satisfy needs? What makes it different from competitors?</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>3. Channels</strong> — How does the business reach and communicate with its customer segments? (e.g., online store, retail, agents, distributors)</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>4. Customer Relationships</strong> — What type of relationship does the business establish with each customer segment? (e.g., self-service, personal assistance, loyalty programs)</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>5. Revenue Streams</strong> — How does the business earn income from each customer segment? (e.g., product sales, subscriptions, licensing, advertising)</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>6. Key Resources</strong> — What critical assets are needed to deliver the value proposition? (e.g., staff, technology, patents, capital, physical facilities)</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>7. Key Activities</strong> — What most important actions must the business perform to operate successfully? (e.g., production, R&amp;D, marketing, logistics)</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>8. Key Partnerships</strong> — Who are the key suppliers, partners, or alliances needed? These reduce risk and acquire resources not held internally.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>9. Cost Structure</strong> — What are the most important costs to run the business model? Is the model cost-driven (low-cost) or value-driven (premium)?</div></div>
+            </div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">BMC vs Business Plan</div>
+            <div class="table-wrap">
+              <table>
+                <tr><th>Feature</th><th>Business Model Canvas</th><th>Business Plan</th></tr>
+                <tr><td>Format</td><td>One-page visual template</td><td>Detailed written document</td></tr>
+                <tr><td>Focus</td><td>How the business WORKS</td><td>How the business will GROW</td></tr>
+                <tr><td>Update Speed</td><td>Quick to revise and pivot</td><td>Time-consuming to update</td></tr>
+                <tr><td>Best Used For</td><td>Startups, ideation, pivoting</td><td>Investors, bank loans, formal planning</td></tr>
+                <tr><td>Detail Level</td><td>High-level overview</td><td>Deep strategic detail</td></tr>
+              </table>
+            </div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">How BMC Supports Business Expansion</div>
+            <div class="note-text">Entrepreneurs use the BMC to redesign their model for growth by: identifying new customer segments, adding revenue streams, forming new partnerships, improving channels, and scaling key activities and resources. For example, a bakery expanding to corporate clients would update its Customer Segments, Channels (add delivery apps), and Key Activities (hire more bakers).</div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">Key Numbers</div>
+            <div class="info-grid">
+              <div class="info-tile"><div class="info-tile-num">9</div><div class="info-tile-label">Building blocks in the BMC</div></div>
+              <div class="info-tile"><div class="info-tile-num">1</div><div class="info-tile-label">Page — the entire model fits on one page</div></div>
+              <div class="info-tile"><div class="info-tile-num">4</div><div class="info-tile-label">Quadrants: customers, value, operations, finances</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUESTIONS -->
+      <div class="q-section-title">Practice Questions — Business Model Canvas</div>
+      <div id="qs-0"></div>
+      <div class="nav-row" style="margin-top:20px;">
+        <button class="nav-btn" disabled>← Previous</button>
+        <span class="nav-progress">Topic 1 of 5</span>
+        <button class="nav-btn" onclick="goTopic(1)">Next Topic →</button>
+      </div>
+    </div>
+
+    <!-- ══════════════ TOPIC 2: COMPETITIVE ADVANTAGE ══════════════ -->
+    <div class="topic-panel t2" id="tp-1">
+      <div class="notes-card">
+        <div class="notes-header">
+          <div class="topic-label">Topic II · Competitive Advantage</div>
+          <h3>Competitive Advantage in Entrepreneurship</h3>
+          <p>A competitive advantage is the unique set of attributes that allows a business to outperform its rivals and sustain superior performance over time in the marketplace.</p>
+        </div>
+        <div class="notes-divider"></div>
+        <div class="notes-body">
+          <div class="note-block">
+            <div class="note-title">Definition &amp; Concept</div>
+            <div class="note-text">A competitive advantage exists when a business can offer greater value to customers than competitors — either through <strong>lower prices</strong> for equivalent benefits (cost advantage) or by providing <strong>unique benefits</strong> that justify premium pricing (differentiation advantage). Michael Porter identified three generic competitive strategies: Cost Leadership, Differentiation, and Focus.</div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">Sources of Competitive Advantage</div>
+            <div class="key-points">
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Innovation</strong> — New products, services, or processes that competitors cannot easily replicate (e.g., Apple's design ecosystem, Amazon's logistics technology).</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Cost Leadership</strong> — Producing at lower cost than competitors through efficiency, economies of scale, or lean operations (e.g., Toyota's lean manufacturing, Walmart's supply chain).</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Differentiation</strong> — Offering superior quality, branding, design, or customer experience that customers are willing to pay more for (e.g., Apple, Tesla, Starbucks).</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Intellectual Property (IP)</strong> — Patents, trademarks, copyrights, and trade secrets prevent competitors from copying innovations.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Customer Loyalty &amp; Brand</strong> — Strong brand recognition and loyal customer bases create switching costs for competitors to overcome.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>First-Mover Advantage</strong> — Being first to market with an innovation allows a business to capture market share, build brand awareness, and set industry standards before competitors arrive.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Talent &amp; Organizational Culture</strong> — Unique human capital and innovative culture that drives continuous improvement and creativity (e.g., Google's culture of experimentation).</div></div>
+            </div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">Porter's Three Generic Strategies</div>
+            <div class="two-col">
+              <div class="col-card"><div class="col-card-title">Cost Leadership</div><ul class="col-card-list"><li>Lowest-cost producer</li><li>Broad target market</li><li>Compete on price</li><li>Example: Walmart, Ryanair</li></ul></div>
+              <div class="col-card"><div class="col-card-title">Differentiation</div><ul class="col-card-list"><li>Unique features/quality</li><li>Broad target market</li><li>Premium pricing</li><li>Example: Apple, Tesla</li></ul></div>
+              <div class="col-card"><div class="col-card-title">Focus / Niche</div><ul class="col-card-list"><li>Narrow market segment</li><li>Cost OR differentiation</li><li>Deep specialization</li><li>Example: Ferrari, Rolls-Royce</li></ul></div>
+            </div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">How Innovation Creates Competitive Advantage</div>
+            <div class="note-text"><strong>Product Innovation</strong> delivers superior offerings — Apple's iPhone gave it dominant market position. <strong>Process Innovation</strong> reduces costs — Toyota's lean manufacturing gave lasting efficiency. <strong>Business Model Innovation</strong> redefines value — Netflix's streaming model disrupted the entire entertainment industry. <strong>Barriers to entry</strong> are created when proprietary technology or innovation culture makes it hard for rivals to replicate success. Competitive advantages must be continuously renewed through ongoing innovation.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-section-title">Practice Questions — Competitive Advantage</div>
+      <div id="qs-1"></div>
+      <div class="nav-row" style="margin-top:20px;">
+        <button class="nav-btn" onclick="goTopic(0)">← Previous</button>
+        <span class="nav-progress">Topic 2 of 5</span>
+        <button class="nav-btn" onclick="goTopic(2)">Next Topic →</button>
+      </div>
+    </div>
+
+    <!-- ══════════════ TOPIC 3: INNOVATION PORTFOLIO ══════════════ -->
+    <div class="topic-panel t3" id="tp-2">
+      <div class="notes-card">
+        <div class="notes-header">
+          <div class="topic-label">Topic III · Innovation Portfolio</div>
+          <h3>Entrepreneurship Innovation Portfolio</h3>
+          <p>A strategic tool that helps entrepreneurs manage multiple innovation ideas simultaneously — balancing risk across different time horizons to ensure both short-term stability and long-term breakthrough potential.</p>
+        </div>
+        <div class="notes-divider"></div>
+        <div class="notes-body">
+          <div class="note-block">
+            <div class="note-title">Definition</div>
+            <div class="note-text">An innovation portfolio is a <strong>collection of innovation ideas, experiments, and initiatives</strong> organized by risk level and growth potential. Just like a financial investment portfolio diversifies across different assets to manage risk, an innovation portfolio diversifies across different types of innovation. It turns innovation from a random activity into a systematic, strategic process.</div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">The 70-20-10 Model — Three Categories</div>
+            <div class="key-points">
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Core Innovation (70%)</strong> — Incremental improvements to existing products, services, or processes. Low risk, immediate returns, keeps the business strong TODAY. Example: improving customer service quality, adding features to an existing product, refining packaging.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Adjacent Innovation (20%)</strong> — Expanding into new markets, customer segments, or launching related products. Medium risk, creates moderate growth. Example: a food startup launching a premium product line, entering a new geographic market.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Transformational Innovation (10%)</strong> — High-risk, disruptive, radical innovations that could create entirely new markets or fundamentally change the business. Long-term bets with potential for massive returns. Example: developing an AI-powered platform, a new business model innovation.</div></div>
+            </div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">Key Figures</div>
+            <div class="info-grid">
+              <div class="info-tile"><div class="info-tile-num">70%</div><div class="info-tile-label">Core (incremental) innovations for stability</div></div>
+              <div class="info-tile"><div class="info-tile-num">20%</div><div class="info-tile-label">Adjacent innovations for growth</div></div>
+              <div class="info-tile"><div class="info-tile-num">10%</div><div class="info-tile-label">Transformational breakthroughs</div></div>
+            </div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">How Entrepreneurs Use an Innovation Portfolio</div>
+            <div class="key-points">
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Generate multiple ideas</strong> — Brainstorm, ideate, and explore many possibilities simultaneously rather than betting on one idea.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Categorize by risk</strong> — Sort ideas into core, adjacent, and transformational to ensure a balanced mix of innovation investment.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Prototype and test</strong> — Use MVPs and rapid prototyping to test ideas quickly and cheaply. Drop weak ideas early; fund promising ones.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Allocate resources strategically</strong> — Decide which ideas deserve more funding, which need partnerships, and which should be paused — based on data, not emotion.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Review continuously</strong> — The portfolio is dynamic: add new ideas, refine promising ones, remove weak ones regularly.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Align with business goals</strong> — Ensure all portfolio ideas support market trends, customer needs, and the entrepreneur's long-term vision.</div></div>
+            </div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">Benefits of an Innovation Portfolio</div>
+            <div class="two-col">
+              <div class="col-card"><div class="col-card-title">Risk Benefits</div><ul class="col-card-list"><li>Spreads risk across multiple bets</li><li>Prevents total failure if one idea fails</li><li>Balances short-term &amp; long-term</li></ul></div>
+              <div class="col-card"><div class="col-card-title">Strategic Benefits</div><ul class="col-card-list"><li>Encourages continuous creativity</li><li>Enables strategic resource allocation</li><li>Builds a competitive idea pipeline</li><li>Sustains long-term growth</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-section-title">Practice Questions — Innovation Portfolio</div>
+      <div id="qs-2"></div>
+      <div class="nav-row" style="margin-top:20px;">
+        <button class="nav-btn" onclick="goTopic(1)">← Previous</button>
+        <span class="nav-progress">Topic 3 of 5</span>
+        <button class="nav-btn" onclick="goTopic(3)">Next Topic →</button>
+      </div>
+    </div>
+
+    <!-- ══════════════ TOPIC 4: GLOBAL ENTREPRENEURSHIP ══════════════ -->
+    <div class="topic-panel t4" id="tp-3">
+      <div class="notes-card">
+        <div class="notes-header">
+          <div class="topic-label">Topic IV · Global Entrepreneurship Impacts</div>
+          <h3>Global Entrepreneurship Impacts<br><span style="color:var(--sky);font-size:0.85em;">Positive &amp; Negative</span></h3>
+          <p>Entrepreneurship operating at a global scale creates profound effects on economies, societies, cultures, and environments — generating both significant opportunities and serious challenges.</p>
+        </div>
+        <div class="notes-divider"></div>
+        <div class="notes-body">
+          <div class="note-block">
+            <div class="note-title">What is Global Entrepreneurship?</div>
+            <div class="note-text">Global entrepreneurship refers to entrepreneurial activities that cross national boundaries — creating businesses, innovations, and ventures that operate in multiple countries or serve international markets. It is enabled by globalization, digital technology, free trade agreements, and global investment networks. Examples include multinational startups (Uber, Airbnb, Spotify) and cross-border SMEs.</div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">✅ Positive Impacts</div>
+            <div class="key-points">
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Economic Growth &amp; Job Creation</strong> — Global entrepreneurship drives GDP growth in both home and host countries. It creates direct employment through business operations and indirect jobs through supply chains and service industries.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Innovation &amp; Technology Transfer</strong> — Global entrepreneurs bring new technologies, products, and business methods across borders. Developing countries benefit from technology transfers that improve productivity and industrial capacity.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Poverty Reduction</strong> — Entrepreneurship creates income opportunities, especially in developing economies. Social entrepreneurs specifically target poverty, access to clean water, healthcare, and education.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Increased Competition &amp; Consumer Choice</strong> — Global markets expose consumers to a wider range of products, services, and prices — forcing local businesses to improve quality and efficiency to compete.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Access to Global Capital &amp; Resources</strong> — Entrepreneurs can access international investment, technology, raw materials, and talent — enabling innovations that would be impossible with local resources alone.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Knowledge &amp; Cultural Exchange</strong> — Cross-border entrepreneurship promotes cultural understanding, knowledge sharing, and diverse perspectives that fuel creative solutions to global problems.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Social Entrepreneurship &amp; SDGs</strong> — Global social entrepreneurs address United Nations Sustainable Development Goals — tackling climate change, food insecurity, healthcare access, and gender equality across borders.</div></div>
+            </div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">⚠️ Negative Impacts</div>
+            <div class="key-points">
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Destruction of Local Businesses</strong> — Large global entrepreneurs (e.g., Amazon, global supermarket chains) can undercut and destroy local small businesses, reducing economic diversity and community wealth.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Exploitation of Labor &amp; Resources</strong> — Some global businesses exploit cheap labor, weak regulations, and natural resources in developing countries — creating inequality and environmental damage.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Environmental Degradation</strong> — Rapid global business growth can cause deforestation, pollution, carbon emissions, and resource depletion — contributing to climate change and ecosystem destruction.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Cultural Homogenization</strong> — Global brands can erode local cultures, languages, and traditions — replacing cultural diversity with a dominant global consumer culture (Westernization).</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Inequality &amp; Wealth Concentration</strong> — The benefits of global entrepreneurship often concentrate among a small elite, widening the gap between wealthy business owners and low-wage workers globally.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Tax Avoidance</strong> — Multinational entrepreneurial firms often use legal loopholes to shift profits to low-tax jurisdictions, reducing government revenues needed for public services.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Economic Dependency</strong> — Countries overly reliant on global entrepreneurs for employment and technology may become vulnerable when those businesses relocate or exit, creating economic instability.</div></div>
+            </div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">Summary Balance</div>
+            <div class="two-col">
+              <div class="col-card"><div class="col-card-title">✅ Key Positives</div><ul class="col-card-list"><li>Economic growth &amp; jobs</li><li>Innovation transfer</li><li>Poverty reduction</li><li>Consumer choice</li><li>Global capital access</li><li>Social impact</li></ul></div>
+              <div class="col-card"><div class="col-card-title">⚠️ Key Negatives</div><ul class="col-card-list"><li>Local business destruction</li><li>Labor exploitation</li><li>Environmental damage</li><li>Cultural erosion</li><li>Wealth inequality</li><li>Tax avoidance</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-section-title">Practice Questions — Global Entrepreneurship Impacts</div>
+      <div id="qs-3"></div>
+      <div class="nav-row" style="margin-top:20px;">
+        <button class="nav-btn" onclick="goTopic(2)">← Previous</button>
+        <span class="nav-progress">Topic 4 of 5</span>
+        <button class="nav-btn" onclick="goTopic(4)">Next Topic →</button>
+      </div>
+    </div>
+
+    <!-- ══════════════ TOPIC 5: DIGITAL TECHNOLOGIES ══════════════ -->
+    <div class="topic-panel t5" id="tp-4">
+      <div class="notes-card">
+        <div class="notes-header">
+          <div class="topic-label">Topic V · Digital Technologies Impact</div>
+          <h3>Impacts of Digital Technologies on 21st Century Entrepreneurship</h3>
+          <p>Digital technologies have fundamentally transformed how businesses are created, managed, scaled, and disrupted — making entrepreneurship more accessible, faster, and globally connected than ever before.</p>
+        </div>
+        <div class="notes-divider"></div>
+        <div class="notes-body">
+          <div class="note-block">
+            <div class="note-title">Overview</div>
+            <div class="note-text">The 21st century entrepreneur operates in a digitally-enabled environment where technology has dismantled traditional barriers to entry, created entirely new business models, and connected entrepreneurs to global markets from day one. Key technologies driving this transformation include the internet, cloud computing, artificial intelligence (AI), big data, mobile platforms, social media, blockchain, and automation.</div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">1. Lowering Barriers to Entry</div>
+            <div class="note-text">Before digital technology, starting a business required significant capital for physical infrastructure, distribution networks, and marketing. Today:<br>• <strong>Cloud computing</strong> (AWS, Google Cloud) replaces expensive physical servers.<br>• <strong>E-commerce platforms</strong> (Shopify, WooCommerce) enable instant online stores.<br>• <strong>Open-source software</strong> provides free professional tools.<br>• A startup can now launch globally from a laptop with minimal upfront cost.</div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">2. Enabling New Business Models</div>
+            <div class="key-points">
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Platform Economy</strong> — Uber, Airbnb, and Amazon Marketplace connect buyers and sellers without owning the core asset (cars, homes, products).</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Subscription Model</strong> — Netflix, Spotify, and SaaS businesses generate recurring revenue through digital subscriptions.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Freemium Model</strong> — LinkedIn, Dropbox, and Zoom offer free basic services and charge for premium features.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Gig Economy</strong> — Digital platforms like Fiverr, Upwork, and Bolt enable on-demand, flexible work arrangements that blur the line between employment and entrepreneurship.</div></div>
+            </div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">3. Transforming Marketing &amp; Customer Acquisition</div>
+            <div class="note-text">Digital technologies give entrepreneurs powerful, cost-effective marketing tools previously only available to large corporations: <strong>Social media</strong> (Facebook, Instagram, TikTok, LinkedIn) for brand building and community. <strong>Search Engine Optimization (SEO)</strong> for organic visibility. <strong>Targeted digital advertising</strong> (Google Ads, Facebook Ads) for precise customer targeting. <strong>Content marketing and influencer partnerships</strong> for authentic brand storytelling. A small startup can now reach global customers for a fraction of traditional advertising costs.</div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">4. Artificial Intelligence &amp; Big Data</div>
+            <div class="key-points">
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Data-driven decision-making</strong> — Entrepreneurs use analytics tools (Google Analytics, CRM systems) to understand customer behavior, identify trends, and optimize operations in real time.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>AI-powered automation</strong> — Chatbots, automated customer service, inventory management, and personalized recommendations reduce operating costs and improve customer experience.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Rapid iteration</strong> — Digital lean startup tools allow entrepreneurs to build, measure, and learn faster than ever — testing ideas with MVPs and pivoting based on real user data.</div></div>
+            </div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">5. Global Reach &amp; Remote Work</div>
+            <div class="note-text">Digital communication tools (Zoom, Slack, Notion, GitHub) enable entrepreneurs to build global teams without physical offices — dramatically expanding access to talent and reducing overhead. An entrepreneur in Dar es Salaam can hire developers in India, designers in Poland, and serve customers worldwide — all from a smartphone. Mobile money platforms (M-Pesa) have further democratized financial access for entrepreneurs in developing economies.</div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">6. Challenges of Digital Entrepreneurship</div>
+            <div class="key-points">
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Cybersecurity risks</strong> — Digital businesses face threats from data breaches, hacking, and fraud that can destroy customer trust.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Digital divide</strong> — Unequal access to technology means digital entrepreneurship benefits are not evenly distributed across regions and income levels.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Information overload</strong> — The vast amount of digital data and competition for attention online makes it increasingly difficult for entrepreneurs to stand out.</div></div>
+              <div class="kp"><div class="kp-dot"></div><div class="kp-text"><strong>Rapid obsolescence</strong> — Technology changes so quickly that today's competitive advantage can become obsolete within months, requiring constant adaptation and learning.</div></div>
+            </div>
+          </div>
+          <div class="note-block">
+            <div class="note-title">Key Impact Summary</div>
+            <div class="info-grid">
+              <div class="info-tile"><div class="info-tile-num">↓</div><div class="info-tile-label">Lower startup costs &amp; barriers to entry</div></div>
+              <div class="info-tile"><div class="info-tile-num">↑</div><div class="info-tile-label">Faster innovation &amp; iteration cycles</div></div>
+              <div class="info-tile"><div class="info-tile-num">🌍</div><div class="info-tile-label">Instant global market access from day one</div></div>
+              <div class="info-tile"><div class="info-tile-num">🤖</div><div class="info-tile-label">AI-powered operations &amp; decision-making</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-section-title">Practice Questions — Digital Technologies</div>
+      <div id="qs-4"></div>
+      <div class="nav-row" style="margin-top:20px;">
+        <button class="nav-btn" onclick="goTopic(3)">← Previous</button>
+        <span class="nav-progress">Topic 5 of 5</span>
+        <button class="nav-btn" disabled>All Done ✓</button>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /layout -->
+
+<button class="float-up" onclick="window.scrollTo(0,0)" aria-label="Top">↑</button>
+
+<script>
+/* ═══════════════════ QUESTION DATA ═══════════════════ */
+var QS=[
+/* ── Topic 0: BMC ── */
+[
+  {type:'tf',q:"The Business Model Canvas (BMC) was developed by Alexander Osterwalder as a one-page visual framework.",ans:true,exp:"Correct. Alexander Osterwalder developed the BMC as a single-page visual template to describe, design, challenge, and pivot a business model."},
+  {type:'tf',q:"The 'Revenue Streams' block in the BMC describes what the business must pay to operate.",ans:false,exp:"Incorrect. Revenue Streams describes how the business EARNS income. What the business PAYS belongs to the 'Cost Structure' block."},
+  {type:'mc',q:"How many building blocks make up the Business Model Canvas?",opts:["6","7","9","12"],ans:2,exp:"The BMC consists of exactly 9 building blocks covering all dimensions of a business: Customer Segments, Value Propositions, Channels, Customer Relationships, Revenue Streams, Key Resources, Key Activities, Key Partnerships, and Cost Structure."},
+  {type:'mc',q:"Which BMC building block answers the question: 'What unique value do we offer to solve customer problems?'",opts:["Customer Relationships","Key Activities","Value Propositions","Revenue Streams"],ans:2,exp:"The Value Propositions block describes the unique value the business offers to its customer segments — what problem it solves and why customers choose it over competitors."},
+  {type:'mc',q:"A company identifying new customer groups to serve during business expansion is updating which BMC block?",opts:["Key Partnerships","Customer Segments","Cost Structure","Key Resources"],ans:1,exp:"Customer Segments defines the different groups of people or organizations the business aims to reach and serve. Adding new groups during expansion directly updates this block."},
+  {type:'sa',q:"Explain the difference between the Business Model Canvas and a traditional Business Plan. When would each be most appropriate to use?",hint:"Compare format, purpose, speed of update, and best use case for each tool.",model:"The Business Model Canvas (BMC) is a one-page visual template with 9 building blocks that gives a high-level overview of how a business works — ideal for startups, ideation, and rapid pivoting. It is quick to update and easy to communicate visually. A traditional Business Plan is a detailed, comprehensive written document covering strategy, financials, operations, and market research — used for formal investor presentations, bank loan applications, and strategic planning. The BMC is best used when designing or redesigning a business quickly; the Business Plan is best used when seeking formal funding or providing detailed strategic direction."},
+],
+/* ── Topic 1: Competitive Advantage ── */
+[
+  {type:'tf',q:"First-mover advantage means a business that enters a market later automatically gains competitive advantage.",ans:false,exp:"False. First-mover advantage goes to the FIRST business to enter a new market — giving it head start in brand awareness, customer acquisition, and setting industry standards."},
+  {type:'tf',q:"Intellectual property such as patents and trademarks can serve as a source of competitive advantage by preventing competitors from copying innovations.",ans:true,exp:"Correct. IP protection creates legal barriers that prevent rivals from replicating proprietary innovations, technologies, or brand identities — sustaining competitive advantage."},
+  {type:'mc',q:"According to Michael Porter's generic strategies, which approach focuses on becoming the lowest-cost producer in the industry?",opts:["Differentiation","Focus","Cost Leadership","Value Proposition"],ans:2,exp:"Porter's Cost Leadership strategy involves becoming the lowest-cost producer in an industry — competing primarily on price. Examples include Walmart and Ryanair."},
+  {type:'mc',q:"Which of the following is the BEST example of a competitive advantage built through process innovation?",opts:["Apple's iPhone design","Netflix's streaming model","Toyota's lean manufacturing system","Starbucks' brand premium pricing"],ans:2,exp:"Toyota's lean manufacturing system is a classic example of process innovation creating competitive advantage — dramatically improving production efficiency and quality compared to rivals."},
+  {type:'mc',q:"A small coffee shop that targets only airport travelers and charges premium prices is using which of Porter's strategies?",opts:["Cost Leadership","Broad Differentiation","Focus / Niche strategy","First-Mover Advantage"],ans:2,exp:"The Focus strategy targets a narrow customer segment — in this case, airport travelers — and can apply either cost focus or differentiation focus within that niche."},
+  {type:'sa',q:"Identify THREE sources of competitive advantage and explain how each helps a business outperform its rivals. Use examples where possible.",hint:"Think about: innovation, cost, differentiation, IP, brand loyalty, first-mover advantage, talent/culture.",model:"Three sources of competitive advantage: (1) Innovation — creating products or processes rivals cannot easily replicate. Apple's iPhone combined design, technology, and ecosystem to dominate the smartphone market. (2) Cost Leadership — producing at lower cost through efficiency or economies of scale. Toyota's lean manufacturing reduced waste and costs significantly below competitors. (3) Intellectual Property (IP) — patents, trademarks, and trade secrets legally prevent competitors from copying innovations, sustaining the advantage over time. For example, pharmaceutical companies use patents to protect new drugs and maintain pricing power."},
+],
+/* ── Topic 2: Innovation Portfolio ── */
+[
+  {type:'tf',q:"In the 70-20-10 innovation portfolio model, 10% is allocated to high-risk transformational innovations.",ans:true,exp:"Correct. The 70-20-10 model allocates 10% of innovation resources to transformational (radical, disruptive) innovations that could create major breakthroughs."},
+  {type:'tf',q:"The innovation portfolio model encourages entrepreneurs to focus exclusively on the single best idea to maximize impact.",ans:false,exp:"False. The innovation portfolio specifically manages MULTIPLE ideas simultaneously across different risk levels — spreading bets rather than relying on a single idea."},
+  {type:'mc',q:"A fashion startup that improves the packaging of its existing product is engaged in which type of portfolio innovation?",opts:["Transformational innovation","Adjacent innovation","Core innovation","Disruptive innovation"],ans:2,exp:"Improving existing packaging is an incremental improvement to the current product — a Core innovation (70% category) that keeps the business strong today with low risk."},
+  {type:'mc',q:"Which tool is used to test innovation portfolio ideas quickly at minimal cost before full investment?",opts:["Business Plan","Minimum Viable Product (MVP)","Business Model Canvas","SWOT Analysis"],ans:1,exp:"A Minimum Viable Product (MVP) is a basic version of the product used to test assumptions and gather real user feedback before committing to full-scale development — reducing time and cost."},
+  {type:'mc',q:"What is the PRIMARY benefit of maintaining a diverse innovation portfolio rather than investing in one idea?",opts:["It guarantees all ideas will succeed","It eliminates all business risk","It spreads risk and ensures business continuity if one idea fails","It removes the need for market research"],ans:2,exp:"A diverse portfolio spreads risk across multiple ideas — if one idea fails, others can sustain and grow the business. This prevents total failure and builds a continuous pipeline of innovation."},
+  {type:'sa',q:"Describe the 70-20-10 innovation portfolio model and explain how an entrepreneur in any business sector could apply it. Give specific examples for each category.",hint:"Define core/adjacent/transformational, give the % allocation, and provide a concrete example for each from any industry.",model:"The 70-20-10 model allocates innovation resources as follows: Core innovations (70%) — incremental improvements to current offerings that generate stable returns with low risk. Example: a restaurant improving its menu based on customer feedback or speeding up delivery. Adjacent innovations (20%) — entering new markets or launching related products with moderate risk. Example: the same restaurant launching a catering service for corporate events. Transformational innovations (10%) — radical, disruptive bets with high risk and breakthrough potential. Example: the restaurant developing an AI-powered personalized meal subscription app. This model ensures the business remains stable today (Core), grows steadily (Adjacent), and explores future opportunities (Transformational) simultaneously."},
+],
+/* ── Topic 3: Global Entrepreneurship ── */
+[
+  {type:'tf',q:"Global entrepreneurship can contribute to poverty reduction by creating employment opportunities in developing economies.",ans:true,exp:"Correct. Global entrepreneurship creates direct jobs through business operations and indirect jobs through supply chains — generating income that reduces poverty, especially in developing countries."},
+  {type:'tf',q:"Cultural homogenization — where global brands erode local cultures — is considered a POSITIVE impact of global entrepreneurship.",ans:false,exp:"False. Cultural homogenization is a NEGATIVE impact — global brands can replace cultural diversity with a dominant global consumer culture, eroding local traditions, languages, and identities."},
+  {type:'mc',q:"Which of the following is a NEGATIVE impact of global entrepreneurship on local economies?",opts:["Technology transfer to developing countries","Creation of new employment opportunities","Destruction of local small businesses by large global corporations","Increased consumer choice"],ans:2,exp:"Large global entrepreneurs (e.g., global supermarket chains, Amazon) can undercut and destroy local small businesses through superior scale, pricing, and logistics — reducing economic diversity."},
+  {type:'mc',q:"A global social enterprise that builds solar-powered water wells in rural Africa is BEST demonstrating which positive impact?",opts:["Cultural homogenization","Wealth concentration","Social entrepreneurship addressing poverty and SDGs","Tax avoidance"],ans:2,exp:"This enterprise directly demonstrates social entrepreneurship aligned with UN Sustainable Development Goals (SDGs) — addressing poverty, clean water access, and sustainable energy simultaneously."},
+  {type:'mc',q:"Which negative global entrepreneurship impact involves multinational companies moving profits to low-tax countries to reduce their tax payments?",opts:["Labor exploitation","Cultural erosion","Tax avoidance","Economic dependency"],ans:2,exp:"Tax avoidance involves multinational firms using legal loopholes to shift profits to low-tax jurisdictions — reducing government revenues needed for public services in the countries where they actually operate."},
+  {type:'sa',q:"Discuss TWO positive and TWO negative impacts of global entrepreneurship on developing economies. Use examples to support your answer.",hint:"Choose specific impacts from each side and explain how they affect developing countries with real or hypothetical examples.",model:"TWO POSITIVE IMPACTS: (1) Job Creation and Economic Growth — global entrepreneurs establish operations in developing countries, creating direct employment and stimulating local supply chains. For example, M-Pesa's mobile banking platform in Kenya created financial access for millions of previously unbanked entrepreneurs. (2) Technology Transfer — global businesses bring advanced technologies and production methods to developing nations, improving productivity. Mobile internet platforms have enabled entrepreneurs in sub-Saharan Africa to access global markets without physical infrastructure.\n\nTWO NEGATIVE IMPACTS: (1) Exploitation of Labor and Resources — some global companies take advantage of weaker labor laws and lower wages in developing countries, paying minimal wages while extracting significant value. (2) Economic Dependency — countries that rely heavily on a single global company for employment become vulnerable when that company relocates or exits, creating sudden economic instability."},
+],
+/* ── Topic 4: Digital Technologies ── */
+[
+  {type:'tf',q:"Cloud computing has lowered the startup costs for new businesses by replacing the need for expensive physical servers and IT infrastructure.",ans:true,exp:"Correct. Cloud platforms like AWS and Google Cloud allow startups to access powerful computing infrastructure on a pay-as-you-use basis — eliminating large upfront IT capital expenditures."},
+  {type:'tf',q:"The gig economy — enabled by digital platforms like Uber and Fiverr — has eliminated the concept of traditional employment entirely.",ans:false,exp:"False. The gig economy has created a NEW category of flexible, on-demand work alongside traditional employment — it has not eliminated traditional employment, but significantly changed the labor market."},
+  {type:'mc',q:"Which digital technology allows entrepreneurs to make data-driven decisions by tracking customer behavior and operational performance in real time?",opts:["Cloud computing","Big data analytics","Blockchain","3D printing"],ans:1,exp:"Big data analytics tools (Google Analytics, CRM systems, business intelligence platforms) allow entrepreneurs to collect, analyze, and act on large volumes of customer and operational data in real time."},
+  {type:'mc',q:"Uber, Airbnb, and Amazon Marketplace are examples of which digital business model?",opts:["Subscription model","Freemium model","Platform economy model","Franchise model"],ans:2,exp:"All three operate on the platform economy model — they connect buyers and sellers on a digital platform without owning the core asset (cars, homes, products), earning fees or commissions on transactions."},
+  {type:'mc',q:"Which of the following is a KEY CHALLENGE brought by digital technologies for 21st century entrepreneurs?",opts:["Higher customer acquisition costs than traditional marketing","Cybersecurity risks and data breaches that threaten customer trust","Reduced global market access","Slower product development cycles"],ans:1,exp:"Cybersecurity risks are a critical challenge — digital businesses store sensitive customer and financial data, making them targets for hacking, data breaches, and fraud that can destroy customer trust and reputation."},
+  {type:'sa',q:"Analyze how digital technologies have transformed entrepreneurship in the 21st century. Discuss at least FOUR specific impacts, using examples.",hint:"Cover: barriers to entry, new business models, marketing transformation, AI/data, global reach, and/or challenges. Use real examples.",model:"Digital technologies have transformed 21st century entrepreneurship in multiple profound ways:\n\n1. LOWERING BARRIERS TO ENTRY: Cloud computing, open-source software, and e-commerce platforms (Shopify, AWS) allow entrepreneurs to launch businesses globally with minimal capital — a barrier that previously required significant physical infrastructure investment.\n\n2. NEW BUSINESS MODELS: Digital infrastructure enabled entirely new models: platform economy (Uber, Airbnb own no cars/homes but are valued at billions), subscription models (Netflix, Spotify generate reliable recurring revenue), and freemium models (Zoom, LinkedIn). These models were impossible before digital connectivity existed.\n\n3. TRANSFORMING MARKETING: Social media, SEO, and targeted digital advertising (Google Ads, Facebook Ads) allow small startups to reach global customers at a fraction of traditional advertising costs — democratizing marketing power previously available only to large corporations.\n\n4. AI AND DATA-DRIVEN OPERATIONS: AI-powered tools enable entrepreneurs to automate customer service (chatbots), personalize offerings (recommendation engines), and make real-time operational decisions based on large data sets — improving efficiency and customer experience simultaneously.\n\nIn conclusion, digital technologies have democratized entrepreneurship — enabling more people, in more places, with less capital, to build globally competitive businesses faster than any previous generation."},
+]
+];
+
+/* ═══════════════════ STATE ═══════════════════ */
+var score=0,answered=0,saMarked={};
+function upd(){
+  document.getElementById('sd').textContent=score;
+  document.getElementById('ad').textContent=answered;
+  document.getElementById('pf').style.width=(answered/30*100)+'%';
+}
+
+/* ═══════════════════ RENDER ═══════════════════ */
+function renderAll(){
+  var letters=['A','B','C','D'];
+  QS.forEach(function(qs,ti){
+    var c=document.getElementById('qs-'+ti);
+    var qNum=0;
+    qs.forEach(function(q,qi){
+      var gid='t'+ti+'q'+qi;
+      var d=document.createElement('div');
+      d.className='q-card';
+      if(q.type==='tf'){
+        qNum++;
+        d.innerHTML='<div class="q-meta">True / False · Q'+qNum+'</div>'+
+          '<div class="q-text">'+q.q+'</div>'+
+          '<div class="tf-row">'+
+            '<button class="tf-btn" id="'+gid+'-T" onclick="doTF(\''+gid+'\','+ti+','+qi+',true)">✅ True</button>'+
+            '<button class="tf-btn" id="'+gid+'-F" onclick="doTF(\''+gid+'\','+ti+','+qi+',false)">❌ False</button>'+
+          '</div><div class="feedback" id="'+gid+'-fb"></div>';
+      } else if(q.type==='mc'){
+        qNum++;
+        var opts=q.opts.map(function(o,oi){
+          return '<button class="mc-opt" id="'+gid+'-'+oi+'" onclick="doMC(\''+gid+'\','+ti+','+qi+','+oi+')">'+
+            '<span class="opt-badge">'+letters[oi]+'</span><span>'+o+'</span></button>';
+        }).join('');
+        d.innerHTML='<div class="q-meta">Multiple Choice · Q'+qNum+'</div>'+
+          '<div class="q-text">'+q.q+'</div>'+
+          '<div class="mc-opts">'+opts+'</div>'+
+          '<div class="feedback" id="'+gid+'-fb"></div>';
+      } else {
+        qNum++;
+        d.innerHTML='<div class="q-meta">Short Answer · Q'+qNum+'</div>'+
+          '<div class="q-text">'+q.q+'</div>'+
+          '<div class="hint-box">💡 <strong>Hint:</strong> '+q.hint+'</div>'+
+          '<textarea class="sa-area" id="'+gid+'-ta" placeholder="Write your answer here…" oninput="doWC(\''+gid+'\')"></textarea>'+
+          '<div class="wc" id="'+gid+'-wc">0 words</div>'+
+          '<div class="q-actions">'+
+            '<button class="btn btn-amber" onclick="doModel(\''+gid+'\','+ti+','+qi+')">Show Model Answer</button>'+
+            '<button class="btn btn-outline" id="'+gid+'-mk" onclick="doMark(\''+gid+'\')">Mark Correct (+1)</button>'+
+          '</div><div class="feedback" id="'+gid+'-fb"></div>';
+      }
+      c.appendChild(d);
+    });
+  });
+}
+
+/* ═══════════════════ HANDLERS ═══════════════════ */
+function doTF(gid,ti,qi,chosen){
+  var tB=document.getElementById(gid+'-T'),fB=document.getElementById(gid+'-F');
+  if(tB.disabled)return;
+  tB.disabled=true;fB.disabled=true;
+  var q=QS[ti][qi],fb=document.getElementById(gid+'-fb');
+  if(chosen===q.ans){
+    (chosen?tB:fB).classList.add('correct');
+    fb.className='feedback ok show';fb.innerHTML='<strong>✅ Correct!</strong>'+q.exp;score++;
+  }else{
+    (chosen?tB:fB).classList.add('wrong');
+    (q.ans?tB:fB).classList.add('correct');
+    fb.className='feedback no show';fb.innerHTML='<strong>❌ Incorrect.</strong>Correct: <strong>'+(q.ans?'TRUE':'FALSE')+'</strong>. '+q.exp;
+  }
+  answered++;upd();
+}
+function doMC(gid,ti,qi,oi){
+  var q=QS[ti][qi];
+  var all=[];
+  for(var k=0;k<q.opts.length;k++){
+    var el=document.getElementById(gid+'-'+k);
+    if(el){el.disabled=true;all.push(el);}
+  }
+  var ch=document.getElementById(gid+'-'+oi),fb=document.getElementById(gid+'-fb');
+  if(oi===q.ans){
+    ch.classList.add('correct');fb.className='feedback ok show';
+    fb.innerHTML='<strong>✅ Correct!</strong>'+q.exp;score++;
+  }else{
+    ch.classList.add('wrong');
+    var rv=document.getElementById(gid+'-'+q.ans);
+    if(rv)rv.classList.add('reveal');
+    fb.className='feedback no show';fb.innerHTML='<strong>❌ Incorrect.</strong>'+q.exp;
+  }
+  answered++;upd();
+}
+function doWC(gid){
+  var v=document.getElementById(gid+'-ta').value.trim();
+  var w=v?v.split(/\s+/).length:0;
+  document.getElementById(gid+'-wc').textContent=w+' word'+(w!==1?'s':'');
+}
+function doModel(gid,ti,qi){
+  var fb=document.getElementById(gid+'-fb');
+  fb.className='feedback info show';
+  fb.innerHTML='<strong>📖 Model Answer:</strong><br>'+QS[ti][qi].model.replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+}
+function doMark(gid){
+  if(saMarked[gid])return;saMarked[gid]=true;
+  var btn=document.getElementById(gid+'-mk');if(btn)btn.disabled=true;
+  score++;answered++;upd();
+  var fb=document.getElementById(gid+'-fb');
+  if(fb.classList.contains('show')){
+    fb.innerHTML+='<br><span style="color:#86efac;font-weight:700;">✅ Marked as correct (+1)</span>';
+  }else{
+    fb.className='feedback ok show';
+    fb.innerHTML='<strong>✅ Self-marked correct!</strong>Compare your answer with the model answer above to ensure accuracy.';
+  }
+}
+
+/* ═══════════════════ NAVIGATION ═══════════════════ */
+var cur=0;
+var TOPICS=[
+  {pill:0,si:'si-0',panel:'tp-0'},
+  {pill:1,si:'si-1',panel:'tp-1'},
+  {pill:2,si:'si-2',panel:'tp-2'},
+  {pill:3,si:'si-3',panel:'tp-3'},
+  {pill:4,si:'si-4',panel:'tp-4'}
+];
+
+function goTopic(idx){
+  // deactivate old
+  document.getElementById('tp-'+cur).classList.remove('active');
+  document.getElementById('si-'+cur).classList.remove('active');
+  document.querySelectorAll('.topic-pill')[cur].classList.remove('active');
+  // activate new
+  cur=idx;
+  document.getElementById('tp-'+cur).classList.add('active');
+  document.getElementById('si-'+cur).classList.add('active');
+  document.querySelectorAll('.topic-pill')[cur].classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* INIT */
+renderAll();
+upd();
+</script>
+</body>
+</html>
