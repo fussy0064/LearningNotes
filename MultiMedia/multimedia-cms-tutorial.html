@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multimedia & CMS — Interactive Tutorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f0e8;
+    --cream: #ede7d9;
+    --amber: #c8902a;
+    --amber-light: #e8b84b;
+    --rust: #9b4a2a;
+    --teal: #1e5c5a;
+    --teal-light: #2d8a87;
+    --muted: #7a7060;
+    --border: #d4c9b0;
+    --card: #faf6ef;
+    --shadow: rgba(15,14,12,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  #progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, var(--amber), var(--amber-light));
+    width: 0%; z-index: 1000;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 8px var(--amber-light);
+  }
+
+  /* ─── SIDE NAV ─── */
+  #sidenav {
+    position: fixed; left: 0; top: 50%; transform: translateY(-50%);
+    z-index: 100; display: flex; flex-direction: column; gap: 6px;
+    padding: 12px 0 12px 16px;
+  }
+  .nav-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); cursor: pointer;
+    transition: all 0.3s; border: none; outline: none;
+    position: relative;
+  }
+  .nav-dot:hover, .nav-dot.active { background: var(--amber); transform: scale(1.4); }
+  .nav-dot .nav-label {
+    position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+    font-size: 11px; font-family: 'DM Mono', monospace; font-weight: 500;
+    color: var(--ink); background: var(--paper); border: 1px solid var(--border);
+    padding: 3px 8px; border-radius: 3px; white-space: nowrap;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    box-shadow: 2px 2px 8px var(--shadow);
+  }
+  .nav-dot:hover .nav-label { opacity: 1; }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 80px 80px 80px 140px;
+    background: var(--ink);
+    position: relative; overflow: hidden;
+  }
+  #hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 80% at 80% 20%, rgba(200,144,42,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(30,92,90,0.12) 0%, transparent 60%);
+  }
+  .hero-tag {
+    font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--amber); margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif; font-size: clamp(52px, 7vw, 96px);
+    font-weight: 900; line-height: 1.0; color: var(--paper);
+    margin-bottom: 24px; max-width: 900px;
+    opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+  }
+  .hero-title em { color: var(--amber-light); font-style: italic; }
+  .hero-subtitle {
+    font-size: 18px; color: rgba(245,240,232,0.6); max-width: 560px;
+    line-height: 1.7; margin-bottom: 56px;
+    opacity: 0; animation: fadeUp 0.9s 0.7s forwards;
+  }
+  .hero-modules {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.9s 0.9s forwards;
+  }
+  .hero-module {
+    background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.12);
+    color: rgba(245,240,232,0.75); font-size: 13px; padding: 8px 16px;
+    border-radius: 2px; font-family: 'DM Mono', monospace; cursor: pointer;
+    transition: all 0.2s; text-decoration: none;
+  }
+  .hero-module:hover {
+    background: var(--amber); color: var(--ink); border-color: var(--amber);
+  }
+  .hero-deco {
+    position: absolute; right: 80px; top: 50%; transform: translateY(-50%);
+    font-family: 'Playfair Display', serif; font-size: 320px; font-weight: 900;
+    color: rgba(200,144,42,0.04); line-height: 1; pointer-events: none;
+    opacity: 0; animation: fadeIn 1.5s 1s forwards;
+    user-select: none;
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    padding: 100px 80px 100px 140px;
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s, transform 0.7s;
+    max-width: 1200px;
+  }
+  .section.visible { opacity: 1; transform: translateY(0); }
+
+  .section-alt { background: var(--cream); }
+
+  .section-header {
+    display: flex; align-items: baseline; gap: 20px; margin-bottom: 56px;
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace; font-size: 11px; color: var(--amber);
+    letter-spacing: 2px; padding-top: 4px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 52px);
+    font-weight: 700; line-height: 1.15; color: var(--ink);
+  }
+  .section-title span { color: var(--amber); }
+
+  /* ─── CARDS ─── */
+  .cards {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px; margin-bottom: 48px;
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 4px; padding: 28px; position: relative;
+    transition: transform 0.25s, box-shadow 0.25s;
+    overflow: hidden;
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--amber); transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px var(--shadow); }
+  .card:hover::before { transform: scaleX(1); }
+  .card-icon { font-size: 28px; margin-bottom: 16px; }
+  .card-title {
+    font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700;
+    margin-bottom: 10px; color: var(--ink);
+  }
+  .card-text { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* ─── TIMELINE ─── */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 1px; background: var(--border);
+  }
+  .timeline-item { position: relative; padding: 0 0 36px 32px; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -4px; top: 8px;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--amber); border: 2px solid var(--paper);
+  }
+  .timeline-year {
+    font-family: 'DM Mono', monospace; font-size: 11px; color: var(--amber);
+    letter-spacing: 2px; margin-bottom: 6px;
+  }
+  .timeline-label { font-weight: 500; margin-bottom: 4px; }
+  .timeline-desc { font-size: 14px; color: var(--muted); }
+
+  /* ─── ACCORDION ─── */
+  .accordion { margin-bottom: 48px; }
+  .acc-item { border-bottom: 1px solid var(--border); }
+  .acc-trigger {
+    width: 100%; background: none; border: none; cursor: pointer;
+    text-align: left; padding: 20px 0; display: flex; align-items: center;
+    justify-content: space-between; gap: 16px;
+    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500;
+    color: var(--ink); transition: color 0.2s;
+  }
+  .acc-trigger:hover { color: var(--amber); }
+  .acc-icon {
+    width: 24px; height: 24px; flex-shrink: 0;
+    border: 1px solid var(--border); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; transition: transform 0.3s, background 0.2s, border-color 0.2s;
+    color: var(--muted);
+  }
+  .acc-trigger.open .acc-icon { transform: rotate(45deg); background: var(--amber); border-color: var(--amber); color: white; }
+  .acc-body {
+    overflow: hidden; max-height: 0;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s;
+  }
+  .acc-body.open { max-height: 800px; }
+  .acc-content { padding: 0 0 24px 0; font-size: 15px; color: var(--muted); line-height: 1.8; }
+
+  /* ─── TWO-COL ─── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ─── COMPARISON TABLE ─── */
+  .compare-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+  .compare-table th {
+    background: var(--ink); color: var(--paper);
+    font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; padding: 14px 20px; text-align: left;
+  }
+  .compare-table td { padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: var(--cream); }
+  .badge {
+    display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 2px;
+    font-family: 'DM Mono', monospace; font-weight: 500;
+  }
+  .badge-amber { background: rgba(200,144,42,0.15); color: var(--amber); }
+  .badge-teal { background: rgba(30,92,90,0.12); color: var(--teal); }
+  .badge-rust { background: rgba(155,74,42,0.12); color: var(--rust); }
+
+  /* ─── LIST STYLED ─── */
+  .styled-list { list-style: none; }
+  .styled-list li {
+    padding: 12px 0 12px 28px; border-bottom: 1px solid var(--border);
+    font-size: 15px; position: relative;
+  }
+  .styled-list li:last-child { border-bottom: none; }
+  .styled-list li::before {
+    content: '→'; position: absolute; left: 0;
+    color: var(--amber); font-family: 'DM Mono', monospace;
+  }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    background: var(--ink); color: var(--paper); padding: 32px 40px;
+    border-radius: 4px; margin: 40px 0; position: relative; overflow: hidden;
+  }
+  .callout::before {
+    content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
+    background: var(--amber-light);
+  }
+  .callout-label {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px;
+    color: var(--amber-light); margin-bottom: 10px; text-transform: uppercase;
+  }
+  .callout p { font-size: 15px; line-height: 1.7; opacity: 0.85; }
+
+  /* ─── COLOR SWATCHES ─── */
+  .swatches { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+  .swatch {
+    width: 80px; text-align: center;
+  }
+  .swatch-color {
+    height: 60px; border-radius: 4px; margin-bottom: 8px;
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+  .swatch-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+
+  /* ─── PRINCIPLE GRID ─── */
+  .principle-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;
+  }
+  .principle-card {
+    padding: 20px; border: 1px solid var(--border); border-radius: 4px;
+    background: var(--card); transition: all 0.2s;
+  }
+  .principle-card:hover { border-color: var(--amber); }
+  .principle-num {
+    font-family: 'DM Mono', monospace; font-size: 10px; color: var(--amber);
+    letter-spacing: 2px; margin-bottom: 6px;
+  }
+  .principle-name { font-weight: 600; font-size: 15px; margin-bottom: 8px; }
+  .principle-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* ─── PROCESS STEPS ─── */
+  .steps { display: flex; gap: 0; flex-wrap: wrap; }
+  .step {
+    flex: 1; min-width: 160px; padding: 24px; border: 1px solid var(--border);
+    border-right: none; background: var(--card); position: relative;
+  }
+  .step:last-child { border-right: 1px solid var(--border); }
+  .step:hover { background: var(--amber); color: white; }
+  .step:hover .step-num, .step:hover .step-title, .step:hover .step-desc { color: white; }
+  .step-num {
+    font-family: 'DM Mono', monospace; font-size: 10px; color: var(--amber);
+    letter-spacing: 2px; margin-bottom: 10px; transition: color 0.2s;
+  }
+  .step-title { font-weight: 600; font-size: 14px; margin-bottom: 6px; transition: color 0.2s; }
+  .step-desc { font-size: 12px; color: var(--muted); line-height: 1.6; transition: color 0.2s; }
+
+  /* ─── ROLES ─── */
+  .role-list { display: flex; flex-direction: column; gap: 12px; }
+  .role-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 16px; border: 1px solid var(--border); background: var(--card);
+    border-radius: 2px; transition: all 0.2s;
+  }
+  .role-item:hover { border-left: 3px solid var(--amber); padding-left: 14px; }
+  .role-icon { font-size: 22px; flex-shrink: 0; width: 40px; text-align: center; }
+  .role-name { font-weight: 600; font-size: 14px; margin-bottom: 3px; }
+  .role-desc { font-size: 13px; color: var(--muted); }
+
+  /* ─── QUIZ ─── */
+  .quiz { background: var(--card); border: 1px solid var(--border); padding: 32px; border-radius: 4px; }
+  .quiz-q { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 20px; }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-opt {
+    padding: 12px 16px; border: 1px solid var(--border); border-radius: 2px;
+    cursor: pointer; font-size: 14px; transition: all 0.2s; background: var(--paper);
+    text-align: left; font-family: 'DM Sans', sans-serif;
+  }
+  .quiz-opt:hover { border-color: var(--amber); background: rgba(200,144,42,0.05); }
+  .quiz-opt.correct { background: rgba(30,92,90,0.1); border-color: var(--teal); color: var(--teal); }
+  .quiz-opt.wrong { background: rgba(155,74,42,0.1); border-color: var(--rust); color: var(--rust); }
+  .quiz-feedback { margin-top: 16px; font-size: 14px; padding: 12px 16px; border-radius: 2px; display: none; }
+  .quiz-feedback.correct { background: rgba(30,92,90,0.08); color: var(--teal); display: block; }
+  .quiz-feedback.wrong { background: rgba(155,74,42,0.08); color: var(--rust); display: block; }
+  .quiz-next { margin-top: 16px; padding: 10px 24px; background: var(--ink); color: var(--paper); border: none; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; display: none; transition: background 0.2s; }
+  .quiz-next:hover { background: var(--amber); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--ink); color: rgba(245,240,232,0.4);
+    padding: 48px 80px 48px 140px; font-size: 13px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: gap;
+    font-family: 'DM Mono', monospace;
+  }
+  footer span { color: var(--amber); }
+
+  /* ─── KEYFRAMES ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  @media (max-width: 900px) {
+    #hero, .section { padding-left: 48px; padding-right: 48px; }
+    #sidenav { display: none; }
+    footer { padding: 32px 48px; }
+    .steps { flex-direction: column; }
+    .step { border-right: 1px solid var(--border); border-bottom: none; }
+    .step:last-child { border-bottom: 1px solid var(--border); }
+  }
+  @media (max-width: 600px) {
+    #hero, .section { padding-left: 24px; padding-right: 24px; }
+    footer { padding: 24px; flex-direction: column; gap: 8px; }
+    .hero-title { font-size: 40px; }
+    .cards { grid-template-columns: 1fr; }
+  }
+
+  /* ─── UTILITY ─── */
+  p { margin-bottom: 16px; }
+  strong { color: var(--ink); font-weight: 600; }
+  .mb { margin-bottom: 32px; }
+  .mt { margin-top: 32px; }
+  .text-muted { color: var(--muted); }
+  .mono { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--cream); padding: 2px 6px; border-radius: 2px; }
+  h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 16px; margin-top: 32px; }
+  h4 { font-size: 15px; font-weight: 600; margin-bottom: 10px; margin-top: 24px; color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- SIDE NAV -->
+<nav id="sidenav" aria-label="Section navigation">
+  <button class="nav-dot active" onclick="scrollTo('#hero')" data-target="hero"><span class="nav-label">Introduction</span></button>
+  <button class="nav-dot" onclick="scrollTo('#s1')" data-target="s1"><span class="nav-label">Multimedia Systems</span></button>
+  <button class="nav-dot" onclick="scrollTo('#s2')" data-target="s2"><span class="nav-label">Media Elements</span></button>
+  <button class="nav-dot" onclick="scrollTo('#s3')" data-target="s3"><span class="nav-label">Production Process</span></button>
+  <button class="nav-dot" onclick="scrollTo('#s4')" data-target="s4"><span class="nav-label">Authoring Tools</span></button>
+  <button class="nav-dot" onclick="scrollTo('#s5')" data-target="s5"><span class="nav-label">Design Principles</span></button>
+  <button class="nav-dot" onclick="scrollTo('#s6')" data-target="s6"><span class="nav-label">CMS Foundations</span></button>
+  <button class="nav-dot" onclick="scrollTo('#s7')" data-target="s7"><span class="nav-label">CMS Architecture</span></button>
+  <button class="nav-dot" onclick="scrollTo('#s8')" data-target="s8"><span class="nav-label">CMS Deployment</span></button>
+  <button class="nav-dot" onclick="scrollTo('#quiz-sec')" data-target="quiz-sec"><span class="nav-label">Quiz</span></button>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-tag">Complete Tutorial — 4 Modules</div>
+  <h1 class="hero-title">Multimedia &amp;<br><em>Content Systems</em></h1>
+  <p class="hero-subtitle">A comprehensive guide to multimedia systems, digital media types, production workflows, authoring tools, design principles, and CMS architecture.</p>
+  <div class="hero-modules">
+    <a class="hero-module" href="#s1">01 — Multimedia Systems</a>
+    <a class="hero-module" href="#s4">02 — Authoring Tools</a>
+    <a class="hero-module" href="#s5">03 — Design Principles</a>
+    <a class="hero-module" href="#s6">04 — CMS</a>
+    <a class="hero-module" href="#quiz-sec">↓ Take the Quiz</a>
+  </div>
+  <div class="hero-deco" aria-hidden="true">M</div>
+</section>
+
+<!-- ═══ SECTION 1: MULTIMEDIA SYSTEMS ═══ -->
+<section id="s1" class="section">
+  <div class="section-header">
+    <span class="section-num">01 —</span>
+    <h2 class="section-title">Multimedia <span>Systems</span></h2>
+  </div>
+
+  <p><strong>Multimedia</strong> is the integration of diverse media forms — text, images, audio, video, and animation — to create rich, interactive digital experiences. It spans education, entertainment, communication, and business.</p>
+
+  <div class="cards mb">
+    <div class="card">
+      <div class="card-icon">💻</div>
+      <div class="card-title">Hardware</div>
+      <div class="card-text">Input devices, output devices, and processing units that enable multimedia creation and playback. Includes CPUs (recommended: i7/i9 or Ryzen 7/9), RAM, storage, and peripherals.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🛠️</div>
+      <div class="card-title">Software</div>
+      <div class="card-text">Creation, editing, and playback tools including codecs, browsers, media players, and authoring suites.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📦</div>
+      <div class="card-title">Data</div>
+      <div class="card-text">The actual multimedia content: text documents, image files, audio tracks, video clips, animations, and interactive components.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <div class="card-title">Network</div>
+      <div class="card-text">Transmission infrastructure that allows multimedia content to be delivered and streamed across devices and platforms.</div>
+    </div>
+  </div>
+
+  <h3>Linear vs. Non-Linear Multimedia</h3>
+  <table class="compare-table">
+    <thead><tr><th>Type</th><th>Characteristic</th><th>Examples</th><th>Control</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Linear</strong></td><td>Fixed, sequential playback</td><td>Films, TV broadcasts, recorded lectures</td><td><span class="badge badge-rust">Passive</span></td></tr>
+      <tr><td><strong>Non-Linear</strong></td><td>User-driven, interactive navigation</td><td>Websites, video games, e-learning modules</td><td><span class="badge badge-teal">Interactive</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Key Features of Multimedia Systems</h3>
+  <div class="accordion">
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Interactivity <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">Allows users to interact with content through clicks, touches, voice, and other inputs. Essential for games, training modules, e-learning, and interactive presentations. Interactivity transforms passive viewing into active engagement.</div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Synchronization <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">The precise alignment of different media types in time — ensuring audio stays in sync with video, captions match speech, and animations coordinate with narration. Critical for broadcast media and video conferencing.</div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Hyperlinking <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">Enables navigation between related content through links embedded in text, images, or interactive objects. The backbone of the World Wide Web and non-linear learning environments.</div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Scalability <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">The ability to maintain quality and performance as content or audience grows. Systems must scale to handle thousands of simultaneous users without degradation — key for streaming platforms and online learning.</div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Compression <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content"><strong>Lossless compression</strong> (e.g., PNG) preserves every bit of original data — ideal for images needing perfect quality. <strong>Lossy compression</strong> (e.g., JPEG, MP3) discards some data to achieve much smaller file sizes — acceptable for streaming and web delivery where minor quality loss is imperceptible.</div></div>
+    </div>
+  </div>
+
+  <h3>Applications of Multimedia</h3>
+  <div class="two-col">
+    <ul class="styled-list">
+      <li><strong>Education</strong> — e-learning platforms, virtual labs, interactive textbooks</li>
+      <li><strong>Entertainment</strong> — streaming video, gaming, virtual reality</li>
+      <li><strong>Business</strong> — marketing materials, corporate training, digital presentations</li>
+      <li><strong>Healthcare</strong> — medical simulations, patient education, telemedicine</li>
+    </ul>
+    <ul class="styled-list">
+      <li><strong>Communication</strong> — video conferencing, social media, messaging apps</li>
+      <li><strong>Retail</strong> — virtual try-ons, product demonstrations, digital kiosks</li>
+      <li><strong>Engineering</strong> — CAD visualization, virtual prototyping, 3D models</li>
+      <li><strong>Research</strong> — data visualization, scientific simulations</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══ SECTION 2: MEDIA ELEMENTS ═══ -->
+<section id="s2" class="section section-alt" style="max-width:none; padding-right:0;">
+  <div style="max-width:1200px; padding-right:80px;">
+  <div class="section-header">
+    <span class="section-num">02 —</span>
+    <h2 class="section-title">The Five <span>Core Elements</span></h2>
+  </div>
+
+  <p>Every multimedia project is built from five fundamental media types. Understanding each — including formats, tools, and best practices — is essential for multimedia production.</p>
+
+  <div class="accordion">
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">📝 Text — Information Conveyance &amp; Formatting <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">
+        Text is the foundation of digital communication — conveying information, creating interfaces, enabling search and accessibility. Key aspects include <strong>character sets</strong> (ASCII, Unicode), <strong>typography</strong> (font, size, weight, spacing), and <strong>hypertext</strong> (clickable links between documents).<br><br>
+        <strong>Formats:</strong> <span class="mono">.TXT</span> (plain), <span class="mono">.DOCX</span> (rich formatted), <span class="mono">.PDF</span> (portable layout)<br>
+        <strong>Tools:</strong> Microsoft Word (document management, formatting, mail merge, tables), Google Docs, Adobe InDesign
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">🖼️ Images — Raster vs Vector <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">
+        <strong>Raster/Bitmap images</strong> are made of pixels — excellent for photographs, complex gradients. Resolution-dependent: enlarging causes pixelation.<br>
+        Formats: <span class="mono">JPEG</span> (lossy, photos), <span class="mono">PNG</span> (lossless, transparency), <span class="mono">TIFF</span> (lossless, archival), <span class="mono">BMP</span> (uncompressed)<br><br>
+        <strong>Vector images</strong> use mathematical equations to define shapes — infinitely scalable with no quality loss. Ideal for logos, icons, illustrations.<br>
+        Formats: <span class="mono">SVG</span>, <span class="mono">AI</span> (Adobe Illustrator), <span class="mono">EPS</span><br><br>
+        <strong>Tools:</strong> Adobe Photoshop (raster editing), Adobe Illustrator &amp; CorelDRAW (vector), GIMP (free raster editing)
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">🎵 Audio — Digital Sound Processing <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">
+        Audio starts as analog sound waves (continuous vibrations) and is converted to digital through <strong>sampling</strong> — capturing values at regular intervals. Higher sample rates and bit depths produce richer, more accurate audio.<br><br>
+        <strong>Formats:</strong> <span class="mono">WAV</span> (lossless, large), <span class="mono">MP3</span> (lossy, compressed, universal), <span class="mono">AAC</span> (high quality compressed), <span class="mono">WMA</span> (Windows format)<br><br>
+        <strong>Tools:</strong> Adobe Audition, Sound Forge, Pro Tools (professional), Audacity (free) — capabilities include recording, multi-track mixing, noise removal, effects processing
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">🎬 Video — Frame-Based Technology <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">
+        Video consists of a sequence of still images (frames) played at high speed — typically <strong>25–30 frames per second (FPS)</strong> — creating the illusion of smooth motion. Higher FPS produces smoother footage; 60+ FPS is used for sports and gaming.<br><br>
+        <strong>Formats:</strong> <span class="mono">MP4</span> (universal, H.264/H.265), <span class="mono">MOV</span> (Apple/Final Cut), <span class="mono">AVI</span> (Windows), <span class="mono">WMV</span> (streaming)<br><br>
+        <strong>Editing tools:</strong> Adobe Premiere Pro, Apple Final Cut Pro — features include non-linear editing, VFX, color grading, multi-track audio mixing
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">✨ Animation — Motion &amp; 3D Techniques <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">
+        Animation creates the illusion of movement through rapidly displayed sequential images. It ranges from simple GIF loops to complex 3D cinematic sequences.<br><br>
+        <strong>2D Animation:</strong> Frame-by-frame drawing or tweening; used in cartoons, UI animations, explainer videos. Tools: Adobe Animate, Toon Boom Harmony<br><br>
+        <strong>3D Animation:</strong> Creating and animating 3D models in virtual space; used in films, games, product visualization. Tools: Blender (free), Autodesk Maya, Cinema 4D<br><br>
+        <strong>Formats:</strong> <span class="mono">GIF</span> (simple loops), <span class="mono">MOV</span>, <span class="mono">MP4</span> (rendered animations)
+      </div></div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Pro Tip — Compression Strategy</div>
+    <p>Always match compression to use case: use <strong>lossless PNG</strong> for logos and UI elements that require sharp edges, <strong>JPEG</strong> for photographs where minor quality loss is invisible, <strong>WebP</strong> for web delivery (superior compression), and <strong>MP3/AAC</strong> for audio streaming while retaining <strong>WAV</strong> masters for editing.</p>
+  </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 3: PRODUCTION PROCESS ═══ -->
+<section id="s3" class="section">
+  <div class="section-header">
+    <span class="section-num">03 —</span>
+    <h2 class="section-title">Production <span>Process</span></h2>
+  </div>
+
+  <p>Multimedia production follows a structured three-phase workflow. Each phase builds on the last, and skipping steps leads to costly revisions later.</p>
+
+  <div class="steps mb">
+    <div class="step">
+      <div class="step-num">PHASE 01</div>
+      <div class="step-title">Pre-Production</div>
+      <div class="step-desc">Planning, ideation, audience analysis, goal-setting, resource planning, scriptwriting, storyboarding</div>
+    </div>
+    <div class="step">
+      <div class="step-num">PHASE 02</div>
+      <div class="step-title">Production</div>
+      <div class="step-desc">Asset creation, recording, 3D modeling, animation, content authoring, initial QA testing</div>
+    </div>
+    <div class="step">
+      <div class="step-num">PHASE 03</div>
+      <div class="step-title">Post-Production</div>
+      <div class="step-desc">Final QA, mastering, polish, archiving, launch, distribution across target platforms</div>
+    </div>
+  </div>
+
+  <h3>Team Roles &amp; Responsibilities</h3>
+  <div class="role-list">
+    <div class="role-item">
+      <div class="role-icon">🎯</div>
+      <div><div class="role-name">Project Manager</div><div class="role-desc">Lifecycle oversight, strategic planning, budget management, stakeholder engagement, risk mitigation, leadership</div></div>
+    </div>
+    <div class="role-item">
+      <div class="role-icon">🎨</div>
+      <div><div class="role-name">Multimedia Designer</div><div class="role-desc">Visual design, asset creation, brand consistency, art direction across all media types</div></div>
+    </div>
+    <div class="role-item">
+      <div class="role-icon">📐</div>
+      <div><div class="role-name">Interface Designer</div><div class="role-desc">Content organization, user interaction design, accessibility, user-friendly layout and navigation</div></div>
+    </div>
+    <div class="role-item">
+      <div class="role-icon">👨‍💻</div>
+      <div><div class="role-name">Multimedia Programmer</div><div class="role-desc">Content sourcing, code development, multimedia integration, cross-functional collaboration, storyboarding support</div></div>
+    </div>
+    <div class="role-item">
+      <div class="role-icon">✍️</div>
+      <div><div class="role-name">Writer / Subject Matter Expert</div><div class="role-desc">Creative storytelling, scriptwriting, proposal writing, interactivity design for educational content</div></div>
+    </div>
+    <div class="role-item">
+      <div class="role-icon">🎵</div>
+      <div><div class="role-name">Audio Specialist</div><div class="role-desc">Talent acquisition, recording session management, audio digitalization, post-production mixing and mastering</div></div>
+    </div>
+    <div class="role-item">
+      <div class="role-icon">🎬</div>
+      <div><div class="role-name">Video Specialist</div><div class="role-desc">Video delivery formats, filming and cinematography, digital editing, color grading</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 4: AUTHORING TOOLS ═══ -->
+<section id="s4" class="section section-alt" style="max-width:none; padding-right:0;">
+  <div style="max-width:1200px; padding-right:80px;">
+  <div class="section-header">
+    <span class="section-num">04 —</span>
+    <h2 class="section-title">Multimedia <span>Authoring Tools</span></h2>
+  </div>
+
+  <p><strong>Authoring tools</strong> are sophisticated software environments that allow creators to combine text, images, audio, video, animations, and interactive elements into cohesive multimedia products — without requiring deep programming expertise.</p>
+
+  <h3>Four Types of Authoring Tools</h3>
+  <div class="cards mb">
+    <div class="card">
+      <div class="card-icon">📄</div>
+      <div class="card-title">Card / Page-Based</div>
+      <div class="card-text">Organizes content as a series of pages or cards, like a digital flipbook. Simple and intuitive for presentations and slide-based courses.<br><br><strong>Examples:</strong> Microsoft PowerPoint, Apple Keynote</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔷</div>
+      <div class="card-title">Icon-Based (Flowchart)</div>
+      <div class="card-text">Uses a visual flowchart/diagram interface. Logic and content flow are represented by connected icons — highly intuitive for branching interactivity.<br><br><strong>Examples:</strong> Adobe Authorware, iSpring Suite</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">⏱️</div>
+      <div class="card-title">Time-Based (Timeline)</div>
+      <div class="card-text">Uses a timeline to sequence animations, transitions, and interactions. Ideal for frame-by-frame animation and synchronized media.<br><br><strong>Examples:</strong> Adobe Animate, Final Cut Pro</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧩</div>
+      <div class="card-title">Object-Oriented</div>
+      <div class="card-text">Content is organized as objects with predefined behaviors and properties. Supports complex interactivity and game logic.<br><br><strong>Examples:</strong> Adobe Flash/Animate, Unity</div>
+    </div>
+  </div>
+
+  <h3>Core Features of Authoring Tools</h3>
+  <div class="two-col">
+    <ul class="styled-list">
+      <li><strong>Interactive Elements</strong> — buttons, hyperlinks, menus, hotspots</li>
+      <li><strong>Media Integration</strong> — text, graphics, audio, video, animations</li>
+      <li><strong>Scripting</strong> — JavaScript, ActionScript for advanced logic</li>
+      <li><strong>Templates &amp; Themes</strong> — pre-designed starting points</li>
+    </ul>
+    <ul class="styled-list">
+      <li><strong>Timeline &amp; Sequencing</strong> — control timing and order</li>
+      <li><strong>Preview &amp; Testing</strong> — live preview before publishing</li>
+      <li><strong>Publishing Options</strong> — HTML5, SWF, EXE, mobile app formats</li>
+      <li><strong>Cross-Platform Export</strong> — desktop, web, mobile</li>
+    </ul>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Key Insight</div>
+    <p>The best authoring tool depends on your output. Use <strong>Unity</strong> for interactive 3D experiences and games, <strong>Adobe Animate</strong> for web animations and HTML5 content, <strong>iSpring Suite</strong> for rapid e-learning development, and <strong>PowerPoint/Keynote</strong> for straightforward business presentations.</p>
+  </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 5: DESIGN PRINCIPLES ═══ -->
+<section id="s5" class="section">
+  <div class="section-header">
+    <span class="section-num">05 —</span>
+    <h2 class="section-title">Design <span>Principles</span></h2>
+  </div>
+
+  <p>Digital design communicates messages visually through imagery, typography, and color. These twelve principles provide a systematic framework for creating effective, beautiful interfaces and multimedia content.</p>
+
+  <div class="principle-grid mb">
+    <div class="principle-card"><div class="principle-num">01</div><div class="principle-name">Balance</div><div class="principle-desc">Symmetrical, asymmetrical, or radial distribution of visual weight across the composition.</div></div>
+    <div class="principle-card"><div class="principle-num">02</div><div class="principle-name">Contrast</div><div class="principle-desc">Differences in color, size, or shape that create visual hierarchy and draw attention.</div></div>
+    <div class="principle-card"><div class="principle-num">03</div><div class="principle-name">Emphasis</div><div class="principle-desc">Highlighting important elements through size, color, or placement to guide the viewer.</div></div>
+    <div class="principle-card"><div class="principle-num">04</div><div class="principle-name">Proportion</div><div class="principle-desc">Size relationships between elements that create visual harmony or tension.</div></div>
+    <div class="principle-card"><div class="principle-num">05</div><div class="principle-name">Hierarchy</div><div class="principle-desc">Visual order that guides attention from most to least important elements.</div></div>
+    <div class="principle-card"><div class="principle-num">06</div><div class="principle-name">Repetition</div><div class="principle-desc">Consistent visual elements create unity, rhythm, and brand recognition.</div></div>
+    <div class="principle-card"><div class="principle-num">07</div><div class="principle-name">Rhythm</div><div class="principle-desc">Visual flow through predictable patterns that create a sense of movement.</div></div>
+    <div class="principle-card"><div class="principle-num">08</div><div class="principle-name">White Space</div><div class="principle-desc">Negative space that improves readability, focus, and perceived elegance.</div></div>
+    <div class="principle-card"><div class="principle-num">09</div><div class="principle-name">Movement</div><div class="principle-desc">Dynamism that guides the eye through the composition in a deliberate sequence.</div></div>
+    <div class="principle-card"><div class="principle-num">10</div><div class="principle-name">Pattern</div><div class="principle-desc">Recognizable repeated structures that create familiarity and visual texture.</div></div>
+    <div class="principle-card"><div class="principle-num">11</div><div class="principle-name">Variety</div><div class="principle-desc">Visual differences that prevent monotony and maintain viewer engagement.</div></div>
+    <div class="principle-card"><div class="principle-num">12</div><div class="principle-name">Unity</div><div class="principle-desc">Cohesion where all elements work together to communicate a single message.</div></div>
+  </div>
+
+  <h3>Color Theory</h3>
+  <div class="two-col">
+    <div>
+      <h4>The Color Wheel</h4>
+      <p>Colors derive from three levels: <strong>Primary</strong> (red, yellow, blue) → <strong>Secondary</strong> (orange, green, purple) → <strong>Tertiary</strong> (mixed combinations). Understanding relationships between these enables effective color scheme creation.</p>
+      <h4>Color Properties</h4>
+      <ul class="styled-list">
+        <li><strong>Hue</strong> — the color itself (red, blue, green)</li>
+        <li><strong>Saturation</strong> — intensity or purity of the color</li>
+        <li><strong>Value</strong> — lightness or darkness of the color</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Color Psychology</h4>
+      <ul class="styled-list">
+        <li><strong>Red</strong> — excitement, urgency, passion, danger</li>
+        <li><strong>Yellow</strong> — optimism, energy, warmth, caution</li>
+        <li><strong>Blue</strong> — calmness, trust, professionalism</li>
+        <li><strong>Green</strong> — nature, growth, health, success</li>
+        <li><strong>Purple</strong> — creativity, luxury, spirituality</li>
+      </ul>
+      <h4>Color Schemes</h4>
+      <p>Monochromatic · Analogous · Complementary · Triadic — each creates different levels of harmony and visual tension.</p>
+    </div>
+  </div>
+
+  <h3>Typography Essentials</h3>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🔤</div>
+      <div class="card-title">Typeface Classification</div>
+      <div class="card-text"><strong>Serif</strong> fonts (Times New Roman, Garamond) have decorative strokes — convey tradition and formality. <strong>Sans-serif</strong> fonts (Helvetica, Gill Sans) are clean and modern — convey simplicity and efficiency.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📏</div>
+      <div class="card-title">Type Metrics</div>
+      <div class="card-text"><strong>Font Size</strong> — hierarchy signal. <strong>Font Weight</strong> — emphasis level. <strong>Leading</strong> — line spacing for readability. <strong>Kerning</strong> — space between specific characters. <strong>Tracking</strong> — overall letter spacing.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎯</div>
+      <div class="card-title">Alignment</div>
+      <div class="card-text">Left alignment is most readable for body text. Center alignment creates formality. Right alignment is decorative. Justified creates clean edges but can create rivers of whitespace in narrow columns.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 6: CMS FOUNDATIONS ═══ -->
+<section id="s6" class="section section-alt" style="max-width:none; padding-right:0;">
+  <div style="max-width:1200px; padding-right:80px;">
+  <div class="section-header">
+    <span class="section-num">06 —</span>
+    <h2 class="section-title">CMS <span>Foundations</span></h2>
+  </div>
+
+  <p>A <strong>Content Management System (CMS)</strong> is software that enables users to create, manage, modify, and publish digital content without requiring technical knowledge. It separates content from presentation, allowing non-developers to maintain websites independently.</p>
+
+  <h3>The Evolution of CMS</h3>
+  <div class="timeline mb">
+    <div class="timeline-item">
+      <div class="timeline-year">EARLY 1990s</div>
+      <div class="timeline-label">Static HTML Era</div>
+      <div class="timeline-desc">Every page hand-coded in HTML. No separation of content and presentation. Updates required developer intervention.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">LATE 1990s</div>
+      <div class="timeline-label">First-Generation CMS</div>
+      <div class="timeline-desc">Early systems introduced templates and databases to separate content from code. Publishing workflows emerged.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2000s</div>
+      <div class="timeline-label">Open Source Revolution</div>
+      <div class="timeline-desc">WordPress (2003), Drupal (2001), and Joomla (2005) democratized web publishing. WordPress now powers 43% of all websites.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2010s</div>
+      <div class="timeline-label">Headless CMS Emerges</div>
+      <div class="timeline-desc">API-first systems like Contentful separated the content backend from any specific frontend — enabling omnichannel content delivery.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2020s</div>
+      <div class="timeline-label">AI-Powered &amp; Composable</div>
+      <div class="timeline-desc">AI-assisted content creation, automated tagging, personalization engines, and composable architectures define the current era.</div>
+    </div>
+  </div>
+
+  <h3>Traditional vs. Headless CMS</h3>
+  <table class="compare-table">
+    <thead><tr><th>Feature</th><th>Traditional / Coupled</th><th>Headless / Decoupled</th></tr></thead>
+    <tbody>
+      <tr><td>Frontend</td><td>Built-in (tightly coupled)</td><td>Any framework via API</td></tr>
+      <tr><td>Delivery</td><td>Web only</td><td>Web, mobile, IoT, any device</td></tr>
+      <tr><td>Flexibility</td><td><span class="badge badge-rust">Limited</span></td><td><span class="badge badge-teal">Maximum</span></td></tr>
+      <tr><td>Developer skill needed</td><td>Low to medium</td><td>Higher (API integration)</td></tr>
+      <tr><td>Examples</td><td>WordPress, Joomla, Drupal</td><td>Contentful, Strapi, Sanity</td></tr>
+      <tr><td>Best for</td><td>Simple websites, blogs</td><td>Omnichannel, complex apps</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Why CMS Matters</h3>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <div class="card-title">Efficiency &amp; Speed</div>
+      <div class="card-text">Content teams can publish without developer involvement. Workflows, approvals, and scheduling are automated.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤝</div>
+      <div class="card-title">Collaboration</div>
+      <div class="card-text">Multiple users with defined roles (admin, editor, author) work simultaneously with version control and conflict management.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📈</div>
+      <div class="card-title">Scalability</div>
+      <div class="card-text">From a personal blog to an enterprise platform serving millions — modern CMS scales to demand without redesign.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">💰</div>
+      <div class="card-title">Cost Reduction</div>
+      <div class="card-text">Non-technical staff can manage content independently, dramatically reducing reliance on expensive developer time for routine updates.</div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 7: CMS ARCHITECTURE ═══ -->
+<section id="s7" class="section">
+  <div class="section-header">
+    <span class="section-num">07 —</span>
+    <h2 class="section-title">CMS <span>Architecture</span></h2>
+  </div>
+
+  <p>A modern CMS is built from several interconnected layers, each with a specific responsibility. Understanding the architecture helps you choose, configure, and extend a CMS effectively.</p>
+
+  <div class="accordion mb">
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Database Layer — The Content Store <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">
+        All content, metadata, user data, and configurations are stored in databases.<br><br>
+        <strong>Relational databases</strong> (MySQL, PostgreSQL) — structured data with relationships, ideal for most CMS content<br>
+        <strong>NoSQL databases</strong> (MongoDB, Couchbase) — flexible schema for varied content structures<br>
+        <strong>Object Storage</strong> (Amazon S3, Azure Blob) — storing binary files: images, videos, documents<br>
+        <strong>Caching layers</strong> (Redis, Memcached) — in-memory storage for high-speed repeated queries
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Application Layer — The Business Logic <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">
+        The core engine that processes requests, applies rules, manages content transformations, handles user authentication and authorization, and coordinates all CMS operations. This is where plugins and extensions plug in.
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Presentation Layer — The Frontend <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">
+        In traditional CMS, this is the theme/template system that renders HTML. In headless CMS, this layer is completely separate — built with any frontend framework (React, Vue, Next.js) and fed content via APIs. This separation is the defining feature of modern headless architecture.
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Security Module — Access Control <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">
+        Manages authentication (who can log in), authorization (what they can do), SSL/HTTPS, firewall rules, automated backups, and protection against common attacks (SQL injection, XSS, CSRF).
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Administration Interface — The Editor Experience <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">
+        The control panel that content editors and administrators use daily:<br><br>
+        <strong>WYSIWYG Editor</strong> — visual content editing with formatting tools<br>
+        <strong>Media Library</strong> — organized storage for images, videos, and files<br>
+        <strong>Workflow Tools</strong> — content approval, review, and publishing pipelines<br>
+        <strong>Analytics Dashboard</strong> — content performance metrics
+      </div></div>
+    </div>
+  </div>
+
+  <h3>Key CMS Features</h3>
+  <div class="two-col">
+    <div>
+      <h4>Content Management</h4>
+      <ul class="styled-list">
+        <li>Visual content editor (WYSIWYG)</li>
+        <li>Content blocks &amp; reusable components</li>
+        <li>Version control &amp; content history</li>
+        <li>Collaborative editing &amp; comments</li>
+        <li>Content scheduling &amp; publishing</li>
+      </ul>
+      <h4>Media Management</h4>
+      <ul class="styled-list">
+        <li>Intelligent auto-tagging</li>
+        <li>Format optimization (WebP, AVIF)</li>
+        <li>CDN integration for fast delivery</li>
+        <li>Digital rights management (DRM)</li>
+      </ul>
+    </div>
+    <div>
+      <h4>SEO Features</h4>
+      <ul class="styled-list">
+        <li>Meta titles &amp; descriptions</li>
+        <li>XML sitemaps (auto-generated)</li>
+        <li>Canonical URLs (preventing duplicate content)</li>
+        <li>Structured data / Schema markup</li>
+        <li>301 redirect management</li>
+        <li>Open Graph tags (social sharing)</li>
+      </ul>
+      <h4>Performance Features</h4>
+      <ul class="styled-list">
+        <li>Page caching &amp; full-page cache</li>
+        <li>Database query optimization</li>
+        <li>Asset minification (CSS/JS)</li>
+        <li>Lazy loading images &amp; videos</li>
+        <li>CDN &amp; AMP support</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>User Roles in CMS</h3>
+  <table class="compare-table">
+    <thead><tr><th>Role</th><th>Permissions</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Administrator</strong></td><td>Full system access: settings, plugins, users, all content</td></tr>
+      <tr><td><strong>Editor</strong></td><td>Create, edit, publish, and delete any content</td></tr>
+      <tr><td><strong>Author</strong></td><td>Create and publish their own content only</td></tr>
+      <tr><td><strong>Contributor</strong></td><td>Create and edit content, but cannot publish — requires editorial review</td></tr>
+      <tr><td><strong>Subscriber / Viewer</strong></td><td>Read-only access; can view gated content after login</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══ SECTION 8: CMS DEPLOYMENT ═══ -->
+<section id="s8" class="section section-alt" style="max-width:none; padding-right:0;">
+  <div style="max-width:1200px; padding-right:80px;">
+  <div class="section-header">
+    <span class="section-num">08 —</span>
+    <h2 class="section-title">CMS <span>Deployment</span></h2>
+  </div>
+
+  <p>Deploying a CMS is a multi-phase process spanning strategic decisions, technical setup, content migration, and ongoing governance. A well-planned deployment prevents costly mistakes.</p>
+
+  <h3>Deployment Strategy</h3>
+  <div class="steps mb">
+    <div class="step">
+      <div class="step-num">STEP 01</div>
+      <div class="step-title">Define Requirements</div>
+      <div class="step-desc">Content types, team size, traffic projections, integrations needed, compliance requirements</div>
+    </div>
+    <div class="step">
+      <div class="step-num">STEP 02</div>
+      <div class="step-title">Evaluate Platforms</div>
+      <div class="step-desc">Compare CMS options against requirements. Consider open-source vs commercial, SaaS vs self-hosted</div>
+    </div>
+    <div class="step">
+      <div class="step-num">STEP 03</div>
+      <div class="step-title">Design Architecture</div>
+      <div class="step-desc">Database design, hosting environment, CDN strategy, security configuration, backup plan</div>
+    </div>
+    <div class="step">
+      <div class="step-num">STEP 04</div>
+      <div class="step-title">Assemble Team</div>
+      <div class="step-desc">Developers, content strategists, designers, QA testers, and ongoing administrators</div>
+    </div>
+  </div>
+
+  <h3>Hosting Options</h3>
+  <table class="compare-table">
+    <thead><tr><th>Option</th><th>Description</th><th>Best For</th><th>Examples</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Cloud SaaS</strong></td><td>Fully managed, subscription-based. No server maintenance.</td><td>Teams without DevOps resources</td><td>WordPress.com, Squarespace, Contentful</td></tr>
+      <tr><td><strong>IaaS / VPS</strong></td><td>Cloud servers managed by your team. Full control.</td><td>Growing platforms needing flexibility</td><td>AWS EC2, DigitalOcean, Google Cloud</td></tr>
+      <tr><td><strong>On-Premise</strong></td><td>Own hardware in own data center. Maximum control.</td><td>Enterprises with strict data compliance</td><td>Self-managed WordPress, Drupal</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Content Migration</h3>
+  <div class="accordion">
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Step 1: Content Audit <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">Inventory all existing content. Identify what to migrate, what to archive, what to delete, and what to consolidate. Document content types, metadata structures, and relationships.</div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Step 2: Data Mapping <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">Map fields from the old system to the new system. Where structures don't match, define transformation rules. Identify custom fields that need to be created in the new CMS.</div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Step 3: Migration Scripts <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">Write or use automated tools to extract, transform, and load (ETL) content from the source to destination. Always run migrations in staging before production. <strong>Pro tip:</strong> Set up 301 redirects for any URLs that change during migration to preserve SEO rankings.</div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">Step 4: Quality Assurance <span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-content">Verify migrated content: check for broken links, missing images, incorrect metadata, encoding issues, and layout problems. Cross-reference counts between source and destination to ensure no content was lost.</div></div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Ongoing Maintenance Checklist</div>
+    <p>A CMS requires continuous care: <strong>Regular Updates</strong> (CMS core, plugins, security patches) · <strong>Performance Monitoring</strong> (uptime, page speed, database health) · <strong>Content Governance</strong> (audit stale content, enforce style guides) · <strong>User Training</strong> (onboard new editors, document workflows)</p>
+  </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 9: QUIZ ═══ -->
+<section id="quiz-sec" class="section">
+  <div class="section-header">
+    <span class="section-num">✓ —</span>
+    <h2 class="section-title">Knowledge <span>Check</span></h2>
+  </div>
+  <p class="mb">Test your understanding with these questions drawn from the tutorial content.</p>
+
+  <div id="quiz-container">
+    <div class="quiz" id="quiz-card">
+      <div class="quiz-q" id="quiz-question"></div>
+      <div class="quiz-options" id="quiz-options"></div>
+      <div class="quiz-feedback" id="quiz-feedback"></div>
+      <button class="quiz-next" id="quiz-next" onclick="nextQuestion()">Next Question →</button>
+    </div>
+    <div style="margin-top:16px; font-family:'DM Mono', monospace; font-size:12px; color:var(--muted);">
+      Question <span id="q-num">1</span> of <span id="q-total">8</span> · Score: <span id="q-score">0</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div>Multimedia &amp; CMS Tutorial · <span>Complete Guide</span></div>
+  <div>Modules: 4 · Sections: 8 · <span>Interactive</span></div>
+</footer>
+
+<script>
+// ─── Progress bar ───
+window.addEventListener('scroll', () => {
+  const scrollTop = document.documentElement.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const pct = (scrollTop / scrollHeight) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+  updateNavDots();
+});
+
+// ─── Scroll to section ───
+function scrollTo(selector) {
+  document.querySelector(selector).scrollIntoView({ behavior: 'smooth' });
+}
+
+// ─── Nav dots ───
+const sections = ['hero','s1','s2','s3','s4','s5','s6','s7','s8','quiz-sec'];
+function updateNavDots() {
+  const dots = document.querySelectorAll('.nav-dot');
+  let active = 0;
+  sections.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.4) active = i;
+  });
+  dots.forEach((d, i) => d.classList.toggle('active', i === active));
+}
+
+// ─── Intersection observer for sections ───
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+// ─── Accordion ───
+function toggleAcc(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+  // close all in same parent
+  btn.closest('.accordion').querySelectorAll('.acc-trigger.open').forEach(b => {
+    b.classList.remove('open');
+    b.nextElementSibling.classList.remove('open');
+  });
+  if (!isOpen) {
+    btn.classList.add('open');
+    body.classList.add('open');
+  }
+}
+
+// ─── Quiz ───
+const quizData = [
+  {
+    q: "Which compression type preserves ALL original data, making it ideal for logos and interface graphics?",
+    opts: ["Lossy compression (JPEG)", "Lossless compression (PNG)", "Streaming compression", "Delta compression"],
+    correct: 1,
+    exp: "Lossless compression (e.g., PNG) retains every bit of original data. Lossy (e.g., JPEG, MP3) discards some data for smaller file sizes."
+  },
+  {
+    q: "What percentage of all websites on the internet currently run on WordPress?",
+    opts: ["About 12%", "About 23%", "About 43%", "About 67%"],
+    correct: 2,
+    exp: "WordPress powers approximately 43% of all websites globally, making it the dominant CMS platform."
+  },
+  {
+    q: "In multimedia production, which phase includes storyboarding, audience analysis, and scriptwriting?",
+    opts: ["Production", "Post-Production", "Pre-Production", "Distribution"],
+    correct: 2,
+    exp: "Pre-Production covers all planning: defining the concept, understanding the audience, setting goals, scripting, and storyboarding before any assets are created."
+  },
+  {
+    q: "A headless CMS differs from a traditional CMS primarily because it:",
+    opts: ["Has no user interface", "Has no database layer", "Delivers content via API to any frontend", "Only works on mobile devices"],
+    correct: 2,
+    exp: "A headless CMS is 'headless' because it has no built-in frontend (the 'head'). It delivers content via APIs so any frontend framework — React, Vue, iOS app, smart TV — can consume it."
+  },
+  {
+    q: "Which type of multimedia authoring tool uses a flowchart/diagram interface with connected icons?",
+    opts: ["Card/Page-Based", "Icon-Based", "Time-Based", "Object-Oriented"],
+    correct: 1,
+    exp: "Icon-based tools (like Adobe Authorware, iSpring Suite) represent content flow as connected icons in a visual flowchart — intuitive for branching interactive content."
+  },
+  {
+    q: "Standard video playback requires how many frames per second (FPS)?",
+    opts: ["8–10 FPS", "15–18 FPS", "25–30 FPS", "60–120 FPS"],
+    correct: 2,
+    exp: "Standard video plays at 25–30 FPS, creating smooth motion. Higher frame rates (60+ FPS) are used for sports and gaming for ultra-smooth visuals."
+  },
+  {
+    q: "In design theory, which principle refers to using differences in color, size, or shape to create visual hierarchy?",
+    opts: ["Rhythm", "Unity", "Contrast", "Pattern"],
+    correct: 2,
+    exp: "Contrast uses differences — in color, size, shape, or texture — to make elements stand out and create a clear visual hierarchy that guides the viewer's attention."
+  },
+  {
+    q: "Which CMS user role can create content but CANNOT publish it — requiring editorial approval first?",
+    opts: ["Editor", "Author", "Contributor", "Subscriber"],
+    correct: 2,
+    exp: "Contributors can create and edit content but lack publish permissions. Their work must be reviewed and published by an Editor or Administrator."
+  }
+];
+
+let currentQ = 0, score = 0, answered = false;
+
+function loadQuestion() {
+  const q = quizData[currentQ];
+  document.getElementById('quiz-question').textContent = q.q;
+  document.getElementById('q-num').textContent = currentQ + 1;
+  document.getElementById('q-total').textContent = quizData.length;
+  document.getElementById('q-score').textContent = score;
+  const opts = document.getElementById('quiz-options');
+  opts.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(i);
+    opts.appendChild(btn);
+  });
+  document.getElementById('quiz-feedback').className = 'quiz-feedback';
+  document.getElementById('quiz-feedback').textContent = '';
+  document.getElementById('quiz-next').style.display = 'none';
+  answered = false;
+}
+
+function selectAnswer(i) {
+  if (answered) return;
+  answered = true;
+  const q = quizData[currentQ];
+  const buttons = document.querySelectorAll('.quiz-opt');
+  buttons.forEach((b, idx) => {
+    b.disabled = true;
+    if (idx === q.correct) b.classList.add('correct');
+    else if (idx === i) b.classList.add('wrong');
+  });
+  const fb = document.getElementById('quiz-feedback');
+  if (i === q.correct) {
+    score++;
+    fb.className = 'quiz-feedback correct';
+    fb.textContent = '✓ Correct! ' + q.exp;
+  } else {
+    fb.className = 'quiz-feedback wrong';
+    fb.textContent = '✗ Not quite. ' + q.exp;
+  }
+  document.getElementById('q-score').textContent = score;
+  const nextBtn = document.getElementById('quiz-next');
+  nextBtn.style.display = 'inline-block';
+  nextBtn.textContent = currentQ < quizData.length - 1 ? 'Next Question →' : 'See Final Score →';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= quizData.length) {
+    const pct = Math.round((score / quizData.length) * 100);
+    let msg = pct >= 80 ? '🏆 Excellent mastery!' : pct >= 60 ? '👍 Good understanding — review sections you missed.' : '📖 Revisit the tutorial — focus on the sections tested.';
+    document.getElementById('quiz-card').innerHTML = `
+      <div style="text-align:center; padding:24px 0;">
+        <div style="font-family:'Playfair Display',serif; font-size:64px; font-weight:900; color:var(--amber);">${pct}%</div>
+        <div style="font-size:18px; font-weight:600; margin:12px 0;">${score} / ${quizData.length} correct</div>
+        <div style="color:var(--muted); margin-bottom:24px;">${msg}</div>
+        <button class="quiz-next" style="display:inline-block;" onclick="restartQuiz()">Retake Quiz ↺</button>
+      </div>`;
+  } else {
+    loadQuestion();
+  }
+}
+
+function restartQuiz() {
+  currentQ = 0; score = 0;
+  document.getElementById('quiz-card').innerHTML = `
+    <div class="quiz-q" id="quiz-question"></div>
+    <div class="quiz-options" id="quiz-options"></div>
+    <div class="quiz-feedback" id="quiz-feedback"></div>
+    <button class="quiz-next" id="quiz-next" onclick="nextQuestion()">Next Question →</button>`;
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
