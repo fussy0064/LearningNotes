@@ -1,0 +1,9 @@
+# Large zip files
+*.zip
+
+# Video files (too large for GitHub)
+*.mp4
+*.avi
+*.mkv
+*.mov
+*.wmv
