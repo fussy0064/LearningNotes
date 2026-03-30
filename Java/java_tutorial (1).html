@@ -1,0 +1,2577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java SE Tutorial — CBE Special Course</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0c09;
+  --bg2: #16120d;
+  --bg3: #1e1810;
+  --surface: #241e14;
+  --surface2: #2d261a;
+  --border: #3a3020;
+  --accent: #e8a020;
+  --accent2: #f0c060;
+  --accent3: #c06010;
+  --text: #f0e8d8;
+  --text2: #c8b898;
+  --text3: #8a7860;
+  --green: #7abb6e;
+  --blue: #6ab0e8;
+  --red: #e86a6a;
+  --purple: #b87ee8;
+  --sidebar-w: 280px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  z-index: 100;
+  display: flex; flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+  padding: 28px 20px 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 6px;
+}
+
+.coffee-icon {
+  width: 36px; height: 36px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.sidebar-logo h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--accent2);
+  line-height: 1.2;
+}
+
+.sidebar-sub {
+  font-size: 0.7rem;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nav-list { list-style: none; padding: 12px 0; flex: 1; }
+
+.nav-list li a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 20px;
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+  border-left: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.nav-list li a:hover,
+.nav-list li a.active {
+  color: var(--accent2);
+  background: rgba(232,160,32,0.07);
+  border-left-color: var(--accent);
+}
+
+.nav-num {
+  background: var(--surface2);
+  color: var(--accent);
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-size: 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  min-width: 24px;
+  text-align: center;
+}
+
+/* ─── MAIN ─── */
+.main {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+}
+
+/* ─── HERO ─── */
+.hero {
+  background: linear-gradient(135deg, #1a1208 0%, #0e0c09 50%, #1a0e04 100%);
+  padding: 80px 60px 70px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 80% 50%, rgba(232,160,32,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 300px 300px at 20% 80%, rgba(192,96,16,0.08) 0%, transparent 60%);
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(232,160,32,0.1);
+  border: 1px solid rgba(232,160,32,0.25);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 0.72rem;
+  color: var(--accent2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--text);
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.hero h1 span { color: var(--accent); }
+
+.hero-sub {
+  font-size: 1rem;
+  color: var(--text2);
+  max-width: 560px;
+  position: relative;
+  margin-bottom: 36px;
+}
+
+.hero-stats {
+  display: flex; gap: 32px;
+  position: relative;
+}
+
+.stat {
+  display: flex; flex-direction: column; gap: 2px;
+}
+
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ─── CONTENT ─── */
+.content { padding: 0 60px 80px; }
+
+/* ─── SECTION ─── */
+.section {
+  padding-top: 60px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 50px;
+}
+
+.section:last-child { border-bottom: none; }
+
+.section-header {
+  display: flex; align-items: flex-start; gap: 18px;
+  margin-bottom: 32px;
+}
+
+.section-icon {
+  width: 48px; height: 48px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+/* ─── PROSE ─── */
+.prose p {
+  color: var(--text2);
+  font-size: 0.92rem;
+  margin-bottom: 14px;
+}
+
+.prose p:last-child { margin-bottom: 0; }
+
+.prose strong { color: var(--accent2); font-weight: 600; }
+
+/* ─── HIGHLIGHT BOX ─── */
+.highlight-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin: 18px 0;
+  font-size: 0.88rem;
+  color: var(--text2);
+}
+
+.highlight-box.info { border-left-color: var(--blue); }
+.highlight-box.success { border-left-color: var(--green); }
+.highlight-box.warning { border-left-color: var(--accent); }
+
+.highlight-box .box-title {
+  font-weight: 600;
+  color: var(--accent2);
+  margin-bottom: 6px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+/* ─── CODE BLOCK ─── */
+.code-wrap {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin: 20px 0;
+  overflow: hidden;
+}
+
+.code-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.code-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+.code-dots { display: flex; gap: 6px; }
+.code-dots span {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.code-dots span:nth-child(1) { background: #ff5f57; }
+.code-dots span:nth-child(2) { background: #ffbd2e; }
+.code-dots span:nth-child(3) { background: #28c840; }
+
+.code-body {
+  padding: 20px 22px;
+  overflow-x: auto;
+}
+
+code, pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+/* syntax colors */
+.kw { color: #d28ae8; }   /* keyword */
+.ty { color: #6ab0e8; }   /* type */
+.st { color: #7abb6e; }   /* string */
+.cm { color: #6a7860; font-style: italic; }  /* comment */
+.fn { color: #e8c06a; }   /* function */
+.nu { color: #e8a870; }   /* number */
+.an { color: var(--accent); } /* annotation/package */
+
+/* ─── OUTPUT BOX ─── */
+.output-wrap {
+  background: #0a0e0a;
+  border: 1px solid #1e3020;
+  border-radius: 8px;
+  margin: 12px 0 20px;
+  overflow: hidden;
+}
+
+.output-header {
+  background: #0f1a0f;
+  border-bottom: 1px solid #1e3020;
+  padding: 8px 16px;
+  font-size: 0.7rem;
+  color: var(--green);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.06em;
+}
+
+.output-body {
+  padding: 14px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  color: var(--green);
+  line-height: 1.7;
+}
+
+/* ─── GRID CARDS ─── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 22px 0;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.card:hover {
+  border-color: var(--accent3);
+  transform: translateY(-2px);
+}
+
+.card-icon { font-size: 1.6rem; margin-bottom: 10px; }
+.card h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+.card p {
+  font-size: 0.78rem;
+  color: var(--text3);
+  line-height: 1.5;
+}
+
+/* ─── TABLE ─── */
+.tbl-wrap {
+  overflow-x: auto;
+  margin: 20px 0;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+thead { background: var(--surface2); }
+thead th {
+  padding: 12px 16px;
+  text-align: left;
+  color: var(--accent2);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(232,160,32,0.03); }
+tbody td {
+  padding: 11px 16px;
+  color: var(--text2);
+  font-family: 'JetBrains Mono', monospace;
+}
+tbody td:first-child { color: var(--accent); }
+
+/* ─── STEP LIST ─── */
+.steps { list-style: none; padding: 0; margin: 18px 0; }
+.steps li {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.88rem;
+  color: var(--text2);
+}
+.steps li:last-child { border-bottom: none; }
+.step-n {
+  background: var(--accent);
+  color: #0e0c09;
+  border-radius: 50%;
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  font-size: 0.72rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ─── INLINE CODE ─── */
+.ic {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78em;
+  color: var(--accent2);
+}
+
+/* ─── DIVIDER ─── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  margin: 30px 0;
+  opacity: 0.3;
+}
+
+/* ─── TOGGLE ─── */
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 16px; left: 16px;
+  z-index: 200;
+  background: var(--accent);
+  color: #0e0c09;
+  border: none; border-radius: 8px;
+  width: 40px; height: 40px;
+  font-size: 18px; cursor: pointer;
+  align-items: center; justify-content: center;
+}
+
+/* ─── SUBSECTION TITLE ─── */
+.sub-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--accent2);
+  margin: 26px 0 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.sub-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ─── PILL TAGS ─── */
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+.tag {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.74rem;
+  color: var(--text2);
+  font-family: 'JetBrains Mono', monospace;
+}
+.tag.accent { background: rgba(232,160,32,0.1); border-color: rgba(232,160,32,0.3); color: var(--accent2); }
+
+/* ─── ARCH DIAGRAM ─── */
+.arch-box {
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 8px;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text2);
+  font-weight: 600;
+}
+.arch-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  margin-bottom: 6px;
+}
+.arch-tree { margin: 24px 0; }
+.arch-outer { border: 2px solid var(--accent3); border-radius: 12px; padding: 14px; }
+.arch-middle { border: 2px solid var(--accent); border-radius: 10px; padding: 12px; margin: 10px; }
+.arch-inner { border: 2px solid var(--accent2); border-radius: 8px; padding: 10px; margin: 8px; background: var(--surface); }
+.arch-name { font-weight: 700; color: var(--accent2); margin-bottom: 4px; font-size: 0.85rem; }
+.arch-desc { font-size: 0.72rem; color: var(--text3); }
+
+/* ─── DEFINITION CARDS ─── */
+.def-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px 24px;
+  margin-bottom: 18px;
+  transition: border-color 0.2s;
+}
+.def-card:hover { border-color: var(--accent3); }
+.def-term {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 10px;
+}
+.def-term .term-badge {
+  background: rgba(232,160,32,0.12);
+  border: 1px solid rgba(232,160,32,0.25);
+  border-radius: 6px;
+  padding: 2px 9px;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent2);
+}
+.def-meaning {
+  font-size: 0.88rem;
+  color: var(--text2);
+  margin-bottom: 14px;
+  line-height: 1.7;
+}
+.def-example-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--green);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.def-example {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--green);
+  border-radius: 0 6px 6px 0;
+  padding: 10px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--text);
+  overflow-x: auto;
+}
+
+/* ─── EXAM QUESTIONS ─── */
+.exam-q {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.exam-q-header {
+  padding: 16px 20px;
+  display: flex; align-items: flex-start; gap: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.exam-q-header:hover { background: rgba(232,160,32,0.05); }
+.q-num {
+  background: var(--accent);
+  color: #0e0c09;
+  border-radius: 8px;
+  padding: 3px 10px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.q-marks {
+  margin-left: auto;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px 10px;
+  font-size: 0.7rem;
+  color: var(--accent2);
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.q-text {
+  font-size: 0.9rem;
+  color: var(--text);
+  font-weight: 500;
+  flex: 1;
+  line-height: 1.5;
+}
+.q-arrow {
+  color: var(--accent);
+  font-size: 0.9rem;
+  transition: transform 0.25s;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.exam-q.open .q-arrow { transform: rotate(90deg); }
+.exam-q-body {
+  display: none;
+  padding: 0 20px 20px 20px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.exam-q.open .exam-q-body { display: block; }
+.ans-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent2);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.ans-text {
+  font-size: 0.86rem;
+  color: var(--text2);
+  line-height: 1.75;
+}
+.ans-text p { margin-bottom: 8px; }
+.ans-text p:last-child { margin-bottom: 0; }
+.q-type {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.q-type.theory { background: rgba(106,176,232,0.12); color: var(--blue); border: 1px solid rgba(106,176,232,0.25); }
+.q-type.practical { background: rgba(122,187,110,0.12); color: var(--green); border: 1px solid rgba(122,187,110,0.25); }
+.q-type.shortans { background: rgba(184,126,232,0.12); color: var(--purple); border: 1px solid rgba(184,126,232,0.25); }
+.exam-section-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent3);
+  font-weight: 700;
+  margin: 28px 0 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.exam-section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .hero, .content { padding-left: 20px; padding-right: 20px; }
+  .hero { padding-top: 60px; }
+  .menu-toggle { display: flex; }
+  .hero-stats { flex-wrap: wrap; gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="coffee-icon">☕</div>
+      <div>
+        <h2>Java SE Tutorial</h2>
+      </div>
+    </div>
+    <div class="sidebar-sub">CBE Special Course · Dr. Kijazi</div>
+  </div>
+  <ul class="nav-list">
+    <li><a href="#s1"><span class="nav-num">01</span>History of Java</a></li>
+    <li><a href="#s2"><span class="nav-num">02</span>Architecture</a></li>
+    <li><a href="#s3"><span class="nav-num">03</span>Data Types &amp; Variables</a></li>
+    <li><a href="#s4"><span class="nav-num">04</span>If Statements</a></li>
+    <li><a href="#s5"><span class="nav-num">05</span>Switch Case</a></li>
+    <li><a href="#s6"><span class="nav-num">06</span>For &amp; While Loops</a></li>
+    <li><a href="#s7"><span class="nav-num">07</span>Break &amp; Continue</a></li>
+    <li><a href="#s8"><span class="nav-num">08</span>Variable Types</a></li>
+    <li><a href="#s9"><span class="nav-num">09</span>Classes &amp; Objects</a></li>
+    <li><a href="#s10"><span class="nav-num">10</span>Arrays</a></li>
+    <li><a href="#s11"><span class="nav-num">11</span>Key Terms &amp; Definitions</a></li>
+    <li><a href="#s12"><span class="nav-num">12</span>Exam Questions</a></li>
+  </ul>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">☕ College of Business Education</div>
+    <h1>Java <span>SE</span> Programming<br>Special Course Tutorial</h1>
+    <p class="hero-sub">A comprehensive guide to Java Standard Edition — from history and architecture to arrays and OOP, with real code examples from Dr. Ahmed Kijazi's course notes.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">10</span><span class="stat-label">Topics</span></div>
+      <div class="stat"><span class="stat-num">20+</span><span class="stat-label">Code Examples</span></div>
+      <div class="stat"><span class="stat-num">SE</span><span class="stat-label">Edition</span></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══════════════ SECTION 1 ═══════════════ -->
+    <section class="section" id="s1">
+      <div class="section-header">
+        <div class="section-icon">📜</div>
+        <div>
+          <span class="section-num">Topic 01</span>
+          <h2>History of Java</h2>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>Java was created by <strong>James Gosling</strong> in the early 1990s at Sun Microsystems. The project team — Gosling, <strong>Mike Sheridan</strong>, and <strong>Patrick Naughton</strong> — initially wanted to build a language for digital devices like set-top boxes and televisions.</p>
+        <p>They considered C++ but abandoned it due to high memory requirements and platform dependency. Instead, in <strong>1991</strong>, they launched the <em>"Green"</em> project to build a new language called <strong>Greentalk</strong> (.gt extension), later renamed <strong>OAK</strong> — named after the oak tree outside Gosling's office.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">🌳</div>
+          <h4>OAK (1991)</h4>
+          <p>Named after the oak tree. Already trademarked by Oak Technologies, so the name had to change.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">☕</div>
+          <h4>JAVA (1995)</h4>
+          <p>Renamed to Java — a type of delicious coffee from Java Island, Indonesia that Gosling was drinking at the time.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🏢</div>
+          <h4>Oracle (2010)</h4>
+          <p>Oracle acquired Sun Microsystems in January 2010, gaining control of Java, Solaris, and MySQL.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌍</div>
+          <h4>Today</h4>
+          <p>Java runs on 3+ billion devices across Windows, Mac OS, UNIX and more. Write Once, Run Anywhere (WORA).</p>
+        </div>
+      </div>
+
+      <div class="sub-title">Why Use Java?</div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">🛡️</div><h4>Robust</h4><p>Built-in error handling with try-catch blocks. Safer and more reliable execution.</p></div>
+        <div class="card"><div class="card-icon">🔄</div><h4>OOP</h4><p>Object-oriented design promotes code reuse and clear program structure.</p></div>
+        <div class="card"><div class="card-icon">🆓</div><h4>Free &amp; Open</h4><p>Completely open-source with no licensing cost.</p></div>
+        <div class="card"><div class="card-icon">🗑️</div><h4>Auto GC</h4><p>Automatic Garbage Collection frees memory no longer in use.</p></div>
+        <div class="card"><div class="card-icon">💻</div><h4>Platform Independent</h4><p>Runs on Linux, Windows, Mac OS via the JVM.</p></div>
+        <div class="card"><div class="card-icon">📈</div><h4>High Demand</h4><p>One of the most sought-after programming skills in the job market.</p></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ SECTION 2 ═══════════════ -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <div class="section-icon">🏗️</div>
+        <div>
+          <span class="section-num">Topic 02</span>
+          <h2>Architecture of Java</h2>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>Java architecture defines how Java programs are created, compiled, and run. It has three main layers: <strong>JDK</strong> (outermost), <strong>JRE</strong> (middle), and <strong>JVM</strong> (innermost).</p>
+      </div>
+
+      <div class="arch-tree">
+        <div class="arch-outer">
+          <div class="arch-name">☕ JDK — Java Development Kit</div>
+          <div class="arch-desc">Complete toolkit for developing Java programs</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+            <div class="arch-box" style="flex:1;min-width:100px;border-color:#e86a6a;color:#e86a6a">Javac<br><span style="font-size:0.65rem;color:var(--text3)">Compiler</span></div>
+            <div class="arch-box" style="flex:1;min-width:100px;border-color:#6ab0e8;color:#6ab0e8">Jdb<br><span style="font-size:0.65rem;color:var(--text3)">Debugger</span></div>
+            <div class="arch-box" style="flex:1;min-width:100px;border-color:#7abb6e;color:#7abb6e">Jar<br><span style="font-size:0.65rem;color:var(--text3)">Archiver</span></div>
+            <div class="arch-box" style="flex:1;min-width:100px;border-color:#b87ee8;color:#b87ee8">JConsole<br><span style="font-size:0.65rem;color:var(--text3)">Monitor</span></div>
+          </div>
+          <div class="arch-middle">
+            <div class="arch-name">🔧 JRE — Java Runtime Environment</div>
+            <div class="arch-desc">Executes Java applications — includes libraries &amp; JVM</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;margin-bottom:8px;">
+              <div class="arch-box" style="flex:1;min-width:90px;border-color:#e8a020;color:#e8a020;font-size:0.72rem">AWT/Swing<br><span style="font-size:0.62rem;color:var(--text3)">GUI Toolkits</span></div>
+              <div class="arch-box" style="flex:1;min-width:90px;border-color:#e8a020;color:#e8a020;font-size:0.72rem">JDBC<br><span style="font-size:0.62rem;color:var(--text3)">DB Connectivity</span></div>
+              <div class="arch-box" style="flex:1;min-width:90px;border-color:#e8a020;color:#e8a020;font-size:0.72rem">JNDI<br><span style="font-size:0.62rem;color:var(--text3)">Directory Service</span></div>
+            </div>
+            <div class="arch-inner">
+              <div class="arch-name">⚙️ JVM — Java Virtual Machine</div>
+              <div class="arch-desc">Translates bytecode → machine code. Enables WORA.</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+                <div class="arch-box" style="flex:1;min-width:80px;font-size:0.7rem">Heap</div>
+                <div class="arch-box" style="flex:1;min-width:80px;font-size:0.7rem">Stack</div>
+                <div class="arch-box" style="flex:1;min-width:80px;font-size:0.7rem">Class Loader</div>
+                <div class="arch-box" style="flex:1;min-width:80px;font-size:0.7rem">JIT Compiler</div>
+                <div class="arch-box" style="flex:1;min-width:80px;font-size:0.7rem">GC</div>
+                <div class="arch-box" style="flex:1;min-width:80px;font-size:0.7rem">Interpreter</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-title">How Java Code Runs</div>
+      <ul class="steps">
+        <li><span class="step-n">1</span> Write source code in a <span class="ic">.java</span> file</li>
+        <li><span class="step-n">2</span> <strong>Javac</strong> (Java Compiler) compiles it into <span class="ic">.class</span> bytecode</li>
+        <li><span class="step-n">3</span> <strong>JVM Class Loader</strong> loads the .class file into memory</li>
+        <li><span class="step-n">4</span> <strong>Interpreter</strong> converts bytecode line-by-line to machine code</li>
+        <li><span class="step-n">5</span> <strong>JIT Compiler</strong> optimises frequently-used code for faster execution</li>
+        <li><span class="step-n">6</span> Program executes on the hardware. <strong>Garbage Collector</strong> frees unused memory.</li>
+      </ul>
+
+      <div class="highlight-box info">
+        <div class="box-title">💡 WORA — Write Once, Run Anywhere</div>
+        Because bytecode runs on the JVM (not directly on hardware), the same <span class="ic">.class</span> file runs on Windows, Mac, Linux, or any platform that has a JVM installed.
+      </div>
+    </section>
+
+    <!-- ═══════════════ SECTION 3 ═══════════════ -->
+    <section class="section" id="s3">
+      <div class="section-header">
+        <div class="section-icon">🔢</div>
+        <div>
+          <span class="section-num">Topic 03</span>
+          <h2>Data Types &amp; Variables</h2>
+        </div>
+      </div>
+
+      <div class="sub-title">Primitive Data Types</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Type</th><th>Size</th><th>Default</th><th>Range / Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>byte</td><td>1 byte</td><td>0</td><td>Whole numbers: -128 to 127</td></tr>
+            <tr><td>short</td><td>2 bytes</td><td>0</td><td>Whole numbers: -32,768 to 32,767</td></tr>
+            <tr><td>int</td><td>4 bytes</td><td>0</td><td>Whole numbers: -2,147,483,648 to 2,147,483,647</td></tr>
+            <tr><td>long</td><td>8 bytes</td><td>0L</td><td>Very large whole numbers</td></tr>
+            <tr><td>float</td><td>4 bytes</td><td>0.0f</td><td>Decimal numbers, 6–7 digit precision</td></tr>
+            <tr><td>double</td><td>8 bytes</td><td>0.0d</td><td>Decimal numbers, 15 digit precision</td></tr>
+            <tr><td>boolean</td><td>1 bit</td><td>false</td><td>true or false only</td></tr>
+            <tr><td>char</td><td>2 bytes</td><td>'\u0000'</td><td>Single character or ASCII value</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sub-title">Declaring Variables</div>
+      <div class="prose">
+        <p>A variable is a named memory location whose value can change during program execution. Syntax:</p>
+      </div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">Variable Declaration Syntax</div>
+        </div>
+        <div class="code-body"><pre><span class="cm">// Syntax: DataType variableName = value;</span>
+
+<span class="ty">int</span>    myNum     = <span class="nu">5</span>;
+<span class="ty">float</span>  price     = <span class="nu">19.99f</span>;
+<span class="ty">char</span>   grade     = <span class="st">'A'</span>;
+<span class="ty">boolean</span> isValid  = <span class="kw">true</span>;
+<span class="ty">String</span> name      = <span class="st">"Ahmed"</span>;
+
+<span class="cm">// Constant — value cannot change</span>
+<span class="kw">final</span> <span class="ty">int</span> MAX_SCORE = <span class="nu">100</span>;</pre></div>
+      </div>
+
+      <div class="sub-title">Program: Displaying Variable Sizes</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">Program1.java — Variable Sizes</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+
+<span class="kw">public class</span> <span class="ty">AllProgramsClass</span> {
+
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        System.out.<span class="fn">println</span>(<span class="st">"int is : "</span>   + (Integer.SIZE/<span class="nu">8</span>) + <span class="st">" bytes."</span>);
+        System.out.<span class="fn">println</span>(<span class="st">"long is: "</span>  + (Long.SIZE/<span class="nu">8</span>)    + <span class="st">" bytes."</span>);
+        System.out.<span class="fn">println</span>(<span class="st">"char is: "</span>  + (Character.SIZE/<span class="nu">8</span>)+ <span class="st">" bytes."</span>);
+        System.out.<span class="fn">println</span>(<span class="st">"float is: "</span> + (Float.SIZE/<span class="nu">8</span>)   + <span class="st">" bytes."</span>);
+        System.out.<span class="fn">println</span>(<span class="st">"double is: "</span>+ (Double.SIZE/<span class="nu">8</span>)  + <span class="st">" bytes."</span>);
+    }
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT</div>
+        <div class="output-body">int is: 4 bytes.
+long is: 8 bytes.
+char is: 2 bytes.
+float is: 4 bytes.
+double is: 8 bytes.</div>
+      </div>
+
+      <div class="sub-title">Program: Default Variable Values</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">Program2.java — Default Values</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">public class</span> <span class="ty">AllProgramsClass</span> {
+    <span class="cm">// Instance variables — get default values automatically</span>
+    <span class="ty">int</span> a;  <span class="ty">float</span> b;  <span class="ty">double</span> c;
+    <span class="ty">char</span> d; <span class="ty">long</span> e;   <span class="ty">String</span> f;
+
+    <span class="kw">public void</span> <span class="fn">printDefaultValue</span>() {
+        System.out.<span class="fn">println</span>(<span class="st">"Integer: "</span> + a);
+        System.out.<span class="fn">println</span>(<span class="st">"Float: "</span>   + b);
+        System.out.<span class="fn">println</span>(<span class="st">"Double: "</span>  + c);
+        System.out.<span class="fn">println</span>(<span class="st">"Char: "</span>    + d);
+        System.out.<span class="fn">println</span>(<span class="st">"Long: "</span>    + e);
+        System.out.<span class="fn">println</span>(<span class="st">"String: "</span>  + f);
+    }
+
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">AllProgramsClass</span> obj = <span class="kw">new</span> <span class="ty">AllProgramsClass</span>();
+        obj.<span class="fn">printDefaultValue</span>();
+    }
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT</div>
+        <div class="output-body">Integer: 0
+Float: 0.0
+Double: 0.0
+Char: 
+Long: 0
+String: null</div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ SECTION 4 ═══════════════ -->
+    <section class="section" id="s4">
+      <div class="section-header">
+        <div class="section-icon">🔀</div>
+        <div>
+          <span class="section-num">Topic 04</span>
+          <h2>If Statements</h2>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>Java provides three forms of the <strong>if</strong> statement for decision-making. They evaluate Boolean expressions to direct program flow.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">1️⃣</div><h4>Simple if</h4><p>Executes a block only when the condition is true. No alternative block.</p></div>
+        <div class="card"><div class="card-icon">2️⃣</div><h4>if…else</h4><p>Provides an alternative (else) block that runs when the condition is false.</p></div>
+        <div class="card"><div class="card-icon">3️⃣</div><h4>if…else if…else</h4><p>Tests multiple conditions in sequence. The matching block executes.</p></div>
+      </div>
+
+      <div class="sub-title">Program: Compare Two Numbers (Simple if)</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">Program3.java — Simple if</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">public class</span> <span class="ty">AllProgramsClass</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">int</span> a = <span class="nu">10</span>;
+        <span class="ty">int</span> b = <span class="nu">20</span>;
+
+        <span class="kw">if</span> (a &gt; b) {
+            System.out.<span class="fn">println</span>(<span class="st">"a Is Greater"</span>);
+        }
+        <span class="kw">if</span> (b &gt; a) {
+            System.out.<span class="fn">println</span>(<span class="st">"b Is Greater"</span>);
+        }
+        <span class="kw">if</span> (a == b) {
+            System.out.<span class="fn">println</span>(<span class="st">"a and b are equal"</span>);
+        }
+    }
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT</div>
+        <div class="output-body">b Is Greater</div>
+      </div>
+
+      <div class="sub-title">Program: Largest of Two Input Numbers (if-else)</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">Program4.java — if-else with Scanner input</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">import</span> <span class="an">java.util.*</span>;
+<span class="kw">public class</span> <span class="ty">AllProgramsClass</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">float</span> a, b;
+        <span class="ty">Scanner</span> numbers = <span class="kw">new</span> <span class="ty">Scanner</span>(System.in);
+
+        System.out.<span class="fn">println</span>(<span class="st">"Enter First Number"</span>);
+        a = numbers.<span class="fn">nextFloat</span>();
+        System.out.<span class="fn">println</span>(<span class="st">"Enter Second Number"</span>);
+        b = numbers.<span class="fn">nextFloat</span>();
+
+        <span class="kw">if</span> (a &gt; b) {
+            System.out.<span class="fn">println</span>(<span class="st">"First Number is Greater"</span>);
+        } <span class="kw">else if</span> (b &gt; a) {
+            System.out.<span class="fn">println</span>(<span class="st">"Second Number is Greater"</span>);
+        } <span class="kw">else</span> {
+            System.out.<span class="fn">println</span>(<span class="st">"a and b are equal"</span>);
+        }
+    }
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT (sample)</div>
+        <div class="output-body">Enter First Number
+1000
+Enter Second Number
+2000
+Second Number is Greater</div>
+      </div>
+
+      <div class="sub-title">Program: Student Grade Calculator (if-else-if-else)</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">Program6.java — Grade Calculator</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">import</span> <span class="an">java.util.*</span>;
+<span class="kw">public class</span> <span class="ty">AllProgramsClass</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">String</span> name;
+        <span class="ty">float</span> english, geography, biology, average;
+        <span class="ty">Scanner</span> input = <span class="kw">new</span> <span class="ty">Scanner</span>(System.in);
+
+        System.out.<span class="fn">print</span>(<span class="st">"Enter Student Name: "</span>);
+        name = input.<span class="fn">nextLine</span>();
+        System.out.<span class="fn">print</span>(<span class="st">"Enter English Marks: "</span>);
+        english = input.<span class="fn">nextFloat</span>();
+        System.out.<span class="fn">print</span>(<span class="st">"Enter Geography Marks: "</span>);
+        geography = input.<span class="fn">nextFloat</span>();
+        System.out.<span class="fn">print</span>(<span class="st">"Enter Biology Marks: "</span>);
+        biology = input.<span class="fn">nextFloat</span>();
+
+        average = (english + geography + biology) / <span class="nu">3</span>;
+
+        System.out.<span class="fn">println</span>(<span class="st">"--- Student Results ---"</span>);
+        System.out.<span class="fn">println</span>(<span class="st">"Student Name: "</span> + name);
+        System.out.<span class="fn">println</span>(<span class="st">"Average: "</span> + average);
+
+        <span class="kw">if</span>      (average &gt;= <span class="nu">80</span>) System.out.<span class="fn">println</span>(<span class="st">"Grade: A"</span>);
+        <span class="kw">else if</span> (average &gt;= <span class="nu">70</span>) System.out.<span class="fn">println</span>(<span class="st">"Grade: B+"</span>);
+        <span class="kw">else if</span> (average &gt;= <span class="nu">60</span>) System.out.<span class="fn">println</span>(<span class="st">"Grade: B"</span>);
+        <span class="kw">else if</span> (average &gt;= <span class="nu">50</span>) System.out.<span class="fn">println</span>(<span class="st">"Grade: C"</span>);
+        <span class="kw">else</span>                     System.out.<span class="fn">println</span>(<span class="st">"Grade: F"</span>);
+    }
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT (sample)</div>
+        <div class="output-body">Enter Student Name: AHMED ATHUMAN
+Enter English Marks: 70
+Enter Geography Marks: 80
+Enter Biology Marks: 50
+--- Student Results ---
+Student Name: AHMED ATHUMAN
+Average: 66.666664
+Grade: B</div>
+      </div>
+      <div class="tbl-wrap"><table><thead><tr><th>Average Score</th><th>Grade</th></tr></thead><tbody>
+        <tr><td>80 – 100</td><td style="color:var(--green)">A</td></tr>
+        <tr><td>70 – 79</td><td style="color:var(--accent2)">B+</td></tr>
+        <tr><td>60 – 69</td><td style="color:var(--accent)">B</td></tr>
+        <tr><td>50 – 59</td><td style="color:var(--accent3)">C</td></tr>
+        <tr><td>0 – 49</td><td style="color:var(--red)">F</td></tr>
+      </tbody></table></div>
+    </section>
+
+    <!-- ═══════════════ SECTION 5 ═══════════════ -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <div class="section-icon">🔧</div>
+        <div>
+          <span class="section-num">Topic 05</span>
+          <h2>Switch Case Statement</h2>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>The <strong>switch</strong> statement tests an expression against multiple <strong>case</strong> values. When a match is found the corresponding block executes. A <span class="ic">break</span> statement ends the switch. Without it, execution falls through to the next case. A <span class="ic">default</span> block runs when no case matches.</p>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">Switch Syntax</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">switch</span> (expression) {
+    <span class="kw">case</span> value1:
+        <span class="cm">// code to execute</span>
+        <span class="kw">break</span>;    <span class="cm">// optional — stops fall-through</span>
+    <span class="kw">case</span> value2:
+        <span class="cm">// code to execute</span>
+        <span class="kw">break</span>;
+    <span class="kw">default</span>:
+        <span class="cm">// code if no case matches</span>
+}</pre></div>
+      </div>
+
+      <div class="sub-title">Program: Module Code Lookup</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">SwitchDemo.java — Module Name from Code</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">import</span> <span class="an">java.util.Scanner</span>;
+<span class="kw">public class</span> <span class="ty">AllProgramsClass</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">Scanner</span> input = <span class="kw">new</span> <span class="ty">Scanner</span>(System.in);
+        System.out.<span class="fn">println</span>(<span class="st">"Enter Module Code"</span>);
+        <span class="ty">String</span> code = input.<span class="fn">nextLine</span>();
+
+        <span class="kw">switch</span> (code) {
+            <span class="kw">case</span> <span class="st">"ITU07313"</span>:
+                System.out.<span class="fn">println</span>(<span class="st">"Data Structure and Algorithm"</span>);
+                <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="st">"ITU07312"</span>:
+                System.out.<span class="fn">println</span>(<span class="st">"Programming in Java"</span>);
+                <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="st">"ITU07212"</span>:
+                System.out.<span class="fn">println</span>(<span class="st">"Programming in C++"</span>);
+                <span class="kw">break</span>;
+            <span class="kw">default</span>:
+                System.out.<span class="fn">println</span>(<span class="st">"Unknown Module"</span>);
+        }
+    }
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT (sample — entering ITU07312)</div>
+        <div class="output-body">Enter Module Code
+ITU07312
+Programming in Java</div>
+      </div>
+
+      <div class="highlight-box warning">
+        <div class="box-title">⚠️ Fall-Through Warning</div>
+        If you omit <span class="ic">break</span>, Java continues executing subsequent cases even if they don't match. This can cause unexpected results. Always add <span class="ic">break</span> unless fall-through is intentional.
+      </div>
+    </section>
+
+    <!-- ═══════════════ SECTION 6 ═══════════════ -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <div class="section-icon">🔁</div>
+        <div>
+          <span class="section-num">Topic 06</span>
+          <h2>For Loop &amp; While Loop</h2>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">🔢</div>
+          <h4>for loop</h4>
+          <p>Best when the number of iterations is known. init, condition, and increment are all inside the header.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔄</div>
+          <h4>while loop</h4>
+          <p>Best when iterations depend on a condition. Init is outside, condition is checked before each iteration.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">⤵️</div>
+          <h4>do-while loop</h4>
+          <p>Executes the body at least once. Condition is checked after the first execution.</p>
+        </div>
+      </div>
+
+      <div class="sub-title">for Loop — Syntax &amp; Examples</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">ForLoop.java — Print 1 to 5</div>
+        </div>
+        <div class="code-body"><pre><span class="cm">// Syntax: for (init; condition; incr/decr)</span>
+
+<span class="kw">for</span> (<span class="ty">int</span> i = <span class="nu">1</span>; i &lt;= <span class="nu">5</span>; i++) {
+    System.out.<span class="fn">println</span>(i);
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT</div>
+        <div class="output-body">1
+2
+3
+4
+5</div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">Stars.java — Triangle Pattern (Nested for loop)</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">for</span> (<span class="ty">int</span> i = <span class="nu">1</span>; i &lt;= <span class="nu">5</span>; i++) {
+    <span class="kw">for</span> (<span class="ty">int</span> j = <span class="nu">1</span>; j &lt;= i; j++) {
+        System.out.<span class="fn">print</span>(<span class="st">"*"</span>);
+    }
+    System.out.<span class="fn">print</span>(<span class="st">"\n"</span>);
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT</div>
+        <div class="output-body">*
+**
+***
+****
+*****</div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">InvertedTriangle.java — Inverted Star Pattern</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">for</span> (<span class="ty">int</span> i = <span class="nu">0</span>; i &lt;= <span class="nu">8</span>; i++) {
+    <span class="kw">for</span> (<span class="ty">int</span> j = <span class="nu">1</span>; j &lt;= <span class="nu">8</span> - i; j++) {
+        System.out.<span class="fn">print</span>(<span class="st">"*"</span>);
+    }
+    System.out.<span class="fn">print</span>(<span class="st">"\n"</span>);
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT</div>
+        <div class="output-body">********
+*******
+******
+*****
+****
+***
+**
+*</div>
+      </div>
+
+      <div class="sub-title">while Loop — Syntax &amp; Example</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">WhileLoop.java — Print 1 to 5</div>
+        </div>
+        <div class="code-body"><pre><span class="ty">int</span> n = <span class="nu">1</span>;
+<span class="kw">while</span> (n &lt;= <span class="nu">5</span>) {
+    System.out.<span class="fn">println</span>(n);
+    n++;    <span class="cm">// increment must be inside the loop body</span>
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT</div>
+        <div class="output-body">1
+2
+3
+4
+5</div>
+      </div>
+
+      <div class="sub-title">do-while Loop — Syntax &amp; Example</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">DoWhile.java — Always executes at least once</div>
+        </div>
+        <div class="code-body"><pre><span class="ty">int</span> i = <span class="nu">1</span>;
+<span class="kw">do</span> {
+    System.out.<span class="fn">println</span>(i);
+    i++;
+} <span class="kw">while</span> (i &lt;= <span class="nu">5</span>);  <span class="cm">// note: semicolon after while</span></pre></div>
+      </div>
+      <div class="highlight-box info">
+        <div class="box-title">Key Difference</div>
+        <strong>for / while</strong>: condition checked <em>before</em> the first iteration — body may never run.<br>
+        <strong>do-while</strong>: condition checked <em>after</em> the first iteration — body always runs at least once.
+      </div>
+    </section>
+
+    <!-- ═══════════════ SECTION 7 ═══════════════ -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <div class="section-icon">⏭️</div>
+        <div>
+          <span class="section-num">Topic 07</span>
+          <h2>Break &amp; Continue Statements</h2>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">🛑</div>
+          <h4>break</h4>
+          <p>Immediately exits the loop (or switch). No more iterations occur after a break.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">⏩</div>
+          <h4>continue</h4>
+          <p>Skips the remainder of the current iteration and jumps to the next iteration.</p>
+        </div>
+      </div>
+
+      <div class="sub-title">Program: break — Stop Loop at Iteration 3</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">BreakDemo.java</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">for</span> (<span class="ty">int</span> i = <span class="nu">1</span>; i &lt;= <span class="nu">8</span>; i++) {
+    System.out.<span class="fn">println</span>(<span class="st">"Iteration No "</span> + i);
+    <span class="kw">if</span> (i == <span class="nu">3</span>) {
+        <span class="kw">break</span>;   <span class="cm">// exits loop when i equals 3</span>
+    }
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT</div>
+        <div class="output-body">Iteration No 1
+Iteration No 2
+Iteration No 3</div>
+      </div>
+
+      <div class="sub-title">Program: continue — Skip Iterations 4 and 5</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">ContinueDemo.java — Print 1,2,3,6,7,8 (skip 4 and 5)</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">for</span> (<span class="ty">int</span> i = <span class="nu">1</span>; i &lt;= <span class="nu">8</span>; i++) {
+    <span class="kw">if</span> (i == <span class="nu">4</span> || i == <span class="nu">5</span>) {
+        <span class="kw">continue</span>;  <span class="cm">// skip printing 4 and 5</span>
+    }
+    System.out.<span class="fn">println</span>(i);
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT</div>
+        <div class="output-body">1
+2
+3
+6
+7
+8</div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ SECTION 8 ═══════════════ -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <div class="section-icon">📦</div>
+        <div>
+          <span class="section-num">Topic 08</span>
+          <h2>Instance, Static &amp; Local Variables</h2>
+        </div>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Type</th><th>Where Declared</th><th>Default Value</th><th>Access</th></tr></thead>
+          <tbody>
+            <tr><td>Local</td><td>Inside method/block</td><td>None — must init</td><td>Only within that method/block</td></tr>
+            <tr><td>Instance</td><td>Inside class, outside method; no static</td><td>Yes (0, false, null)</td><td>Via object</td></tr>
+            <tr><td>Static</td><td>Inside class with static keyword</td><td>Yes (0, false, null)</td><td>Direct (no object needed)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sub-title">Program: Demonstrating Variable Types</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">VariableTypes.java</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">public class</span> <span class="ty">VariableTypes</span> {
+
+    <span class="cm">// ── INSTANCE variable (belongs to object)</span>
+    <span class="ty">int</span> instanceVar = <span class="nu">100</span>;
+
+    <span class="cm">// ── STATIC variable (belongs to class)</span>
+    <span class="kw">static</span> <span class="ty">String</span> schoolName = <span class="st">"CBE"</span>;
+
+    <span class="kw">void</span> <span class="fn">showLocal</span>() {
+        <span class="cm">// ── LOCAL variable (only lives inside this method)</span>
+        <span class="ty">int</span> localVar = <span class="nu">50</span>;
+        System.out.<span class="fn">println</span>(<span class="st">"Local: "</span>    + localVar);
+        System.out.<span class="fn">println</span>(<span class="st">"Instance: "</span> + instanceVar);
+        System.out.<span class="fn">println</span>(<span class="st">"Static: "</span>   + schoolName);
+    }
+
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">VariableTypes</span> obj = <span class="kw">new</span> <span class="ty">VariableTypes</span>();
+        obj.<span class="fn">showLocal</span>();
+
+        <span class="cm">// Static variable accessible without object:</span>
+        System.out.<span class="fn">println</span>(<span class="st">"Static direct: "</span> + schoolName);
+    }
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT</div>
+        <div class="output-body">Local: 50
+Instance: 100
+Static: CBE
+Static direct: CBE</div>
+      </div>
+
+      <div class="highlight-box success">
+        <div class="box-title">✅ Key Rules Summary</div>
+        • <strong>Local</strong>: No default value — you MUST assign before use. No access modifiers allowed.<br>
+        • <strong>Instance</strong>: Gets memory when object is created. Accessible via object reference.<br>
+        • <strong>Static</strong>: Shared across all objects. Accessible directly without creating an object.<br>
+        • <strong>Constants</strong>: Declared with <span class="ic">final</span>. Value cannot change after assignment.
+      </div>
+    </section>
+
+    <!-- ═══════════════ SECTION 9 ═══════════════ -->
+    <section class="section" id="s9">
+      <div class="section-header">
+        <div class="section-icon">🏛️</div>
+        <div>
+          <span class="section-num">Topic 09</span>
+          <h2>Classes &amp; Objects</h2>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>A <strong>class</strong> is a blueprint for creating objects — it groups variables (state) and methods (behaviour) together. An <strong>object</strong> is an instance of a class — a real entity created from the blueprint.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">🎨</div><h4>State</h4><p>Object properties — represented by variables (e.g., car colour, speed).</p></div>
+        <div class="card"><div class="card-icon">⚡</div><h4>Behaviour</h4><p>Actions an object can perform — represented by methods (e.g., accelerate, brake).</p></div>
+        <div class="card"><div class="card-icon">🏷️</div><h4>Identity</h4><p>A unique name that distinguishes one object from another.</p></div>
+      </div>
+
+      <div class="sub-title">Static Method Example</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">StaticMethod.java — Average with static function + parameters</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">import</span> <span class="an">java.util.Scanner</span>;
+<span class="kw">public class</span> <span class="ty">AllProgramsClass</span> {
+
+    <span class="cm">// Static method — called without creating an object</span>
+    <span class="kw">public static void</span> <span class="fn">average</span>(<span class="ty">float</span> m, <span class="ty">float</span> g, <span class="ty">float</span> e) {
+        <span class="ty">float</span> avg = (m + g + e) / <span class="nu">3</span>;
+        System.out.<span class="fn">println</span>(<span class="st">"The Average is "</span> + avg);
+    }
+
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">float</span> math, geog, engl;
+        <span class="ty">Scanner</span> input = <span class="kw">new</span> <span class="ty">Scanner</span>(System.in);
+
+        System.out.<span class="fn">println</span>(<span class="st">"Enter Mathematics Marks"</span>);
+        math = input.<span class="fn">nextFloat</span>();
+        System.out.<span class="fn">println</span>(<span class="st">"Enter Geography Marks"</span>);
+        geog = input.<span class="fn">nextFloat</span>();
+        System.out.<span class="fn">println</span>(<span class="st">"Enter English Marks"</span>);
+        engl = input.<span class="fn">nextFloat</span>();
+
+        <span class="fn">average</span>(math, geog, engl);  <span class="cm">// called without object</span>
+    }
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT (sample: 10, 20, 40)</div>
+        <div class="output-body">The Average is 23.333334</div>
+      </div>
+
+      <div class="sub-title">Instance Method Example</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">InstanceMethod.java — Average via object</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">import</span> <span class="an">java.util.Scanner</span>;
+<span class="kw">public class</span> <span class="ty">AllProgramsClass</span> {
+
+    <span class="cm">// Instance method — requires an object to call</span>
+    <span class="kw">public void</span> <span class="fn">average</span>(<span class="ty">float</span> m, <span class="ty">float</span> g, <span class="ty">float</span> e) {
+        <span class="ty">float</span> avg = (m + g + e) / <span class="nu">3</span>;
+        System.out.<span class="fn">println</span>(<span class="st">"The Average is "</span> + avg);
+    }
+
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">Scanner</span> input = <span class="kw">new</span> <span class="ty">Scanner</span>(System.in);
+        <span class="ty">float</span> math, geog, engl;
+
+        System.out.<span class="fn">println</span>(<span class="st">"Enter Mathematics Marks"</span>);
+        math = input.<span class="fn">nextFloat</span>();
+        System.out.<span class="fn">println</span>(<span class="st">"Enter Geography Marks"</span>);
+        geog = input.<span class="fn">nextFloat</span>();
+        System.out.<span class="fn">println</span>(<span class="st">"Enter English Marks"</span>);
+        engl = input.<span class="fn">nextFloat</span>();
+
+        <span class="cm">// Create an object first, then call the method</span>
+        <span class="ty">AllProgramsClass</span> callavg = <span class="kw">new</span> <span class="ty">AllProgramsClass</span>();
+        callavg.<span class="fn">average</span>(math, geog, engl);
+    }
+}</pre></div>
+      </div>
+
+      <div class="sub-title">Constructor Example</div>
+      <div class="prose">
+        <p>A <strong>constructor</strong> is a special method with the same name as the class and no return type. It is automatically called when an object is created with <span class="ic">new</span>.</p>
+      </div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">ConstructorDemo.java — Constructor with parameters</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">import</span> <span class="an">java.util.Scanner</span>;
+<span class="kw">public class</span> <span class="ty">AllProgramsClass</span> {
+
+    <span class="cm">// Constructor — same name as class, no return type</span>
+    <span class="kw">public</span> <span class="fn">AllProgramsClass</span>(<span class="ty">float</span> a, <span class="ty">float</span> b, <span class="ty">float</span> c) {
+        <span class="ty">float</span> avg = (a + b + c) / <span class="nu">3</span>;
+        System.out.<span class="fn">println</span>(<span class="st">"The Average is "</span> + avg);
+    }
+
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">Scanner</span> input = <span class="kw">new</span> <span class="ty">Scanner</span>(System.in);
+        <span class="ty">float</span> math, geog, engl;
+        
+        System.out.<span class="fn">println</span>(<span class="st">"Enter Mathematics Marks"</span>); math = input.<span class="fn">nextFloat</span>();
+        System.out.<span class="fn">println</span>(<span class="st">"Enter Geography Marks"</span>);  geog = input.<span class="fn">nextFloat</span>();
+        System.out.<span class="fn">println</span>(<span class="st">"Enter English Marks"</span>);    engl = input.<span class="fn">nextFloat</span>();
+
+        <span class="cm">// Creating the object calls the constructor automatically</span>
+        <span class="ty">AllProgramsClass</span> obj = <span class="kw">new</span> <span class="ty">AllProgramsClass</span>(math, geog, engl);
+    }
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT (entering 10, 10, 10)</div>
+        <div class="output-body">The Average is 10.0</div>
+      </div>
+
+      <div class="highlight-box info">
+        <div class="box-title">📌 Constructor Rules</div>
+        1. Constructor name must be identical to the class name.<br>
+        2. No explicit return type (not even void).<br>
+        3. Cannot be abstract, static, final, or synchronized.
+      </div>
+    </section>
+
+    <!-- ═══════════════ SECTION 10 ═══════════════ -->
+    <section class="section" id="s10">
+      <div class="section-header">
+        <div class="section-icon">🗂️</div>
+        <div>
+          <span class="section-num">Topic 10</span>
+          <h2>Arrays</h2>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>A Java array is an object that stores elements of the <strong>same data type</strong> in contiguous memory. It has a <strong>fixed size</strong> set at creation (instantiation). Arrays start at index <strong>0</strong>.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">📏</div><h4>1D Array</h4><p>Linear storage — elements arranged in a single row. Accessed with one index: <span class="ic">arr[i]</span>.</p></div>
+        <div class="card"><div class="card-icon">🔲</div><h4>2D Array</h4><p>Matrix storage — rows and columns. Accessed with two indices: <span class="ic">arr[row][col]</span>.</p></div>
+      </div>
+
+      <div class="sub-title">1D Array — Declaration &amp; Initialization</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">Array1D.java — Declaration, Initialization, and Access</div>
+        </div>
+        <div class="code-body"><pre><span class="cm">// Method 1: Separate declaration and instantiation</span>
+<span class="ty">int</span> data[];
+data = <span class="kw">new</span> <span class="ty">int</span>[<span class="nu">7</span>];
+data[<span class="nu">0</span>] = <span class="nu">100</span>;
+data[<span class="nu">1</span>] = <span class="nu">234</span>;
+<span class="cm">// ... etc</span>
+
+<span class="cm">// Method 4: Declare + instantiate + initialise in one line</span>
+<span class="ty">int</span> data[] = {<span class="nu">100</span>, <span class="nu">234</span>, <span class="nu">100</span>, <span class="nu">4</span>, <span class="nu">19</span>, <span class="nu">100</span>, <span class="nu">345</span>};</pre></div>
+      </div>
+
+      <div class="sub-title">Program: 1D Array Operations</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">Array1DProgram.java — Store, Access, Update, Display All</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">public class</span> <span class="ty">AllProgramsClass</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+
+        <span class="ty">int</span> data[] = <span class="kw">new</span> <span class="ty">int</span>[]{<span class="nu">100</span>, <span class="nu">234</span>, <span class="nu">100</span>, <span class="nu">4</span>, <span class="nu">19</span>, <span class="nu">100</span>, <span class="nu">345</span>};
+
+        <span class="cm">// Access 3rd element (index 2)</span>
+        System.out.<span class="fn">println</span>(<span class="st">"3rd Element: "</span> + data[<span class="nu">2</span>]);
+
+        <span class="cm">// Update element at index 1 (value 234 → 5000)</span>
+        data[<span class="nu">1</span>] = <span class="nu">5000</span>;
+
+        <span class="cm">// Display all elements with for-loop</span>
+        System.out.<span class="fn">println</span>(<span class="st">"All Elements:"</span>);
+        <span class="kw">for</span> (<span class="ty">int</span> i = <span class="nu">0</span>; i &lt;= <span class="nu">6</span>; i++) {
+            System.out.<span class="fn">println</span>(data[i]);
+        }
+    }
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT</div>
+        <div class="output-body">3rd Element: 100
+All Elements:
+100
+5000
+100
+4
+19
+100
+345</div>
+      </div>
+
+      <div class="sub-title">2D Array — Declaration &amp; Program</div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">Array2DProgram.java — 3×5 Matrix Operations</div>
+        </div>
+        <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">public class</span> <span class="ty">AllProgramsClass</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+
+        <span class="ty">int</span> data[][] = <span class="kw">new</span> <span class="ty">int</span>[][]{{<span class="nu">100</span>,<span class="nu">234</span>,<span class="nu">100</span>,<span class="nu">4</span>,<span class="nu">19</span>},
+                                     {<span class="nu">345</span>,<span class="nu">45</span>,<span class="nu">67</span>,<span class="nu">90</span>,<span class="nu">1000</span>},
+                                     {<span class="nu">45</span>,<span class="nu">67</span>,<span class="nu">89</span>,<span class="nu">69</span>,<span class="nu">35</span>}};
+
+        <span class="cm">// Display 3rd element (index [0][2])</span>
+        System.out.<span class="fn">println</span>(<span class="st">"3rd Element: "</span> + data[<span class="nu">0</span>][<span class="nu">2</span>]);
+
+        <span class="cm">// Display element at [2][0]</span>
+        System.out.<span class="fn">println</span>(<span class="st">"data[2][0]: "</span>  + data[<span class="nu">2</span>][<span class="nu">0</span>]);
+
+        <span class="cm">// Update 1000 → 5000 at [1][4]</span>
+        data[<span class="nu">1</span>][<span class="nu">4</span>] = <span class="nu">5000</span>;
+
+        <span class="cm">// Display all with nested for-loop</span>
+        System.out.<span class="fn">println</span>(<span class="st">"All Elements:"</span>);
+        <span class="kw">for</span> (<span class="ty">int</span> i = <span class="nu">0</span>; i &lt;= <span class="nu">2</span>; i++) {
+            System.out.<span class="fn">println</span>(<span class="st">"Row "</span> + (i+<span class="nu">1</span>));
+            <span class="kw">for</span> (<span class="ty">int</span> j = <span class="nu">0</span>; j &lt;= <span class="nu">4</span>; j++) {
+                System.out.<span class="fn">print</span>(<span class="st">" "</span> + data[i][j]);
+            }
+            System.out.<span class="fn">println</span>();
+        }
+    }
+}</pre></div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-header">▶ OUTPUT</div>
+        <div class="output-body">3rd Element: 100
+data[2][0]: 45
+All Elements:
+Row 1
+ 100 234 100 4 19
+Row 2
+ 345 45 67 90 5000
+Row 3
+ 45 67 89 69 35</div>
+      </div>
+
+      <div class="highlight-box success">
+        <div class="box-title">✅ Array Quick Reference</div>
+        • Arrays start at index <strong>0</strong>, not 1<br>
+        • Size is <strong>fixed</strong> after creation — use ArrayList for dynamic sizing<br>
+        • 2D array <span class="ic">data[3][5]</span> = 3 rows, 5 columns = 15 total elements<br>
+        • Access with <span class="ic">data[row][col]</span> for 2D arrays
+      </div>
+
+      <!-- Final summary card -->
+      <div class="divider"></div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;margin-top:20px;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:10px;">☕</div>
+        <h3 style="font-family:'Playfair Display',serif;color:var(--accent2);margin-bottom:8px;">Tutorial Complete!</h3>
+        <p style="color:var(--text3);font-size:0.85rem;max-width:400px;margin:0 auto;">You have covered all 10 core topics from Dr. Ahmed Kijazi's Java SE Special Course at the College of Business Education.</p>
+        <div class="tags" style="justify-content:center;margin-top:18px;">
+          <span class="tag accent">History</span>
+          <span class="tag accent">Architecture</span>
+          <span class="tag accent">Data Types</span>
+          <span class="tag accent">If Statements</span>
+          <span class="tag accent">Switch Case</span>
+          <span class="tag accent">Loops</span>
+          <span class="tag accent">Break &amp; Continue</span>
+          <span class="tag accent">Variables</span>
+          <span class="tag accent">OOP</span>
+          <span class="tag accent">Arrays</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════ SECTION 11 — DEFINITIONS ═══════════════ -->
+    <section class="section" id="s11">
+      <div class="section-header">
+        <div class="section-icon">📖</div>
+        <div>
+          <span class="section-num">Topic 11</span>
+          <h2>Key Terms &amp; Definitions</h2>
+        </div>
+      </div>
+      <div class="prose"><p>All essential vocabulary from the Java SE course, each with a definition and a short code example.</p></div>
+
+      <!-- ── JAVA FUNDAMENTALS ── -->
+      <div class="sub-title">Java Fundamentals</div>
+
+      <div class="def-card">
+        <div class="def-term">Java <span class="term-badge">Language</span></div>
+        <div class="def-meaning">A high-level, object-oriented, platform-independent programming language created by James Gosling in the early 1990s. It follows the <strong>WORA</strong> principle — Write Once, Run Anywhere.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">public class</span> <span class="ty">Hello</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        System.out.<span class="fn">println</span>(<span class="st">"Hello, Java!"</span>);
+    }
+}</div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">JDK <span class="term-badge">Toolkit</span></div>
+        <div class="def-meaning">The <strong>Java Development Kit</strong> is a software toolkit used to develop and execute Java programs. It contains the Java compiler (javac), debugger (jdb), archiver (jar), JConsole, and the JRE.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="cm">// Compile using JDK's javac tool (command line):</span>
+javac HelloWorld.java
+
+<span class="cm">// Run using JDK's java tool:</span>
+java HelloWorld</div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">JRE <span class="term-badge">Runtime</span></div>
+        <div class="def-meaning">The <strong>Java Runtime Environment</strong> provides the environment needed to execute Java applications. It includes the JVM, class libraries (AWT, Swing, JDBC), and deployment tools — but NOT the compiler.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="cm">// JRE contains libraries you import, e.g.:</span>
+<span class="kw">import</span> <span class="an">java.util.Scanner</span>;   <span class="cm">// utility library (part of JRE)</span>
+<span class="kw">import</span> <span class="an">java.sql.*</span>;             <span class="cm">// JDBC database library (part of JRE)</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">JVM <span class="term-badge">Virtual Machine</span></div>
+        <div class="def-meaning">The <strong>Java Virtual Machine</strong> is an abstract machine that converts Java bytecode into machine-specific instructions. It is responsible for memory management (heap, stack), garbage collection, and enabling platform independence.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="cm">// .java  ──javac──▶  .class (bytecode)  ──JVM──▶  machine code
+// The same .class file runs on Windows, Linux, Mac via their JVMs</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Bytecode <span class="term-badge">Compiled Output</span></div>
+        <div class="def-meaning">The intermediate, platform-neutral code produced by the Java compiler (javac). Stored in a <span class="ic">.class</span> file. The JVM interprets or JIT-compiles bytecode into native machine code at runtime.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="cm">// After running: javac Message.java
+// A file Message.class is created — this is the bytecode file
+// You cannot read it directly; the JVM executes it.</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Garbage Collector <span class="term-badge">Memory</span></div>
+        <div class="def-meaning">An automatic memory management component inside the JVM. It finds objects in the heap that are no longer referenced by any part of the program and frees that memory — preventing memory leaks without programmer intervention.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="ty">String</span> s = <span class="kw">new</span> <span class="ty">String</span>(<span class="st">"CBE"</span>); <span class="cm">// object created in heap</span>
+s = <span class="kw">null</span>;  <span class="cm">// original "CBE" object now unreachable</span>
+<span class="cm">// GC will automatically free the memory used by "CBE"</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">JIT Compiler <span class="term-badge">Optimisation</span></div>
+        <div class="def-meaning">The <strong>Just-In-Time Compiler</strong> monitors which bytecode segments are executed most frequently and compiles those directly to native machine code, so the interpreter does not re-translate them. This improves runtime performance.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="cm">// A loop executed 10,000 times:
+for (int i = 0; i &lt; 10000; i++) { ... }
+// JIT detects this hot spot and compiles it to native code
+// so subsequent iterations run at near-native speed.</span></div>
+      </div>
+
+      <!-- ── DATA TYPES ── -->
+      <div class="sub-title">Data Types &amp; Variables</div>
+
+      <div class="def-card">
+        <div class="def-term">Data Type <span class="term-badge">Type System</span></div>
+        <div class="def-meaning">Specifies the kind of value a variable can hold and how much memory it occupies. Java has two categories: <strong>Primitive</strong> (byte, short, int, long, float, double, boolean, char) and <strong>Non-primitive</strong> (String, Arrays, Classes).</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="ty">int</span>     age     = <span class="nu">21</span>;       <span class="cm">// primitive</span>
+<span class="ty">double</span>  gpa     = <span class="nu">4.7</span>;      <span class="cm">// primitive</span>
+<span class="ty">String</span>  name    = <span class="st">"Juma"</span>;   <span class="cm">// non-primitive (object)</span>
+<span class="ty">int</span>[]   scores  = {<span class="nu">80</span>,<span class="nu">90</span>,<span class="nu">70</span>};<span class="cm">// non-primitive (array)</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Variable <span class="term-badge">Memory</span></div>
+        <div class="def-meaning">A named memory location whose stored value can change during program execution. Variables must be declared with a data type before use. The name must start with a letter, underscore, or $ — not a digit.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="ty">int</span> studentAge = <span class="nu">20</span>;    <span class="cm">// declared and initialised</span>
+studentAge = <span class="nu">21</span>;         <span class="cm">// value changed — variable</span>
+<span class="cm">// Invalid names: 1name, student age, #score</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Constant (Final Variable) <span class="term-badge">Memory</span></div>
+        <div class="def-meaning">A variable declared with the <span class="ic">final</span> keyword. Its value is set once and <strong>cannot be changed</strong> afterwards. By convention, constant names are written in UPPER_CASE.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">final</span> <span class="ty">double</span> PI = <span class="nu">3.14159</span>;
+<span class="kw">final</span> <span class="ty">int</span> MAX_STUDENTS = <span class="nu">50</span>;
+<span class="cm">// PI = 3.0; ← COMPILE ERROR: cannot assign to final variable</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Local Variable <span class="term-badge">Scope</span></div>
+        <div class="def-meaning">Declared inside a method, constructor, or block. It exists <strong>only within that block</strong>. No default value — you must initialise it before use. Cannot have access modifiers (public, private, etc.).</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">void</span> <span class="fn">calculate</span>() {
+    <span class="ty">int</span> result = <span class="nu">0</span>;   <span class="cm">// local — only lives inside calculate()</span>
+    result = <span class="nu">5</span> + <span class="nu">3</span>;
+    System.out.<span class="fn">println</span>(result);
+} <span class="cm">// result no longer exists after here</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Instance Variable <span class="term-badge">Scope</span></div>
+        <div class="def-meaning">Declared inside a class but <strong>outside any method</strong>, without the static keyword. Gets memory when an object is created. Has default values (0 for numbers, false for boolean, null for objects).</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">class</span> <span class="ty">Student</span> {
+    <span class="ty">String</span> name;   <span class="cm">// instance variable — default: null</span>
+    <span class="ty">int</span>    age;    <span class="cm">// instance variable — default: 0</span>
+}
+<span class="cm">// Each object gets its OWN copy of name and age</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Static Variable <span class="term-badge">Scope</span></div>
+        <div class="def-meaning">Declared with the <span class="ic">static</span> keyword inside a class. <strong>Shared by all objects</strong> of that class. Can be accessed directly without creating an object.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">class</span> <span class="ty">University</span> {
+    <span class="kw">static</span> <span class="ty">String</span> name = <span class="st">"CBE"</span>;  <span class="cm">// shared by ALL objects</span>
+}
+<span class="cm">// Access without object:</span>
+System.out.<span class="fn">println</span>(<span class="ty">University</span>.name);  <span class="cm">// prints: CBE</span></div>
+      </div>
+
+      <!-- ── OOP ── -->
+      <div class="sub-title">Object-Oriented Programming</div>
+
+      <div class="def-card">
+        <div class="def-term">Class <span class="term-badge">OOP</span></div>
+        <div class="def-meaning">A blueprint or template for creating objects. A class can contain variables (fields), methods, constructors, and inner classes. Every Java program must have at least one class.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">public class</span> <span class="ty">Car</span> {
+    <span class="ty">String</span> colour;   <span class="cm">// field</span>
+    <span class="ty">int</span>    speed;    <span class="cm">// field</span>
+    <span class="kw">void</span> <span class="fn">accelerate</span>() { speed += <span class="nu">10</span>; } <span class="cm">// method</span>
+}</div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Object <span class="term-badge">OOP</span></div>
+        <div class="def-meaning">An instance of a class — a real entity in memory with its own state (variable values) and behaviour (methods). Created using the <span class="ic">new</span> keyword.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="ty">Car</span> myCar = <span class="kw">new</span> <span class="ty">Car</span>();  <span class="cm">// create object from Car class</span>
+myCar.colour = <span class="st">"Red"</span>;        <span class="cm">// set state</span>
+myCar.<span class="fn">accelerate</span>();           <span class="cm">// call behaviour</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Constructor <span class="term-badge">OOP</span></div>
+        <div class="def-meaning">A special method that has the <strong>same name as the class</strong> and <strong>no return type</strong>. It is automatically invoked when an object is created with <span class="ic">new</span>. Used to initialise the object's state.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">class</span> <span class="ty">Student</span> {
+    <span class="ty">String</span> name;
+    <span class="kw">public</span> <span class="fn">Student</span>(<span class="ty">String</span> n) { <span class="cm">// constructor</span>
+        <span class="kw">this</span>.name = n;
+    }
+}
+<span class="ty">Student</span> s = <span class="kw">new</span> <span class="ty">Student</span>(<span class="st">"Ahmed"</span>); <span class="cm">// constructor called here</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Method <span class="term-badge">OOP</span></div>
+        <div class="def-meaning">A named block of code inside a class that performs a specific task when called. Methods promote code reuse — write once, call many times. May accept parameters and return a value.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">public int</span> <span class="fn">add</span>(<span class="ty">int</span> a, <span class="ty">int</span> b) {  <span class="cm">// method with return value</span>
+    <span class="kw">return</span> a + b;
+}
+<span class="ty">int</span> result = <span class="fn">add</span>(<span class="nu">5</span>, <span class="nu">3</span>);  <span class="cm">// result = 8</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Static Method <span class="term-badge">OOP</span></div>
+        <div class="def-meaning">A method declared with the <span class="ic">static</span> keyword. Can be called <strong>without creating an object</strong>. Can only directly access other static members. The <span class="ic">main()</span> method is always static.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">public static void</span> <span class="fn">greet</span>() {
+    System.out.<span class="fn">println</span>(<span class="st">"Welcome to CBE!"</span>);
+}
+<span class="cm">// Called without object:</span>
+<span class="fn">greet</span>();   <span class="cm">// or ClassName.greet();</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Instance Method <span class="term-badge">OOP</span></div>
+        <div class="def-meaning">A method declared <strong>without</strong> the static keyword. Belongs to an object (instance), not the class. Must create an object first, then call the method on that object.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">class</span> <span class="ty">Calc</span> {
+    <span class="kw">public void</span> <span class="fn">display</span>() {          <span class="cm">// instance method</span>
+        System.out.<span class="fn">println</span>(<span class="st">"Hello"</span>);
+    }
+}
+<span class="ty">Calc</span> c = <span class="kw">new</span> <span class="ty">Calc</span>();  <span class="cm">// object created first</span>
+c.<span class="fn">display</span>();           <span class="cm">// then method called via object</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Encapsulation <span class="term-badge">OOP Pillar</span></div>
+        <div class="def-meaning">The practice of bundling data (variables) and the methods that operate on that data into a single unit (class), and restricting direct access by declaring variables <span class="ic">private</span>. Access is granted through public getter/setter methods.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">class</span> <span class="ty">BankAccount</span> {
+    <span class="kw">private double</span> balance = <span class="nu">0</span>;   <span class="cm">// hidden from outside</span>
+    <span class="kw">public void</span> <span class="fn">deposit</span>(<span class="ty">double</span> amt) { balance += amt; }
+    <span class="kw">public double</span> <span class="fn">getBalance</span>()     { <span class="kw">return</span> balance; }
+}</div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Abstraction <span class="term-badge">OOP Pillar</span></div>
+        <div class="def-meaning">Hiding complex implementation details and showing only the essential features to the user. Achieved via <strong>abstract classes</strong> (partial abstraction) or <strong>interfaces</strong> (100% abstraction).</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">abstract class</span> <span class="ty">Shape</span> {
+    <span class="kw">abstract double</span> <span class="fn">area</span>();   <span class="cm">// no body — must be in subclass</span>
+}
+<span class="kw">class</span> <span class="ty">Circle</span> <span class="kw">extends</span> <span class="ty">Shape</span> {
+    <span class="ty">double</span> r;
+    <span class="kw">double</span> <span class="fn">area</span>() { <span class="kw">return</span> <span class="nu">3.14</span> * r * r; } <span class="cm">// body defined here</span>
+}</div>
+      </div>
+
+      <!-- ── CONTROL FLOW ── -->
+      <div class="sub-title">Control Flow &amp; Arrays</div>
+
+      <div class="def-card">
+        <div class="def-term">Control Flow Statement <span class="term-badge">Control</span></div>
+        <div class="def-meaning">Statements that alter the sequential top-to-bottom execution of Java code. Java has three types: <strong>Decision-making</strong> (if, switch), <strong>Loop</strong> (for, while, do-while), and <strong>Jump</strong> (break, continue).</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">if</span> (score &gt;= <span class="nu">50</span>) { System.out.<span class="fn">println</span>(<span class="st">"Pass"</span>); }  <span class="cm">// decision</span>
+<span class="kw">for</span> (<span class="ty">int</span> i=<span class="nu">0</span>; i&lt;<span class="nu">5</span>; i++) { ... }             <span class="cm">// loop</span>
+<span class="kw">if</span> (i==<span class="nu">3</span>) <span class="kw">break</span>;                           <span class="cm">// jump</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Operator <span class="term-badge">Expression</span></div>
+        <div class="def-meaning">A symbol that performs an operation on one or more operands. Java operators include: Arithmetic (+,-,*,/,%), Relational (==,!=,>,<), Logical (&&,||,!), Assignment (=,+=,-=), and Bitwise (&,|,^,~,<<,>>).</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="ty">int</span> a = <span class="nu">10</span>, b = <span class="nu">3</span>;
+System.out.<span class="fn">println</span>(a + b);   <span class="cm">// 13  — arithmetic</span>
+System.out.<span class="fn">println</span>(a &gt; b);   <span class="cm">// true — relational</span>
+System.out.<span class="fn">println</span>(a % b);   <span class="cm">// 1   — modulus (remainder)</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Array <span class="term-badge">Data Structure</span></div>
+        <div class="def-meaning">A fixed-size, ordered collection of elements of the <strong>same data type</strong> stored in contiguous memory. Elements are accessed by zero-based index. Once created, the size cannot change.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="ty">int</span>[] marks = {<span class="nu">85</span>, <span class="nu">70</span>, <span class="nu">92</span>};
+System.out.<span class="fn">println</span>(marks[<span class="nu">0</span>]); <span class="cm">// 85 — first element</span>
+System.out.<span class="fn">println</span>(marks[<span class="nu">2</span>]); <span class="cm">// 92 — third element</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Package <span class="term-badge">Organisation</span></div>
+        <div class="def-meaning">A namespace that groups related classes together, similar to a folder. Declared at the top of a .java file. Prevents naming conflicts between classes in large projects.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">package</span> <span class="an">AllPrograms</span>;       <span class="cm">// declare this file belongs to AllPrograms</span>
+<span class="kw">import</span> <span class="an">java.util.Scanner</span>;  <span class="cm">// import a class from java.util package</span>
+<span class="kw">public class</span> <span class="ty">MyClass</span> { ... }</div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Access Modifier <span class="term-badge">OOP</span></div>
+        <div class="def-meaning">Keywords that control the visibility/scope of a class, method, or variable. Java has four: <strong>public</strong> (everywhere), <strong>protected</strong> (same package + subclasses), <strong>default</strong> (same package only), <strong>private</strong> (same class only).</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="kw">public class</span>    <span class="ty">A</span> { }           <span class="cm">// any class can use A</span>
+<span class="kw">private</span> <span class="ty">int</span>      balance;       <span class="cm">// only class A can access</span>
+<span class="kw">protected</span> <span class="ty">void</span>   <span class="fn">save</span>() { }    <span class="cm">// class + subclasses</span>
+<span class="ty">void</span>             <span class="fn">display</span>() { } <span class="cm">// default: same package</span></div>
+      </div>
+
+      <div class="def-card">
+        <div class="def-term">Syntax Error <span class="term-badge">Error Type</span></div>
+        <div class="def-meaning">An error that occurs when Java's language rules are violated — detected by the compiler at compile time. Also called a <em>compile-time error</em>. The program will not run until all syntax errors are fixed.</div>
+        <div class="def-example-label">▸ Example</div>
+        <div class="def-example"><span class="cm">// SYNTAX ERROR examples:</span>
+<span class="ty">int</span> x = <span class="nu">5</span>    <span class="cm">// ← missing semicolon</span>
+<span class="kw">if</span> x &gt; <span class="nu">3</span>     <span class="cm">// ← missing parentheses: should be if (x > 3)</span>
+<span class="cm">/* missing closing comment — syntax error</span></div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════ SECTION 12 — EXAM QUESTIONS ═══════════════ -->
+    <section class="section" id="s12">
+      <div class="section-header">
+        <div class="section-icon">📝</div>
+        <div>
+          <span class="section-num">Topic 12</span>
+          <h2>Likely Exam Questions</h2>
+        </div>
+      </div>
+      <div class="prose">
+        <p>Based on the course notes, these are questions most likely to appear in your exam today. Click any question to reveal a model answer. Good luck! ☕</p>
+      </div>
+
+      <div class="highlight-box warning">
+        <div class="box-title">📌 Exam Tips</div>
+        • Always define the term before explaining it<br>
+        • For programming questions: include package declaration, class name, and proper syntax<br>
+        • Show sample output for every program you write<br>
+        • Mention access modifiers and return types when declaring methods
+      </div>
+
+      <!-- SECTION A: THEORY -->
+      <div class="exam-section-label">Section A — Theory / Short Answer</div>
+
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="exam-q-header">
+          <span class="q-num">Q1</span>
+          <span class="q-type theory">Theory</span>
+          <span class="q-text">Briefly explain the history of Java programming language and how it got its name.</span>
+          <span class="q-marks">5 marks</span>
+          <span class="q-arrow">▶</span>
+        </div>
+        <div class="exam-q-body">
+          <div class="ans-label">✅ Model Answer</div>
+          <div class="ans-text">
+            <p>Java was created in the early 1990s by <strong>James Gosling</strong>, along with Mike Sheridan and Patrick Naughton at Sun Microsystems. The team initially aimed to build a language for digital devices such as set-top boxes and televisions.</p>
+            <p>They attempted to use C++ but abandoned it due to high memory usage and platform dependency. In 1991 they started the <em>"Green"</em> project, developing a language called <strong>Greentalk</strong> (.gt), later renamed <strong>OAK</strong> — named after an oak tree outside Gosling's office.</p>
+            <p>Because "OAK" was already trademarked by Oak Technologies, the team renamed it to <strong>Java</strong> in 1995 — a type of coffee from Java Island, Indonesia that Gosling was drinking at the time. This is why Java's logo is a cup of coffee. Oracle later acquired Sun Microsystems in 2010, gaining control of Java, which now runs on over 3 billion devices.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="exam-q-header">
+          <span class="q-num">Q2</span>
+          <span class="q-type theory">Theory</span>
+          <span class="q-text">With the aid of a diagram, explain the Java Architecture (JDK, JRE, JVM) and how a Java program is compiled and executed.</span>
+          <span class="q-marks">10 marks</span>
+          <span class="q-arrow">▶</span>
+        </div>
+        <div class="exam-q-body">
+          <div class="ans-label">✅ Model Answer</div>
+          <div class="ans-text">
+            <p><strong>Java Architecture</strong> consists of three main components:</p>
+            <p><strong>1. JDK (Java Development Kit)</strong> — the outermost layer; contains the Java compiler (javac), debugger (jdb), archiver (jar), JConsole, and the JRE. It is used by developers to write and compile Java programs.</p>
+            <p><strong>2. JRE (Java Runtime Environment)</strong> — contained within the JDK. Provides the environment to run Java applications. Includes the JVM plus class libraries (JDBC, AWT, Swing, JNDI) and deployment tools. End users need only the JRE to run programs.</p>
+            <p><strong>3. JVM (Java Virtual Machine)</strong> — the innermost layer. Converts bytecode into native machine code. Contains: Class Loader, Method Area, Heap, Stack, Native Stack, Native Interface, and the Execution Engine (Interpreter + JIT Compiler + Garbage Collector).</p>
+            <p><strong>Execution process:</strong> Source (.java) → javac compiles → bytecode (.class) → Class Loader loads → JVM Interpreter/JIT converts → Machine code executes.</p>
+            <p>Because the JVM abstracts the hardware, the same .class file runs on any platform — this is called <strong>WORA (Write Once, Run Anywhere)</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="exam-q-header">
+          <span class="q-num">Q3</span>
+          <span class="q-type shortans">Short Answer</span>
+          <span class="q-text">Define the following terms with examples: (a) Variable (b) Constant (c) Data Type (d) Array (e) Package</span>
+          <span class="q-marks">10 marks</span>
+          <span class="q-arrow">▶</span>
+        </div>
+        <div class="exam-q-body">
+          <div class="ans-label">✅ Model Answer</div>
+          <div class="ans-text">
+            <p><strong>(a) Variable</strong> — A named memory location whose value can change during program execution.<br><span class="ic">int age = 20;</span> — age can later be reassigned to 21.</p>
+            <p><strong>(b) Constant</strong> — A named memory location declared with <span class="ic">final</span> whose value cannot change after assignment.<br><span class="ic">final int MAX = 100;</span> — assigning MAX = 200 causes a compile error.</p>
+            <p><strong>(c) Data Type</strong> — Specifies the type of value a variable stores and the memory it uses.<br><span class="ic">double gpa = 4.7;</span> — double stores decimal numbers using 8 bytes.</p>
+            <p><strong>(d) Array</strong> — A fixed-size collection of elements of the same data type stored contiguously, accessed by index starting at 0.<br><span class="ic">int[] scores = {80, 90, 70};</span> — scores[0] is 80.</p>
+            <p><strong>(e) Package</strong> — A namespace grouping related classes to prevent naming conflicts and organise code.<br><span class="ic">package AllPrograms;</span> — groups all classes in the AllPrograms package.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="exam-q-header">
+          <span class="q-num">Q4</span>
+          <span class="q-type theory">Theory</span>
+          <span class="q-text">Differentiate between the following pairs: (a) JDK vs JRE (b) for loop vs while loop (c) break vs continue (d) static method vs instance method</span>
+          <span class="q-marks">8 marks</span>
+          <span class="q-arrow">▶</span>
+        </div>
+        <div class="exam-q-body">
+          <div class="ans-label">✅ Model Answer</div>
+          <div class="ans-text">
+            <p><strong>(a) JDK vs JRE</strong><br>JDK (Java Development Kit) is used to <em>develop</em> Java programs — it includes the compiler, debugger, and the JRE. JRE (Java Runtime Environment) is used to <em>run</em> Java programs only — it contains the JVM and libraries but NOT the compiler. JDK ⊃ JRE.</p>
+            <p><strong>(b) for loop vs while loop</strong><br>In a <em>for</em> loop the init, condition, and increment are all enclosed in the loop header — best when iteration count is known. In a <em>while</em> loop they are separate — best when iterations depend on a dynamic condition. Both check the condition BEFORE each iteration.</p>
+            <p><strong>(c) break vs continue</strong><br><em>break</em> exits the loop entirely — no further iterations occur. <em>continue</em> skips the rest of the current iteration and jumps straight to the next iteration; the loop keeps running.</p>
+            <p><strong>(d) Static method vs Instance method</strong><br>A <em>static</em> method is declared with <span class="ic">static</span> and can be called without creating an object. An <em>instance</em> method has no static keyword and requires an object to be created first before it can be called.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="exam-q-header">
+          <span class="q-num">Q5</span>
+          <span class="q-type theory">Theory</span>
+          <span class="q-text">State FIVE reasons why Java is widely used as a programming language.</span>
+          <span class="q-marks">5 marks</span>
+          <span class="q-arrow">▶</span>
+        </div>
+        <div class="exam-q-body">
+          <div class="ans-label">✅ Model Answer</div>
+          <div class="ans-text">
+            <p><strong>1. Robust</strong> — Java has built-in error-handling features such as try-catch blocks that reduce runtime errors and make programs safer.</p>
+            <p><strong>2. Platform Independent (WORA)</strong> — Java programs compile to bytecode that runs on any platform with a JVM, without rewriting the source code.</p>
+            <p><strong>3. Object-Oriented</strong> — Supports encapsulation, inheritance, and abstraction, promoting code reuse and clear program structure.</p>
+            <p><strong>4. Automatic Garbage Collection</strong> — The JVM automatically frees memory no longer in use, preventing memory leaks without programmer intervention.</p>
+            <p><strong>5. Free and Open-Source</strong> — Java is completely free to use, reducing development costs and encouraging widespread adoption.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="exam-q-header">
+          <span class="q-num">Q6</span>
+          <span class="q-type theory">Theory</span>
+          <span class="q-text">Explain the three types of variables in Java (Local, Instance, Static) with their characteristics.</span>
+          <span class="q-marks">9 marks</span>
+          <span class="q-arrow">▶</span>
+        </div>
+        <div class="exam-q-body">
+          <div class="ans-label">✅ Model Answer</div>
+          <div class="ans-text">
+            <p><strong>1. Local Variable</strong> — Declared inside a method, constructor, or block. Characteristics: (i) accessible only within its declaring block; (ii) no default value — must be initialised before use; (iii) cannot have access modifiers; (iv) the <span class="ic">static</span> keyword cannot be used.</p>
+            <p><strong>2. Instance Variable</strong> — Declared inside a class but outside any method, without <span class="ic">static</span>. Characteristics: (i) memory allocated when an object is created; (ii) has default values (0, false, null); (iii) each object gets its own separate copy; (iv) access modifiers can be applied.</p>
+            <p><strong>3. Static Variable</strong> — Declared with the <span class="ic">static</span> keyword inside a class. Characteristics: (i) memory allocated once when the class loads; (ii) shared by ALL objects of the class; (iii) accessible directly without creating an object; (iv) has default values.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION B: PRACTICAL -->
+      <div class="exam-section-label">Section B — Practical / Programming</div>
+
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="exam-q-header">
+          <span class="q-num">Q7</span>
+          <span class="q-type practical">Practical</span>
+          <span class="q-text">Write a Java program to accept a student's name and three subject marks (Maths, English, Kiswahili) from the user, compute the average, and display the grade using if-else-if statements.</span>
+          <span class="q-marks">15 marks</span>
+          <span class="q-arrow">▶</span>
+        </div>
+        <div class="exam-q-body">
+          <div class="ans-label">✅ Model Answer</div>
+          <div class="code-wrap" style="margin-top:10px">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-title">StudentGrade.java</div></div>
+            <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">import</span> <span class="an">java.util.Scanner</span>;
+<span class="kw">public class</span> <span class="ty">StudentGrade</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">String</span> name;
+        <span class="ty">float</span> maths, english, kiswahili, avg;
+        <span class="ty">Scanner</span> sc = <span class="kw">new</span> <span class="ty">Scanner</span>(System.in);
+
+        System.out.<span class="fn">print</span>(<span class="st">"Enter student name: "</span>);
+        name = sc.<span class="fn">nextLine</span>();
+        System.out.<span class="fn">print</span>(<span class="st">"Enter Maths marks: "</span>);
+        maths = sc.<span class="fn">nextFloat</span>();
+        System.out.<span class="fn">print</span>(<span class="st">"Enter English marks: "</span>);
+        english = sc.<span class="fn">nextFloat</span>();
+        System.out.<span class="fn">print</span>(<span class="st">"Enter Kiswahili marks: "</span>);
+        kiswahili = sc.<span class="fn">nextFloat</span>();
+
+        avg = (maths + english + kiswahili) / <span class="nu">3</span>;
+
+        System.out.<span class="fn">println</span>(<span class="st">"\n--- Results ---"</span>);
+        System.out.<span class="fn">println</span>(<span class="st">"Name: "</span>    + name);
+        System.out.<span class="fn">println</span>(<span class="st">"Average: "</span> + avg);
+
+        <span class="kw">if</span>      (avg &gt;= <span class="nu">80</span>) System.out.<span class="fn">println</span>(<span class="st">"Grade: A"</span>);
+        <span class="kw">else if</span> (avg &gt;= <span class="nu">70</span>) System.out.<span class="fn">println</span>(<span class="st">"Grade: B+"</span>);
+        <span class="kw">else if</span> (avg &gt;= <span class="nu">60</span>) System.out.<span class="fn">println</span>(<span class="st">"Grade: B"</span>);
+        <span class="kw">else if</span> (avg &gt;= <span class="nu">50</span>) System.out.<span class="fn">println</span>(<span class="st">"Grade: C"</span>);
+        <span class="kw">else</span>                 System.out.<span class="fn">println</span>(<span class="st">"Grade: F"</span>);
+    }
+}</pre></div>
+          </div>
+          <div class="output-wrap"><div class="output-header">▶ SAMPLE OUTPUT</div><div class="output-body">Enter student name: Amina Said
+Enter Maths marks: 75
+Enter English marks: 82
+Enter Kiswahili marks: 68
+--- Results ---
+Name: Amina Said
+Average: 75.0
+Grade: B+</div></div>
+        </div>
+      </div>
+
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="exam-q-header">
+          <span class="q-num">Q8</span>
+          <span class="q-type practical">Practical</span>
+          <span class="q-text">Write a Java program using a switch case statement to display the name of a day given its number (1=Monday … 7=Sunday). Accept the number as input from the user.</span>
+          <span class="q-marks">10 marks</span>
+          <span class="q-arrow">▶</span>
+        </div>
+        <div class="exam-q-body">
+          <div class="ans-label">✅ Model Answer</div>
+          <div class="code-wrap" style="margin-top:10px">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-title">DayName.java</div></div>
+            <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">import</span> <span class="an">java.util.Scanner</span>;
+<span class="kw">public class</span> <span class="ty">DayName</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">Scanner</span> sc = <span class="kw">new</span> <span class="ty">Scanner</span>(System.in);
+        System.out.<span class="fn">print</span>(<span class="st">"Enter day number (1-7): "</span>);
+        <span class="ty">int</span> day = sc.<span class="fn">nextInt</span>();
+
+        <span class="kw">switch</span> (day) {
+            <span class="kw">case</span> <span class="nu">1</span>: System.out.<span class="fn">println</span>(<span class="st">"Monday"</span>);    <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nu">2</span>: System.out.<span class="fn">println</span>(<span class="st">"Tuesday"</span>);   <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nu">3</span>: System.out.<span class="fn">println</span>(<span class="st">"Wednesday"</span>); <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nu">4</span>: System.out.<span class="fn">println</span>(<span class="st">"Thursday"</span>);  <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nu">5</span>: System.out.<span class="fn">println</span>(<span class="st">"Friday"</span>);    <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nu">6</span>: System.out.<span class="fn">println</span>(<span class="st">"Saturday"</span>);  <span class="kw">break</span>;
+            <span class="kw">case</span> <span class="nu">7</span>: System.out.<span class="fn">println</span>(<span class="st">"Sunday"</span>);    <span class="kw">break</span>;
+            <span class="kw">default</span>: System.out.<span class="fn">println</span>(<span class="st">"Invalid number"</span>);
+        }
+    }
+}</pre></div>
+          </div>
+          <div class="output-wrap"><div class="output-header">▶ SAMPLE OUTPUT</div><div class="output-body">Enter day number (1-7): 5
+Friday</div></div>
+        </div>
+      </div>
+
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="exam-q-header">
+          <span class="q-num">Q9</span>
+          <span class="q-type practical">Practical</span>
+          <span class="q-text">Using a for loop, write a Java program to display the multiplication table of a number entered by the user (e.g., table of 5: 5×1=5, 5×2=10 … 5×10=50).</span>
+          <span class="q-marks">10 marks</span>
+          <span class="q-arrow">▶</span>
+        </div>
+        <div class="exam-q-body">
+          <div class="ans-label">✅ Model Answer</div>
+          <div class="code-wrap" style="margin-top:10px">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-title">MultiTable.java</div></div>
+            <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">import</span> <span class="an">java.util.Scanner</span>;
+<span class="kw">public class</span> <span class="ty">MultiTable</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">Scanner</span> sc = <span class="kw">new</span> <span class="ty">Scanner</span>(System.in);
+        System.out.<span class="fn">print</span>(<span class="st">"Enter a number: "</span>);
+        <span class="ty">int</span> n = sc.<span class="fn">nextInt</span>();
+
+        System.out.<span class="fn">println</span>(<span class="st">"Multiplication Table of "</span> + n);
+        <span class="kw">for</span> (<span class="ty">int</span> i = <span class="nu">1</span>; i &lt;= <span class="nu">10</span>; i++) {
+            System.out.<span class="fn">println</span>(n + <span class="st">" x "</span> + i + <span class="st">" = "</span> + (n * i));
+        }
+    }
+}</pre></div>
+          </div>
+          <div class="output-wrap"><div class="output-header">▶ SAMPLE OUTPUT</div><div class="output-body">Enter a number: 5
+Multiplication Table of 5
+5 x 1 = 5
+5 x 2 = 10
+5 x 3 = 15
+5 x 4 = 20
+5 x 5 = 25
+5 x 6 = 30
+5 x 7 = 35
+5 x 8 = 40
+5 x 9 = 45
+5 x 10 = 50</div></div>
+        </div>
+      </div>
+
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="exam-q-header">
+          <span class="q-num">Q10</span>
+          <span class="q-type practical">Practical</span>
+          <span class="q-text">Write a Java program that uses an array to store 5 integers entered by the user and then displays: (a) all elements, (b) the largest element, (c) the sum of all elements.</span>
+          <span class="q-marks">15 marks</span>
+          <span class="q-arrow">▶</span>
+        </div>
+        <div class="exam-q-body">
+          <div class="ans-label">✅ Model Answer</div>
+          <div class="code-wrap" style="margin-top:10px">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-title">ArrayOperations.java</div></div>
+            <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">import</span> <span class="an">java.util.Scanner</span>;
+<span class="kw">public class</span> <span class="ty">ArrayOperations</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">int</span>[] nums = <span class="kw">new</span> <span class="ty">int</span>[<span class="nu">5</span>];
+        <span class="ty">Scanner</span> sc = <span class="kw">new</span> <span class="ty">Scanner</span>(System.in);
+
+        <span class="cm">// Input</span>
+        <span class="kw">for</span> (<span class="ty">int</span> i = <span class="nu">0</span>; i &lt; <span class="nu">5</span>; i++) {
+            System.out.<span class="fn">print</span>(<span class="st">"Enter number "</span> + (i+<span class="nu">1</span>) + <span class="st">": "</span>);
+            nums[i] = sc.<span class="fn">nextInt</span>();
+        }
+
+        <span class="cm">// (a) Display all</span>
+        System.out.<span class="fn">println</span>(<span class="st">"\nAll elements:"</span>);
+        <span class="kw">for</span> (<span class="ty">int</span> i = <span class="nu">0</span>; i &lt; <span class="nu">5</span>; i++) {
+            System.out.<span class="fn">println</span>(<span class="st">"nums["</span> + i + <span class="st">"] = "</span> + nums[i]);
+        }
+
+        <span class="cm">// (b) Largest</span>
+        <span class="ty">int</span> max = nums[<span class="nu">0</span>];
+        <span class="kw">for</span> (<span class="ty">int</span> i = <span class="nu">1</span>; i &lt; <span class="nu">5</span>; i++) {
+            <span class="kw">if</span> (nums[i] &gt; max) max = nums[i];
+        }
+        System.out.<span class="fn">println</span>(<span class="st">"Largest: "</span> + max);
+
+        <span class="cm">// (c) Sum</span>
+        <span class="ty">int</span> sum = <span class="nu">0</span>;
+        <span class="kw">for</span> (<span class="ty">int</span> i = <span class="nu">0</span>; i &lt; <span class="nu">5</span>; i++) sum += nums[i];
+        System.out.<span class="fn">println</span>(<span class="st">"Sum: "</span> + sum);
+    }
+}</pre></div>
+          </div>
+          <div class="output-wrap"><div class="output-header">▶ SAMPLE OUTPUT</div><div class="output-body">Enter number 1: 10
+Enter number 2: 45
+Enter number 3: 23
+Enter number 4: 8
+Enter number 5: 67
+All elements:
+nums[0] = 10
+nums[1] = 45
+nums[2] = 23
+nums[3] = 8
+nums[4] = 67
+Largest: 67
+Sum: 153</div></div>
+        </div>
+      </div>
+
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="exam-q-header">
+          <span class="q-num">Q11</span>
+          <span class="q-type practical">Practical</span>
+          <span class="q-text">Write a Java program using a while loop and the continue statement to print all even numbers between 1 and 20, skipping numbers divisible by 6.</span>
+          <span class="q-marks">10 marks</span>
+          <span class="q-arrow">▶</span>
+        </div>
+        <div class="exam-q-body">
+          <div class="ans-label">✅ Model Answer</div>
+          <div class="code-wrap" style="margin-top:10px">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-title">EvenSkipSix.java</div></div>
+            <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">public class</span> <span class="ty">EvenSkipSix</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">int</span> i = <span class="nu">1</span>;
+        <span class="kw">while</span> (i &lt;= <span class="nu">20</span>) {
+            i++;
+            <span class="kw">if</span> (i % <span class="nu">2</span> != <span class="nu">0</span>) <span class="kw">continue</span>;  <span class="cm">// skip odd numbers</span>
+            <span class="kw">if</span> (i % <span class="nu">6</span> == <span class="nu">0</span>) <span class="kw">continue</span>;  <span class="cm">// skip multiples of 6</span>
+            System.out.<span class="fn">println</span>(i);
+        }
+    }
+}</pre></div>
+          </div>
+          <div class="output-wrap"><div class="output-header">▶ OUTPUT</div><div class="output-body">2
+4
+8
+10
+14
+16
+20</div></div>
+        </div>
+      </div>
+
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="exam-q-header">
+          <span class="q-num">Q12</span>
+          <span class="q-type practical">Practical</span>
+          <span class="q-text">Implement a Java class named "BankAccount" that demonstrates encapsulation. The class should have a private variable "balance", a method to deposit, a method to withdraw (reject if insufficient), and a method to display the balance.</span>
+          <span class="q-marks">15 marks</span>
+          <span class="q-arrow">▶</span>
+        </div>
+        <div class="exam-q-body">
+          <div class="ans-label">✅ Model Answer</div>
+          <div class="code-wrap" style="margin-top:10px">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-title">BankAccount.java — Encapsulation Demo</div></div>
+            <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">class</span> <span class="ty">BankAccount</span> {
+    <span class="kw">private double</span> balance = <span class="nu">0</span>;  <span class="cm">// encapsulated — hidden from outside</span>
+
+    <span class="kw">public void</span> <span class="fn">deposit</span>(<span class="ty">double</span> amount) {
+        <span class="kw">if</span> (amount &gt; <span class="nu">0</span>) {
+            balance += amount;
+            System.out.<span class="fn">println</span>(<span class="st">"Deposited: "</span> + amount);
+        } <span class="kw">else</span> {
+            System.out.<span class="fn">println</span>(<span class="st">"Invalid deposit amount"</span>);
+        }
+    }
+
+    <span class="kw">public void</span> <span class="fn">withdraw</span>(<span class="ty">double</span> amount) {
+        <span class="kw">if</span> (amount &gt; balance) {
+            System.out.<span class="fn">println</span>(<span class="st">"Insufficient funds"</span>);
+        } <span class="kw">else</span> {
+            balance -= amount;
+            System.out.<span class="fn">println</span>(<span class="st">"Withdrawn: "</span> + amount);
+        }
+    }
+
+    <span class="kw">public void</span> <span class="fn">displayBalance</span>() {
+        System.out.<span class="fn">println</span>(<span class="st">"Current Balance: "</span> + balance);
+    }
+}
+
+<span class="kw">public class</span> <span class="ty">AllProgramsClass</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="ty">BankAccount</span> acc = <span class="kw">new</span> <span class="ty">BankAccount</span>();
+        acc.<span class="fn">deposit</span>(<span class="nu">5000</span>);
+        acc.<span class="fn">withdraw</span>(<span class="nu">2000</span>);
+        acc.<span class="fn">withdraw</span>(<span class="nu">4000</span>); <span class="cm">// should fail</span>
+        acc.<span class="fn">displayBalance</span>();
+    }
+}</pre></div>
+          </div>
+          <div class="output-wrap"><div class="output-header">▶ OUTPUT</div><div class="output-body">Deposited: 5000.0
+Withdrawn: 2000.0
+Insufficient funds
+Current Balance: 3000.0</div></div>
+        </div>
+      </div>
+
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="exam-q-header">
+          <span class="q-num">Q13</span>
+          <span class="q-type practical">Practical</span>
+          <span class="q-text">Write a Java program using a 2D array to store and display marks of 3 students in 3 subjects. Calculate and display each student's average.</span>
+          <span class="q-marks">15 marks</span>
+          <span class="q-arrow">▶</span>
+        </div>
+        <div class="exam-q-body">
+          <div class="ans-label">✅ Model Answer</div>
+          <div class="code-wrap" style="margin-top:10px">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-title">StudentMarks2D.java</div></div>
+            <div class="code-body"><pre><span class="kw">package</span> <span class="an">AllPrograms</span>;
+<span class="kw">public class</span> <span class="ty">StudentMarks2D</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="ty">String</span>[] args) {
+        <span class="cm">// 3 students × 3 subjects</span>
+        <span class="ty">int</span>[][] marks = {
+            {<span class="nu">70</span>, <span class="nu">85</span>, <span class="nu">90</span>},   <span class="cm">// Student 1</span>
+            {<span class="nu">60</span>, <span class="nu">72</span>, <span class="nu">55</span>},   <span class="cm">// Student 2</span>
+            {<span class="nu">88</span>, <span class="nu">91</span>, <span class="nu">78</span>}    <span class="cm">// Student 3</span>
+        };
+        <span class="ty">String</span>[] subjects = {<span class="st">"Maths"</span>, <span class="st">"English"</span>, <span class="st">"Science"</span>};
+
+        <span class="kw">for</span> (<span class="ty">int</span> i = <span class="nu">0</span>; i &lt; <span class="nu">3</span>; i++) {
+            System.out.<span class="fn">println</span>(<span class="st">"--- Student "</span> + (i+<span class="nu">1</span>) + <span class="st">" ---"</span>);
+            <span class="ty">int</span> total = <span class="nu">0</span>;
+            <span class="kw">for</span> (<span class="ty">int</span> j = <span class="nu">0</span>; j &lt; <span class="nu">3</span>; j++) {
+                System.out.<span class="fn">println</span>(subjects[j] + <span class="st">": "</span> + marks[i][j]);
+                total += marks[i][j];
+            }
+            System.out.<span class="fn">println</span>(<span class="st">"Average: "</span> + (total/<span class="nu">3.0</span>));
+        }
+    }
+}</pre></div>
+          </div>
+          <div class="output-wrap"><div class="output-header">▶ OUTPUT</div><div class="output-body">--- Student 1 ---
+Maths: 70
+English: 85
+Science: 90
+Average: 81.666664
+--- Student 2 ---
+Maths: 60
+English: 72
+Science: 55
+Average: 62.333332
+--- Student 3 ---
+Maths: 88
+English: 91
+Science: 78
+Average: 85.666664</div></div>
+        </div>
+      </div>
+
+      <!-- Final Good Luck Box -->
+      <div style="background:linear-gradient(135deg,#1a1208,#0e160a);border:1px solid var(--border);border-radius:12px;padding:28px;margin-top:30px;text-align:center;">
+        <div style="font-size:2.2rem;margin-bottom:10px;">🎓</div>
+        <h3 style="font-family:'Playfair Display',serif;color:var(--accent2);margin-bottom:8px;font-size:1.4rem;">All the Best in Your Exam!</h3>
+        <p style="color:var(--text3);font-size:0.85rem;max-width:480px;margin:0 auto 16px;">Remember: Read each question carefully, show all your work, define terms before explaining, and always include package declarations and sample output in your programs.</p>
+        <div style="font-size:0.8rem;color:var(--accent);font-family:'JetBrains Mono',monospace;">☕ Dr. Ahmed Kijazi — CBE Java SE Special Course</div>
+      </div>
+
+    </section>
+
+  </div><!-- /content -->
+</main>
+
+<script>
+// Highlight active nav link on scroll
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.nav-list a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const active = document.querySelector(`.nav-list a[href="#${e.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+// Close sidebar on link click (mobile)
+navLinks.forEach(a => {
+  a.addEventListener('click', () => {
+    document.querySelector('.sidebar').classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
