@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multimedia Technology — Complete Tutorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=Cabinet+Grotesk:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f4ee;
+  --ink: #1a1814;
+  --muted: #6b6455;
+  --border: #ddd8ce;
+  --card: #ffffff;
+
+  --c1: #c53a1e;   /* CMS — terracotta red */
+  --c2: #1a5276;   /* Web Dev — navy */
+  --c3: #1d6348;   /* Compression — forest */
+  --c4: #6b3fa0;   /* Formats — plum */
+
+  --c1l: #fdf0ee;
+  --c2l: #edf3fa;
+  --c3l: #edf7f3;
+  --c4l: #f5effe;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.65;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ─── LAYOUT ─── */
+#app { display: flex; height: 100vh; }
+
+/* ─── LEFT SIDEBAR ─── */
+#sidebar {
+  width: 280px; flex-shrink: 0;
+  background: var(--ink);
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+#sidebar-header {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+#sidebar-logo {
+  font-family: 'Fraunces', serif; font-size: 17px; font-weight: 700;
+  color: #fff; line-height: 1.3; margin-bottom: 4px;
+}
+#sidebar-sub {
+  font-family: 'Fira Code', monospace; font-size: 10px;
+  color: rgba(255,255,255,0.3); letter-spacing: 2px; text-transform: uppercase;
+}
+
+.module-group { padding: 16px 12px 8px; }
+.module-label {
+  font-family: 'Fira Code', monospace; font-size: 9px; letter-spacing: 3px;
+  text-transform: uppercase; padding: 0 12px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+.module-label::after {
+  content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+}
+.slide-btn {
+  width: 100%; background: none; border: none; cursor: pointer;
+  text-align: left; padding: 9px 12px; border-radius: 5px;
+  font-family: 'Cabinet Grotesk', sans-serif; font-size: 13px;
+  color: rgba(255,255,255,0.45); transition: all 0.18s;
+  display: flex; align-items: center; gap: 10px; line-height: 1.3;
+}
+.slide-btn:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); }
+.slide-btn.active { color: #fff; background: rgba(255,255,255,0.1); }
+.slide-btn .snum {
+  font-family: 'Fira Code', monospace; font-size: 10px; width: 22px;
+  text-align: right; flex-shrink: 0; opacity: 0.4;
+}
+.slide-btn.active .snum { opacity: 0.7; }
+.dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+
+/* ─── MAIN CONTENT ─── */
+#main {
+  flex: 1; overflow: hidden; position: relative;
+  display: flex; flex-direction: column;
+}
+
+/* Top bar */
+#topbar {
+  height: 52px; flex-shrink: 0;
+  background: var(--card); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px;
+}
+#slide-path {
+  font-family: 'Fira Code', monospace; font-size: 11px; color: var(--muted);
+  letter-spacing: 1px;
+}
+#slide-counter {
+  font-family: 'Fira Code', monospace; font-size: 11px; color: var(--muted);
+}
+#slide-counter span { color: var(--ink); font-weight: 600; }
+
+/* Slide area */
+#slides-area {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  padding: 40px 48px 60px;
+  scroll-behavior: smooth;
+}
+
+/* Bottom nav */
+#nav-bar {
+  height: 56px; flex-shrink: 0;
+  background: var(--card); border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px;
+}
+.nav-btn {
+  display: flex; align-items: center; gap: 8px;
+  background: none; border: 1px solid var(--border);
+  padding: 8px 20px; border-radius: 4px; cursor: pointer;
+  font-family: 'Cabinet Grotesk', sans-serif; font-size: 13px;
+  font-weight: 500; color: var(--muted); transition: all 0.18s;
+}
+.nav-btn:hover:not(:disabled) { border-color: var(--ink); color: var(--ink); }
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.nav-btn.primary {
+  background: var(--ink); border-color: var(--ink); color: #fff;
+}
+.nav-btn.primary:hover:not(:disabled) { opacity: 0.85; }
+
+#progress-dots {
+  display: flex; gap: 6px; align-items: center;
+}
+.pdot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--border); transition: all 0.2s; cursor: pointer;
+}
+.pdot.active { width: 20px; border-radius: 3px; background: var(--ink); }
+
+/* ─── SLIDE STYLES ─── */
+.slide { display: none; animation: slideIn 0.35s ease; }
+.slide.active { display: block; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Cover slide */
+.cover {
+  min-height: 72vh; display: flex; flex-direction: column;
+  justify-content: center; position: relative; overflow: hidden;
+  border-radius: 12px; padding: 60px 64px;
+  background: var(--ink);
+}
+.cover-bg-text {
+  position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+  font-family: 'Fraunces', serif; font-size: 240px; font-weight: 900;
+  color: rgba(255,255,255,0.03); line-height: 1; pointer-events: none; user-select: none;
+  white-space: nowrap;
+}
+.cover-kicker {
+  font-family: 'Fira Code', monospace; font-size: 11px; letter-spacing: 3px;
+  text-transform: uppercase; margin-bottom: 24px;
+}
+.cover-title {
+  font-family: 'Fraunces', serif; font-size: clamp(40px, 5vw, 72px);
+  font-weight: 900; line-height: 1.05; color: #fff; margin-bottom: 20px;
+}
+.cover-sub {
+  font-size: 16px; max-width: 560px; line-height: 1.75; margin-bottom: 40px;
+  color: rgba(255,255,255,0.55);
+}
+.cover-modules {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.cmod {
+  font-family: 'Fira Code', monospace; font-size: 11px; letter-spacing: 1px;
+  padding: 7px 14px; border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 3px; color: rgba(255,255,255,0.6);
+}
+
+/* Section title slide */
+.sec-title {
+  border-radius: 12px; padding: 56px 64px; min-height: 46vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  position: relative; overflow: hidden;
+}
+.sec-title-num {
+  font-family: 'Fraunces', serif; position: absolute; right: 48px; top: 40px;
+  font-size: 120px; font-weight: 900; line-height: 1; opacity: 0.07; color: #fff;
+}
+.sec-title-tag {
+  font-family: 'Fira Code', monospace; font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 16px;
+}
+.sec-title h2 {
+  font-family: 'Fraunces', serif; font-size: clamp(32px, 4vw, 56px);
+  font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 16px;
+}
+.sec-title-desc { font-size: 15px; color: rgba(255,255,255,0.6); max-width: 600px; line-height: 1.7; }
+
+/* Content slide */
+.content-slide { padding: 4px 0 20px; }
+.slide-h { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+.slide-tag {
+  font-family: 'Fira Code', monospace; font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 20px; display: inline-block;
+  padding: 4px 10px; border-radius: 3px;
+}
+.slide-lead { font-size: 15px; color: var(--muted); margin-bottom: 28px; line-height: 1.75; max-width: 760px; }
+
+/* Cards */
+.cards { display: grid; gap: 16px; }
+.cards-2 { grid-template-columns: 1fr 1fr; }
+.cards-3 { grid-template-columns: repeat(3, 1fr); }
+.cards-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 900px) { .cards-4,.cards-3 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .cards-2,.cards-3,.cards-4 { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 22px; transition: box-shadow 0.2s, transform 0.2s;
+  position: relative; overflow: hidden;
+}
+.card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.07); transform: translateY(-2px); }
+.card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+}
+.card:hover::before { transform: scaleX(1); }
+.card-icon { font-size: 26px; margin-bottom: 12px; }
+.card-title { font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+.card-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* Table */
+.tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin: 20px 0; }
+.tbl th { padding: 11px 16px; text-align: left; font-family: 'Fira Code', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid; }
+.tbl td { padding: 11px 16px; border-bottom: 1px solid var(--border); color: var(--muted); }
+.tbl td:first-child { color: var(--ink); font-weight: 600; }
+.tbl tr:hover td { background: var(--bg); }
+
+/* Tag pills */
+.pill { display: inline-block; padding: 3px 9px; border-radius: 3px; font-family: 'Fira Code', monospace; font-size: 11px; }
+
+/* List */
+.icon-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+.icon-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; }
+.icon-list li .ico { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; padding-top: 1px; }
+.icon-list li .lbody { line-height: 1.6; }
+.icon-list li strong { display: block; font-weight: 600; color: var(--ink); }
+.icon-list li span { color: var(--muted); font-size: 13px; }
+
+/* Two-col */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+@media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
+
+/* Code block */
+.code-block {
+  background: #1a1814; border-radius: 8px; padding: 20px 24px; margin: 16px 0;
+  font-family: 'Fira Code', monospace; font-size: 13px; line-height: 1.7;
+  color: #e8e3d7; overflow-x: auto; position: relative;
+}
+.code-block .code-label {
+  position: absolute; top: 12px; right: 16px;
+  font-size: 10px; letter-spacing: 2px; opacity: 0.35; text-transform: uppercase;
+}
+.ck { color: #c78350; } /* keyword */
+.cs { color: #7ec6a0; } /* string */
+.cc { color: #7aadcc; } /* class/tag */
+.cm { color: #888; }   /* comment */
+.cv { color: #d4a0e0; } /* value */
+
+/* Architecture diagram */
+.arch-diagram {
+  display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+}
+.arch-layer {
+  padding: 16px 24px; display: flex; align-items: center; gap: 16px;
+  border-bottom: 1px solid var(--border); transition: all 0.2s;
+  cursor: default;
+}
+.arch-layer:last-child { border-bottom: none; }
+.arch-layer:hover { filter: brightness(0.97); }
+.arch-num {
+  font-family: 'Fira Code', monospace; font-size: 10px; width: 24px;
+  flex-shrink: 0; opacity: 0.5;
+}
+.arch-name { font-weight: 700; font-size: 14px; min-width: 180px; flex-shrink: 0; }
+.arch-desc { font-size: 13px; color: var(--muted); flex: 1; }
+.arch-tech { font-family: 'Fira Code', monospace; font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 28px; margin: 20px 0; }
+.timeline::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 1px; background: var(--border); }
+.tl-item { position: relative; padding-bottom: 24px; }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-dot { position: absolute; left: -25px; top: 4px; width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--bg); }
+.tl-year { font-family: 'Fira Code', monospace; font-size: 10px; letter-spacing: 2px; margin-bottom: 4px; }
+.tl-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.tl-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* Comparison bar */
+.comp-bar { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 16px 0; }
+.comp-row { display: flex; align-items: stretch; border-bottom: 1px solid var(--border); }
+.comp-row:last-child { border-bottom: none; }
+.comp-label { padding: 14px 20px; font-size: 13px; font-weight: 600; width: 160px; flex-shrink: 0; background: var(--bg); border-right: 1px solid var(--border); display: flex; align-items: center; }
+.comp-a, .comp-b { flex: 1; padding: 14px 18px; font-size: 13px; color: var(--muted); display: flex; align-items: center; border-right: 1px solid var(--border); }
+.comp-b { border-right: none; }
+
+/* Callout */
+.callout {
+  border-radius: 8px; padding: 20px 24px; margin: 20px 0;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.callout-icon { font-size: 20px; flex-shrink: 0; padding-top: 2px; }
+.callout-body { font-size: 14px; line-height: 1.7; }
+.callout-title { font-weight: 700; margin-bottom: 4px; }
+
+/* Compression visual */
+.compress-visual {
+  display: flex; align-items: center; gap: 16px; margin: 24px 0;
+  padding: 24px; background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+}
+.block-group { display: flex; gap: 4px; flex-wrap: wrap; }
+.blk { width: 18px; height: 18px; border-radius: 3px; }
+.compress-arrow { font-size: 22px; color: var(--muted); flex-shrink: 0; }
+.compress-label { font-family: 'Fira Code', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-top: 8px; }
+
+/* Format grid */
+.fmt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin: 20px 0; }
+.fmt-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 6px;
+  padding: 16px 14px; text-align: center; transition: all 0.2s; cursor: default;
+}
+.fmt-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+.fmt-ext {
+  font-family: 'Fira Code', monospace; font-size: 16px; font-weight: 700;
+  margin-bottom: 8px; display: block;
+}
+.fmt-type { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.fmt-quality { height: 4px; border-radius: 2px; background: var(--border); margin-top: 8px; overflow: hidden; }
+.fmt-quality-fill { height: 100%; border-radius: 2px; }
+
+/* QUIZ */
+.quiz-wrap { max-width: 720px; }
+.quiz-q-text { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; margin-bottom: 24px; line-height: 1.5; color: var(--ink); }
+.q-opts { display: flex; flex-direction: column; gap: 10px; }
+.q-opt {
+  padding: 14px 18px; background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; cursor: pointer; font-size: 14px; color: var(--muted);
+  text-align: left; font-family: 'Cabinet Grotesk', sans-serif; transition: all 0.18s;
+  display: flex; align-items: center; gap: 12px;
+}
+.q-opt:hover:not(:disabled) { border-color: var(--ink); color: var(--ink); }
+.q-opt.correct { background: #edfaf2; border-color: #2ecc71; color: #1a6b3a; }
+.q-opt.wrong { background: #fef0ee; border-color: #e74c3c; color: #922b21; }
+.q-letter {
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fira Code', monospace; font-size: 11px; font-weight: 600;
+  border: 1px solid var(--border); color: var(--muted);
+}
+.q-feedback {
+  margin-top: 16px; padding: 14px 18px; border-radius: 6px;
+  font-size: 14px; line-height: 1.7; display: none;
+}
+.q-feedback.show { display: block; }
+.q-feedback.ok { background: #edfaf2; border: 1px solid #2ecc71; color: #1a6b3a; }
+.q-feedback.no { background: #fef0ee; border: 1px solid #e74c3c; color: #922b21; }
+.q-next {
+  margin-top: 16px; padding: 10px 24px; border: none;
+  border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: 600;
+  font-family: 'Cabinet Grotesk', sans-serif; display: none;
+  background: var(--ink); color: #fff; transition: opacity 0.2s;
+}
+.q-next.show { display: inline-block; }
+.q-next:hover { opacity: 0.82; }
+.quiz-meta { margin-top: 16px; font-family: 'Fira Code', monospace; font-size: 11px; color: var(--muted); }
+
+/* Score screen */
+.score-screen { text-align: center; padding: 48px 24px; }
+.score-num { font-family: 'Fraunces', serif; font-size: 96px; font-weight: 900; line-height: 1; margin-bottom: 12px; }
+.score-label { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.score-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+.score-restart { padding: 12px 32px; background: var(--ink); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; font-family: 'Cabinet Grotesk', sans-serif; }
+
+/* ─── MODULE COLORS ─── */
+/* CMS = c1 red */
+.mod1 .sec-title { background: var(--c1); }
+.mod1 .slide-tag { background: var(--c1l); color: var(--c1); }
+.mod1 .slide-h, .mod1 .tl-year { color: var(--c1); }
+.mod1 .card::before { background: var(--c1); }
+.mod1 .tl-dot { background: var(--c1); }
+.mod1 .tbl th { color: var(--c1); border-color: var(--c1); }
+.mod1 .dot { background: var(--c1); }
+.mod1 .arch-num, .mod1 .arch-name { color: var(--c1); }
+.mod1 .arch-layer:nth-child(odd) { background: var(--c1l); }
+
+/* Web Dev = c2 navy */
+.mod2 .sec-title { background: var(--c2); }
+.mod2 .slide-tag { background: var(--c2l); color: var(--c2); }
+.mod2 .slide-h, .mod2 .tl-year { color: var(--c2); }
+.mod2 .card::before { background: var(--c2); }
+.mod2 .tl-dot { background: var(--c2); }
+.mod2 .tbl th { color: var(--c2); border-color: var(--c2); }
+.mod2 .dot { background: var(--c2); }
+
+/* Compression = c3 forest */
+.mod3 .sec-title { background: var(--c3); }
+.mod3 .slide-tag { background: var(--c3l); color: var(--c3); }
+.mod3 .slide-h, .mod3 .tl-year { color: var(--c3); }
+.mod3 .card::before { background: var(--c3); }
+.mod3 .tbl th { color: var(--c3); border-color: var(--c3); }
+.mod3 .dot { background: var(--c3); }
+
+/* Formats = c4 plum */
+.mod4 .sec-title { background: var(--c4); }
+.mod4 .slide-tag { background: var(--c4l); color: var(--c4); }
+.mod4 .slide-h, .mod4 .tl-year { color: var(--c4); }
+.mod4 .card::before { background: var(--c4); }
+.mod4 .tbl th { color: var(--c4); border-color: var(--c4); }
+.mod4 .dot { background: var(--c4); }
+.mod4 .fmt-ext { color: var(--c4); }
+
+/* Quiz */
+.quiz-sec .slide-tag { background: #fff8e8; color: #b8860b; }
+.quiz-sec .slide-h { color: #b8860b; }
+
+@media (max-width: 700px) {
+  #sidebar { display: none; }
+  #slides-area { padding: 24px 20px 40px; }
+  #topbar, #nav-bar { padding: 0 20px; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div id="sidebar-header">
+    <div id="sidebar-logo">Multimedia<br>Technology</div>
+    <div id="sidebar-sub">CBE · Complete Guide</div>
+  </div>
+
+  <div class="module-group">
+    <div class="module-label" style="color:rgba(255,255,255,0.3);">Intro</div>
+    <button class="slide-btn active" onclick="goTo(0)"><span class="snum">—</span><span class="dot" style="background:#fff;opacity:0.5;"></span>Cover</button>
+  </div>
+
+  <div class="module-group">
+    <div class="module-label" style="color:#c53a1e;">01 · CMS</div>
+    <button class="slide-btn" onclick="goTo(1)"><span class="snum">1</span><span class="dot" style="background:#c53a1e;"></span>Overview</button>
+    <button class="slide-btn" onclick="goTo(2)"><span class="snum">2</span><span class="dot" style="background:#c53a1e;"></span>Architecture</button>
+    <button class="slide-btn" onclick="goTo(3)"><span class="snum">3</span><span class="dot" style="background:#c53a1e;"></span>Types of CMS</button>
+    <button class="slide-btn" onclick="goTo(4)"><span class="snum">4</span><span class="dot" style="background:#c53a1e;"></span>Key Features</button>
+    <button class="slide-btn" onclick="goTo(5)"><span class="snum">5</span><span class="dot" style="background:#c53a1e;"></span>Deployment</button>
+  </div>
+
+  <div class="module-group">
+    <div class="module-label" style="color:#1a5276;">02 · Web Dev</div>
+    <button class="slide-btn" onclick="goTo(6)"><span class="snum">6</span><span class="dot" style="background:#1a5276;"></span>Overview</button>
+    <button class="slide-btn" onclick="goTo(7)"><span class="snum">7</span><span class="dot" style="background:#1a5276;"></span>HTML & CSS</button>
+    <button class="slide-btn" onclick="goTo(8)"><span class="snum">8</span><span class="dot" style="background:#1a5276;"></span>JavaScript</button>
+    <button class="slide-btn" onclick="goTo(9)"><span class="snum">9</span><span class="dot" style="background:#1a5276;"></span>Frameworks</button>
+    <button class="slide-btn" onclick="goTo(10)"><span class="snum">10</span><span class="dot" style="background:#1a5276;"></span>Databases & APIs</button>
+  </div>
+
+  <div class="module-group">
+    <div class="module-label" style="color:#1d6348;">03 · Compression</div>
+    <button class="slide-btn" onclick="goTo(11)"><span class="snum">11</span><span class="dot" style="background:#1d6348;"></span>Overview</button>
+    <button class="slide-btn" onclick="goTo(12)"><span class="snum">12</span><span class="dot" style="background:#1d6348;"></span>Lossless Methods</button>
+    <button class="slide-btn" onclick="goTo(13)"><span class="snum">13</span><span class="dot" style="background:#1d6348;"></span>Lossy Methods</button>
+    <button class="slide-btn" onclick="goTo(14)"><span class="snum">14</span><span class="dot" style="background:#1d6348;"></span>Comparison</button>
+  </div>
+
+  <div class="module-group">
+    <div class="module-label" style="color:#6b3fa0;">04 · Formats</div>
+    <button class="slide-btn" onclick="goTo(15)"><span class="snum">15</span><span class="dot" style="background:#6b3fa0;"></span>Overview</button>
+    <button class="slide-btn" onclick="goTo(16)"><span class="snum">16</span><span class="dot" style="background:#6b3fa0;"></span>Image Formats</button>
+    <button class="slide-btn" onclick="goTo(17)"><span class="snum">17</span><span class="dot" style="background:#6b3fa0;"></span>Audio Formats</button>
+    <button class="slide-btn" onclick="goTo(18)"><span class="snum">18</span><span class="dot" style="background:#6b3fa0;"></span>Video Formats</button>
+  </div>
+
+  <div class="module-group">
+    <div class="module-label" style="color:rgba(255,255,255,0.3);">Quiz</div>
+    <button class="slide-btn" onclick="goTo(19)"><span class="snum">★</span><span class="dot" style="background:#b8860b;"></span>Knowledge Check</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="topbar">
+    <div id="slide-path">Multimedia Technology</div>
+    <div id="slide-counter">Slide <span id="cur-num">1</span> / <span id="tot-num">20</span></div>
+  </div>
+
+  <div id="slides-area">
+
+    <!-- SLIDE 0: COVER -->
+    <div class="slide active" data-title="Cover">
+      <div class="cover">
+        <div class="cover-bg-text">MM</div>
+        <div class="cover-kicker" style="color:rgba(255,255,255,0.4);">College of Business Education · Multimedia Technology</div>
+        <div class="cover-title">Complete<br>Multimedia<br><em style="color:#e8c97a;">Technology</em><br>Tutorial</div>
+        <div class="cover-sub">Four essential modules: Content Management Systems, Web Development Technologies, Compression Algorithms, and Multimedia Formats.</div>
+        <div class="cover-modules">
+          <div class="cmod" style="border-color:rgba(197,58,30,0.4); color:#e8877a;">01 · CMS</div>
+          <div class="cmod" style="border-color:rgba(26,82,118,0.4); color:#7fb3d3;">02 · Web Development</div>
+          <div class="cmod" style="border-color:rgba(29,99,72,0.4); color:#76b89a;">03 · Compression</div>
+          <div class="cmod" style="border-color:rgba(107,63,160,0.4); color:#b39ddb;">04 · Multimedia Formats</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ MODULE 1: CMS ══════════ -->
+
+    <!-- SLIDE 1 -->
+    <div class="slide mod1" data-title="CMS · Overview">
+      <div class="sec-title">
+        <div class="sec-title-num">01</div>
+        <div class="sec-title-tag">Module One</div>
+        <h2>Content Management<br>Systems</h2>
+        <div class="sec-title-desc">Architecture, types, features, and deployment of CMS platforms in multimedia environments.</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide mod1 content-slide" data-title="CMS · Architecture">
+      <div class="slide-tag">Module 01 · Architecture</div>
+      <div class="slide-h">CMS Architecture Layers</div>
+      <div class="slide-lead">A CMS is built from interconnected layers, each with a distinct responsibility. Understanding these layers helps you select, configure, and extend any CMS platform.</div>
+      <div class="arch-diagram">
+        <div class="arch-layer" style="background:#fdf0ee;">
+          <div class="arch-num">05</div>
+          <div class="arch-name" style="color:#c53a1e;">Presentation Layer</div>
+          <div class="arch-desc">Themes, templates, and frontend delivery — what visitors see. In headless CMS, this is a separate app consuming APIs.</div>
+          <div class="arch-tech">HTML · CSS · JS</div>
+        </div>
+        <div class="arch-layer">
+          <div class="arch-num">04</div>
+          <div class="arch-name" style="color:#c53a1e;">Administration Interface</div>
+          <div class="arch-desc">WYSIWYG editor, media library, workflow tools, analytics dashboard used by content editors.</div>
+          <div class="arch-tech">Dashboard · CMS Panel</div>
+        </div>
+        <div class="arch-layer" style="background:#fdf0ee;">
+          <div class="arch-num">03</div>
+          <div class="arch-name" style="color:#c53a1e;">Application Layer</div>
+          <div class="arch-desc">Business logic, plugins, routing, authentication, and content transformation engine.</div>
+          <div class="arch-tech">PHP · Python · Node</div>
+        </div>
+        <div class="arch-layer">
+          <div class="arch-num">02</div>
+          <div class="arch-name" style="color:#c53a1e;">Security Module</div>
+          <div class="arch-desc">SSL, firewall, role-based access control, automated backups, and protection against SQL injection & XSS.</div>
+          <div class="arch-tech">Auth · RBAC · SSL</div>
+        </div>
+        <div class="arch-layer" style="background:#fdf0ee;">
+          <div class="arch-num">01</div>
+          <div class="arch-name" style="color:#c53a1e;">Database Layer</div>
+          <div class="arch-desc">Stores all content, metadata, users, and settings. Relational (MySQL/PostgreSQL), NoSQL (MongoDB), or object storage (S3).</div>
+          <div class="arch-tech">MySQL · MongoDB · Redis</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide mod1 content-slide" data-title="CMS · Types">
+      <div class="slide-tag">Module 01 · Types</div>
+      <div class="slide-h">Types of CMS Platforms</div>
+      <div class="slide-lead">CMS platforms are categorised by how content is stored, managed, and delivered to the end user.</div>
+      <div class="cards cards-2">
+        <div class="card">
+          <div class="card-icon">🔗</div>
+          <div class="card-title">Traditional / Coupled CMS</div>
+          <div class="card-text">Frontend and backend are tightly linked. Content is created and displayed by the same system. Fast to set up for simple websites.<br><br><strong>Examples:</strong> WordPress (43% of all websites), Joomla, Drupal<br><br><span class="pill" style="background:#fdf0ee;color:#c53a1e;">Best for: Blogs, simple websites</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔓</div>
+          <div class="card-title">Headless / Decoupled CMS</div>
+          <div class="card-text">Content is stored in a backend and delivered via API to any frontend — web, mobile, IoT, smart TV. Maximum flexibility.<br><br><strong>Examples:</strong> Contentful, Strapi, Sanity<br><br><span class="pill" style="background:#fdf0ee;color:#c53a1e;">Best for: Omnichannel, complex apps</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon">☁️</div>
+          <div class="card-title">Cloud / SaaS CMS</div>
+          <div class="card-text">Fully hosted and managed by the vendor. No server maintenance required — you simply subscribe and publish.<br><br><strong>Examples:</strong> WordPress.com, Squarespace, Wix<br><br><span class="pill" style="background:#fdf0ee;color:#c53a1e;">Best for: Non-technical users</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🏢</div>
+          <div class="card-title">Enterprise CMS</div>
+          <div class="card-text">High-end commercial platforms built for large organizations needing advanced workflows, compliance, and integrations.<br><br><strong>Examples:</strong> Adobe Experience Manager, Sitecore, Kentico<br><br><span class="pill" style="background:#fdf0ee;color:#c53a1e;">Best for: Large enterprises</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide mod1 content-slide" data-title="CMS · Features">
+      <div class="slide-tag">Module 01 · Key Features</div>
+      <div class="slide-h">Essential CMS Features</div>
+      <div class="two-col">
+        <div>
+          <ul class="icon-list">
+            <li><div class="ico">✏️</div><div class="lbody"><strong>WYSIWYG Editor</strong><span>Visual content editing — what you see is what you get. No HTML knowledge required to format and publish content.</span></div></li>
+            <li><div class="ico">🖼️</div><div class="lbody"><strong>Media Library</strong><span>Organised storage for images, videos, and documents with tagging, search, format optimisation, and CDN integration.</span></div></li>
+            <li><div class="ico">👥</div><div class="lbody"><strong>User Roles</strong><span>Administrator → Editor → Author → Contributor → Subscriber. Each role has defined permissions for what they can create, edit, or publish.</span></div></li>
+            <li><div class="ico">🔄</div><div class="lbody"><strong>Version Control</strong><span>Every edit is tracked. Content editors can review history and roll back to any previous version with one click.</span></div></li>
+          </ul>
+        </div>
+        <div>
+          <ul class="icon-list">
+            <li><div class="ico">🔍</div><div class="lbody"><strong>SEO Tools</strong><span>Meta titles, XML sitemaps, canonical URLs, structured data, Open Graph tags, and 301 redirect management built in.</span></div></li>
+            <li><div class="ico">⚡</div><div class="lbody"><strong>Performance</strong><span>Page caching, database query optimisation, asset minification (CSS/JS), lazy loading, and CDN delivery.</span></div></li>
+            <li><div class="ico">📅</div><div class="lbody"><strong>Content Scheduling</strong><span>Schedule publish and unpublish dates for articles, campaigns, and time-sensitive content automatically.</span></div></li>
+            <li><div class="ico">🔌</div><div class="lbody"><strong>Integrations</strong><span>Connect with CRM, analytics, payment gateways, email marketing, and third-party services via API.</span></div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide mod1 content-slide" data-title="CMS · Deployment">
+      <div class="slide-tag">Module 01 · Deployment</div>
+      <div class="slide-h">CMS Deployment Strategy</div>
+      <div class="slide-lead">Deploying a CMS follows a structured lifecycle. Skipping phases leads to costly rework and security vulnerabilities.</div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">PHASE 1</div>
+          <div class="tl-title">Define Requirements</div>
+          <div class="tl-desc">Identify content types, team size, traffic projections, compliance needs, integrations required, and budget.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">PHASE 2</div>
+          <div class="tl-title">Evaluate & Select Platform</div>
+          <div class="tl-desc">Compare CMS options against requirements. Consider open-source vs. commercial, SaaS vs. self-hosted, headless vs. traditional.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">PHASE 3</div>
+          <div class="tl-title">Design Architecture & Infrastructure</div>
+          <div class="tl-desc">Set up hosting environment, configure SSL/firewall/backups, establish Git workflow and CI/CD pipeline, plan CDN strategy.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">PHASE 4</div>
+          <div class="tl-title">Content Migration</div>
+          <div class="tl-desc">Content Audit → Data Mapping → Migration Scripts → QA. Always set up 301 redirects for changed URLs to preserve SEO.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">PHASE 5</div>
+          <div class="tl-title">Testing & Launch</div>
+          <div class="tl-desc">Functionality testing, performance benchmarking, security audit, user acceptance testing (UAT), then go live.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ MODULE 2: WEB DEV ══════════ -->
+
+    <!-- SLIDE 6 -->
+    <div class="slide mod2" data-title="Web Dev · Overview">
+      <div class="sec-title">
+        <div class="sec-title-num">02</div>
+        <div class="sec-title-tag">Module Two</div>
+        <h2>Web Development<br>Technologies</h2>
+        <div class="sec-title-desc">The core languages, frameworks, databases, and APIs that power modern web applications and multimedia platforms.</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7 -->
+    <div class="slide mod2 content-slide" data-title="Web Dev · HTML & CSS">
+      <div class="slide-tag">Module 02 · HTML & CSS</div>
+      <div class="slide-h">HTML & CSS — The Foundation</div>
+      <div class="slide-lead">Every web page is built on HTML (structure) and CSS (presentation). Understanding their roles is the first step in web development.</div>
+      <div class="two-col">
+        <div>
+          <div class="callout" style="background:#edf3fa; border-left:3px solid #1a5276;">
+            <div class="callout-icon">📄</div>
+            <div class="callout-body"><div class="callout-title" style="color:#1a5276;">HTML — HyperText Markup Language</div>Defines the <strong>structure and content</strong> of a web page using elements (tags). Introduced by Tim Berners-Lee in 1991. HTML5 added native support for audio, video, canvas, local storage, and semantic elements.</div>
+          </div>
+          <div class="code-block">
+            <div class="code-label">HTML5</div>
+<span class="cc">&lt;!DOCTYPE html&gt;</span>
+<span class="cc">&lt;html&gt;</span>
+  <span class="cc">&lt;head&gt;</span>
+    <span class="cc">&lt;title&gt;</span><span class="cs">Page Title</span><span class="cc">&lt;/title&gt;</span>
+  <span class="cc">&lt;/head&gt;</span>
+  <span class="cc">&lt;body&gt;</span>
+    <span class="cc">&lt;h1&gt;</span><span class="cs">Heading</span><span class="cc">&lt;/h1&gt;</span>
+    <span class="cc">&lt;p&gt;</span><span class="cs">Paragraph text</span><span class="cc">&lt;/p&gt;</span>
+    <span class="cc">&lt;video</span> <span class="ck">src</span>=<span class="cs">"clip.mp4"</span> <span class="ck">controls</span><span class="cc">&gt;&lt;/video&gt;</span>
+  <span class="cc">&lt;/body&gt;</span>
+<span class="cc">&lt;/html&gt;</span></div>
+        </div>
+        <div>
+          <div class="callout" style="background:#edf3fa; border-left:3px solid #1a5276;">
+            <div class="callout-icon">🎨</div>
+            <div class="callout-body"><div class="callout-title" style="color:#1a5276;">CSS — Cascading Style Sheets</div>Controls the <strong>visual presentation</strong>: colours, fonts, layouts, spacing, and animations. CSS3 introduced flexbox, grid, transitions, and media queries for responsive design.</div>
+          </div>
+          <div class="code-block">
+            <div class="code-label">CSS3</div>
+<span class="ck">body</span> {
+  <span class="cv">font-family</span>: <span class="cs">'Segoe UI', sans-serif</span>;
+  <span class="cv">background</span>: <span class="cs">#f5f5f5</span>;
+}
+<span class="ck">h1</span> {
+  <span class="cv">color</span>: <span class="cs">#1a5276</span>;
+  <span class="cv">font-size</span>: <span class="cs">2rem</span>;
+  <span class="cv">animation</span>: <span class="cs">fadeIn 0.5s ease</span>;
+}
+<span class="cm">/* Responsive layout */</span>
+<span class="ck">@media</span> (max-width: <span class="cv">768px</span>) {
+  <span class="ck">.grid</span> { <span class="cv">grid-template-columns</span>: <span class="cs">1fr</span>; }
+}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8 -->
+    <div class="slide mod2 content-slide" data-title="Web Dev · JavaScript">
+      <div class="slide-tag">Module 02 · JavaScript</div>
+      <div class="slide-h">JavaScript — Interactivity & Logic</div>
+      <div class="slide-lead">JavaScript is the only programming language that runs natively in web browsers, enabling dynamic behaviour, user interaction, and real-time data updates without page reloads.</div>
+      <div class="cards cards-3">
+        <div class="card">
+          <div class="card-icon">🖱️</div>
+          <div class="card-title">DOM Manipulation</div>
+          <div class="card-text">JavaScript reads and modifies the Document Object Model — changing HTML content, styles, and attributes in response to user actions.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <div class="card-title">Fetch API / AJAX</div>
+          <div class="card-text">Load data from servers without refreshing the page. Powers live search, social feeds, chat, and real-time dashboards.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📦</div>
+          <div class="card-title">ES6+ Modern JS</div>
+          <div class="card-text">Arrow functions, async/await, destructuring, modules, classes, and template literals make JavaScript powerful and readable.</div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-label">JavaScript ES6+</div>
+<span class="cm">// Async fetch — load data without page reload</span>
+<span class="ck">async function</span> <span class="cc">loadContent</span>() {
+  <span class="ck">const</span> res = <span class="ck">await</span> fetch(<span class="cs">'https://api.example.com/posts'</span>);
+  <span class="ck">const</span> data = <span class="ck">await</span> res.json();
+  data.forEach(<span class="cv">post</span> =&gt; {
+    document.getElementById(<span class="cs">'feed'</span>).innerHTML += <span class="cs">`&lt;p&gt;${post.title}&lt;/p&gt;`</span>;
+  });
+}
+loadContent();</div>
+    </div>
+
+    <!-- SLIDE 9 -->
+    <div class="slide mod2 content-slide" data-title="Web Dev · Frameworks">
+      <div class="slide-tag">Module 02 · Frameworks</div>
+      <div class="slide-h">Web Development Frameworks</div>
+      <div class="slide-lead">Frameworks provide pre-built structures, tools, and conventions to speed up development and enforce best practices.</div>
+      <table class="tbl">
+        <thead><tr><th>Framework</th><th>Type</th><th>Language</th><th>Best Used For</th></tr></thead>
+        <tbody>
+          <tr><td>React</td><td>Frontend UI Library</td><td>JavaScript</td><td>Interactive SPAs, component-based multimedia UIs</td></tr>
+          <tr><td>Vue.js</td><td>Frontend Framework</td><td>JavaScript</td><td>Progressive web apps, lightweight interactive pages</td></tr>
+          <tr><td>Angular</td><td>Full Frontend Framework</td><td>TypeScript</td><td>Large-scale enterprise web applications</td></tr>
+          <tr><td>Next.js</td><td>Full-Stack React</td><td>JavaScript</td><td>SEO-optimised sites with server-side rendering</td></tr>
+          <tr><td>Laravel</td><td>Backend Framework</td><td>PHP</td><td>CMS backends, API servers, web platforms</td></tr>
+          <tr><td>Django</td><td>Backend Framework</td><td>Python</td><td>Rapid backend development with built-in admin panel</td></tr>
+          <tr><td>Node.js / Express</td><td>Backend Runtime</td><td>JavaScript</td><td>Real-time apps, REST APIs, streaming services</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SLIDE 10 -->
+    <div class="slide mod2 content-slide" data-title="Web Dev · Databases & APIs">
+      <div class="slide-tag">Module 02 · Databases & APIs</div>
+      <div class="slide-h">Databases & APIs</div>
+      <div class="two-col">
+        <div>
+          <h3 style="font-family:'Fraunces',serif; font-size:17px; margin-bottom:14px; color:#1a5276;">Databases</h3>
+          <ul class="icon-list">
+            <li><div class="ico">📊</div><div class="lbody"><strong>Relational (SQL)</strong><span>Structured tables with relationships. MySQL and PostgreSQL are standard for web applications and CMS platforms.</span></div></li>
+            <li><div class="ico">🍃</div><div class="lbody"><strong>NoSQL Document</strong><span>Flexible JSON-like documents. MongoDB suits unstructured or rapidly evolving data like multimedia metadata.</span></div></li>
+            <li><div class="ico">⚡</div><div class="lbody"><strong>In-Memory Cache</strong><span>Redis and Memcached store hot data in RAM for microsecond retrieval. Used for sessions, leaderboards, and caching.</span></div></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="font-family:'Fraunces',serif; font-size:17px; margin-bottom:14px; color:#1a5276;">APIs — Application Programming Interfaces</h3>
+          <ul class="icon-list">
+            <li><div class="ico">🔌</div><div class="lbody"><strong>REST API</strong><span>Most common standard. Uses HTTP methods (GET, POST, PUT, DELETE) to exchange JSON data between client and server.</span></div></li>
+            <li><div class="ico">🔷</div><div class="lbody"><strong>GraphQL</strong><span>Query language for APIs — clients request exactly the data they need, reducing over-fetching. Used by Facebook, GitHub.</span></div></li>
+            <li><div class="ico">🔄</div><div class="lbody"><strong>WebSockets</strong><span>Persistent two-way connection enabling real-time communication for chat, live scores, and collaborative tools.</span></div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ MODULE 3: COMPRESSION ══════════ -->
+
+    <!-- SLIDE 11 -->
+    <div class="slide mod3" data-title="Compression · Overview">
+      <div class="sec-title">
+        <div class="sec-title-num">03</div>
+        <div class="sec-title-tag">Module Three</div>
+        <h2>Compression &<br>Decompression<br>Algorithms</h2>
+        <div class="sec-title-desc">How multimedia data is reduced in size for efficient storage and transmission, and reconstructed for playback.</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 12 -->
+    <div class="slide mod3 content-slide" data-title="Compression · Lossless">
+      <div class="slide-tag">Module 03 · Lossless Methods</div>
+      <div class="slide-h">Lossless Compression</div>
+      <div class="slide-lead">Lossless compression reduces file size while guaranteeing <strong>perfect, bit-for-bit reconstruction</strong> of the original data. Not a single byte of information is lost.</div>
+      <div class="compress-visual">
+        <div>
+          <div class="block-group">
+            <div class="blk" style="background:#c53a1e;"></div><div class="blk" style="background:#c53a1e;"></div><div class="blk" style="background:#c53a1e;"></div><div class="blk" style="background:#c53a1e;"></div>
+            <div class="blk" style="background:#1a5276;"></div><div class="blk" style="background:#1a5276;"></div><div class="blk" style="background:#1a5276;"></div>
+            <div class="blk" style="background:#c53a1e;"></div><div class="blk" style="background:#1d6348;"></div><div class="blk" style="background:#1d6348;"></div>
+            <div class="blk" style="background:#1d6348;"></div><div class="blk" style="background:#1d6348;"></div>
+          </div>
+          <div class="compress-label">ORIGINAL: 12 units</div>
+        </div>
+        <div class="compress-arrow">→ compress →</div>
+        <div>
+          <div class="block-group">
+            <div class="blk" style="background:#c53a1e; width:72px;"></div>
+            <div class="blk" style="background:#1a5276; width:54px;"></div>
+            <div class="blk" style="background:#c53a1e;"></div>
+            <div class="blk" style="background:#1d6348; width:72px;"></div>
+          </div>
+          <div class="compress-label">ENCODED: 4 tokens (RLE)</div>
+        </div>
+        <div class="compress-arrow">→ decompress →</div>
+        <div>
+          <div class="block-group">
+            <div class="blk" style="background:#c53a1e;"></div><div class="blk" style="background:#c53a1e;"></div><div class="blk" style="background:#c53a1e;"></div><div class="blk" style="background:#c53a1e;"></div>
+            <div class="blk" style="background:#1a5276;"></div><div class="blk" style="background:#1a5276;"></div><div class="blk" style="background:#1a5276;"></div>
+            <div class="blk" style="background:#c53a1e;"></div><div class="blk" style="background:#1d6348;"></div><div class="blk" style="background:#1d6348;"></div>
+            <div class="blk" style="background:#1d6348;"></div><div class="blk" style="background:#1d6348;"></div>
+          </div>
+          <div class="compress-label">RESTORED: 12 units (identical)</div>
+        </div>
+      </div>
+      <div class="cards cards-3">
+        <div class="card">
+          <div class="card-title">Run-Length Encoding (RLE)</div>
+          <div class="card-text">Replaces consecutive repeated values with a single value + count. <code style="font-family:'Fira Code',monospace;font-size:12px;background:#edf7f3;padding:1px 5px;border-radius:3px;">AAAA → 4A</code>. Used in BMP, TIFF, fax machines.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Huffman Coding</div>
+          <div class="card-text">Assigns shorter binary codes to more frequent symbols. Common characters get fewer bits. Foundation of ZIP, PNG, and DEFLATE compression.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">LZW (Lempel-Ziv-Welch)</div>
+          <div class="card-text">Builds a dictionary of repeated patterns during encoding. Used in GIF, TIFF, and PDF compression. Decompressor rebuilds the same dictionary to reverse it.</div>
+        </div>
+      </div>
+      <div class="callout" style="background:#edf7f3; border-left:3px solid #1d6348;">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body"><div class="callout-title" style="color:#1d6348;">When to use lossless compression</div>Use lossless for logos, icons, screenshots, medical images, legal documents, and any content where perfect accuracy is non-negotiable. Formats: <strong>PNG, FLAC, ZIP, TIFF</strong></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 13 -->
+    <div class="slide mod3 content-slide" data-title="Compression · Lossy">
+      <div class="slide-tag">Module 03 · Lossy Methods</div>
+      <div class="slide-h">Lossy Compression</div>
+      <div class="slide-lead">Lossy compression permanently discards data that the human perceptual system is unlikely to notice, achieving <strong>much higher compression ratios</strong> than lossless methods — at the cost of some quality.</div>
+      <div class="cards cards-2">
+        <div class="card">
+          <div class="card-icon">🖼️</div>
+          <div class="card-title">DCT — Discrete Cosine Transform</div>
+          <div class="card-text">The algorithm behind <strong>JPEG</strong>. Converts image blocks into frequency components, then discards high-frequency (fine detail) data that eyes are less sensitive to. At low quality settings, "blocking" artefacts appear where blocks meet.<br><br>Also used in: MPEG video, MP3 audio (DCT variant).</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎵</div>
+          <div class="card-title">Perceptual / Psychoacoustic Coding</div>
+          <div class="card-text">Used in <strong>MP3, AAC, OGG</strong>. Exploits hearing limitations — we cannot hear quiet sounds masked by louder simultaneous sounds. The codec removes inaudible audio data, reducing file size by 90%+ vs. raw WAV with minimal perceived quality loss.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎬</div>
+          <div class="card-title">Inter-frame Compression</div>
+          <div class="card-text">Used in <strong>MPEG, H.264, H.265</strong>. Only stores the differences between consecutive video frames — not full frames. A reference "keyframe" is stored periodically; intermediate frames only record what changed. Reduces video file sizes by 100:1 or more.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌊</div>
+          <div class="card-title">Wavelet Compression</div>
+          <div class="card-text">Used in <strong>JPEG 2000, WebP</strong>. Analyses the image at multiple scales — preserving important large-scale structure while discarding fine-scale noise. Avoids blocking artefacts, and supports progressive image loading.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 14 -->
+    <div class="slide mod3 content-slide" data-title="Compression · Comparison">
+      <div class="slide-tag">Module 03 · Comparison</div>
+      <div class="slide-h">Lossless vs Lossy — Choosing the Right Method</div>
+      <div class="comp-bar">
+        <div class="comp-row">
+          <div class="comp-label" style="background:#f0f0f0;"></div>
+          <div class="comp-a" style="font-weight:700;color:#1d6348;background:#edf7f3;">Lossless</div>
+          <div class="comp-b" style="font-weight:700;color:#c53a1e;background:#fdf0ee;">Lossy</div>
+        </div>
+        <div class="comp-row"><div class="comp-label">Data Loss</div><div class="comp-a">None — perfect reconstruction</div><div class="comp-b">Permanent — cannot recover</div></div>
+        <div class="comp-row"><div class="comp-label">Compression Ratio</div><div class="comp-a">2:1 – 10:1 (moderate)</div><div class="comp-b">10:1 – 100:1+ (very high)</div></div>
+        <div class="comp-row"><div class="comp-label">File Quality</div><div class="comp-a">Identical to original</div><div class="comp-b">Reduced (varies by setting)</div></div>
+        <div class="comp-row"><div class="comp-label">Image Formats</div><div class="comp-a">PNG, BMP, TIFF, GIF</div><div class="comp-b">JPEG, WebP, AVIF</div></div>
+        <div class="comp-row"><div class="comp-label">Audio Formats</div><div class="comp-a">FLAC, WAV, ALAC</div><div class="comp-b">MP3, AAC, OGG, Opus</div></div>
+        <div class="comp-row"><div class="comp-label">Video Formats</div><div class="comp-a">Uncompressed AVI, ProRes</div><div class="comp-b">H.264, H.265, VP9, AV1</div></div>
+        <div class="comp-row"><div class="comp-label">Best For</div><div class="comp-a">Archives, logos, medical, legal</div><div class="comp-b">Web, streaming, social media</div></div>
+      </div>
+    </div>
+
+    <!-- ══════════ MODULE 4: FORMATS ══════════ -->
+
+    <!-- SLIDE 15 -->
+    <div class="slide mod4" data-title="Formats · Overview">
+      <div class="sec-title">
+        <div class="sec-title-num">04</div>
+        <div class="sec-title-tag">Module Four</div>
+        <h2>Understanding<br>Multimedia Formats</h2>
+        <div class="sec-title-desc">A comprehensive guide to image, audio, and video file formats — their specifications, use cases, and trade-offs.</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 16 -->
+    <div class="slide mod4 content-slide" data-title="Formats · Image">
+      <div class="slide-tag">Module 04 · Image Formats</div>
+      <div class="slide-h">Image File Formats</div>
+      <div class="slide-lead">Choosing the right image format affects file size, visual quality, browser compatibility, and whether transparency is supported.</div>
+      <div class="fmt-grid">
+        <div class="fmt-card">
+          <span class="fmt-ext">.JPEG</span>
+          <div class="fmt-type">Lossy Raster</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5;">Photographs, complex gradients. Best for web delivery. Doesn't support transparency.</div>
+          <div class="fmt-quality"><div class="fmt-quality-fill" style="width:70%;background:#c53a1e;"></div></div>
+        </div>
+        <div class="fmt-card">
+          <span class="fmt-ext">.PNG</span>
+          <div class="fmt-type">Lossless Raster</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5;">Logos, screenshots, UI elements. Supports full transparency (alpha channel).</div>
+          <div class="fmt-quality"><div class="fmt-quality-fill" style="width:100%;background:#1d6348;"></div></div>
+        </div>
+        <div class="fmt-card">
+          <span class="fmt-ext">.WebP</span>
+          <div class="fmt-type">Lossy + Lossless</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5;">Google format. 25–35% smaller than JPEG/PNG. Supports transparency and animation.</div>
+          <div class="fmt-quality"><div class="fmt-quality-fill" style="width:85%;background:#6b3fa0;"></div></div>
+        </div>
+        <div class="fmt-card">
+          <span class="fmt-ext">.SVG</span>
+          <div class="fmt-type">Vector (XML)</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5;">Infinitely scalable without pixelation. Ideal for icons, logos, illustrations, and responsive graphics.</div>
+          <div class="fmt-quality"><div class="fmt-quality-fill" style="width:100%;background:#1a5276;"></div></div>
+        </div>
+        <div class="fmt-card">
+          <span class="fmt-ext">.GIF</span>
+          <div class="fmt-type">Lossless Raster</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5;">Simple animations and graphics. Limited to 256 colours. Widely replaced by WebP and video for animations.</div>
+          <div class="fmt-quality"><div class="fmt-quality-fill" style="width:45%;background:#b8860b;"></div></div>
+        </div>
+        <div class="fmt-card">
+          <span class="fmt-ext">.TIFF</span>
+          <div class="fmt-type">Lossless Raster</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5;">Professional archival and printing. Supports multiple pages and layers. Very large file sizes.</div>
+          <div class="fmt-quality"><div class="fmt-quality-fill" style="width:100%;background:#1d6348;"></div></div>
+        </div>
+        <div class="fmt-card">
+          <span class="fmt-ext">.AVIF</span>
+          <div class="fmt-type">Lossy + Lossless</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5;">Next-generation format. Better quality per byte than WebP. Growing browser support.</div>
+          <div class="fmt-quality"><div class="fmt-quality-fill" style="width:92%;background:#6b3fa0;"></div></div>
+        </div>
+        <div class="fmt-card">
+          <span class="fmt-ext">.RAW</span>
+          <div class="fmt-type">Unprocessed</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5;">Camera sensor data before processing. Maximum editing flexibility. Requires special software to open.</div>
+          <div class="fmt-quality"><div class="fmt-quality-fill" style="width:100%;background:#1a1814;"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 17 -->
+    <div class="slide mod4 content-slide" data-title="Formats · Audio">
+      <div class="slide-tag">Module 04 · Audio Formats</div>
+      <div class="slide-h">Audio File Formats</div>
+      <div class="slide-lead">Audio formats range from uncompressed masters used in professional production to highly compressed files optimised for streaming and distribution.</div>
+      <table class="tbl">
+        <thead><tr><th>Format</th><th>Type</th><th>Typical Size</th><th>Quality</th><th>Best Used For</th></tr></thead>
+        <tbody>
+          <tr><td>.WAV</td><td>Uncompressed PCM</td><td>~10 MB/min</td><td>Studio master</td><td>Professional recording, editing masters</td></tr>
+          <tr><td>.FLAC</td><td>Lossless compressed</td><td>~5 MB/min</td><td>Identical to WAV</td><td>Archiving, audiophile listening</td></tr>
+          <tr><td>.AIFF</td><td>Uncompressed (Apple)</td><td>~10 MB/min</td><td>Studio master</td><td>Apple/Mac professional audio workflows</td></tr>
+          <tr><td>.MP3</td><td>Lossy (MPEG Layer 3)</td><td>~1 MB/min</td><td>Good (128–320 kbps)</td><td>Music distribution, streaming, podcasts</td></tr>
+          <tr><td>.AAC</td><td>Lossy (MPEG-4)</td><td>~1 MB/min</td><td>Better than MP3</td><td>Apple devices, YouTube, streaming</td></tr>
+          <tr><td>.OGG</td><td>Lossy open-source</td><td>~1 MB/min</td><td>Good</td><td>Web audio, games, open-source projects</td></tr>
+          <tr><td>.Opus</td><td>Lossy (ultra-efficient)</td><td>&lt;0.5 MB/min</td><td>Excellent at low bitrate</td><td>VoIP, WebRTC, low-bandwidth streaming</td></tr>
+        </tbody>
+      </table>
+      <div class="callout" style="background:#f5effe; border-left:3px solid #6b3fa0;">
+        <div class="callout-icon">🎚️</div>
+        <div class="callout-body"><div class="callout-title" style="color:#6b3fa0;">Professional Workflow Tip</div>Always record and edit in <strong>WAV or AIFF</strong> (lossless), then export to <strong>MP3 or AAC</strong> for distribution. Never re-compress an already-lossy file — quality degrades with each generation.</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 18 -->
+    <div class="slide mod4 content-slide" data-title="Formats · Video">
+      <div class="slide-tag">Module 04 · Video Formats</div>
+      <div class="slide-h">Video File Formats & Codecs</div>
+      <div class="slide-lead">A video file has two components: a <strong>container</strong> (the file format wrapping everything) and a <strong>codec</strong> (the algorithm that compresses/decompresses the video stream).</div>
+      <div class="cards cards-2">
+        <div class="card">
+          <div class="card-title">📦 Containers (File Extensions)</div>
+          <div class="card-text" style="margin-top:10px;">
+            <table style="width:100%;font-size:12px;border-collapse:collapse;">
+              <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 4px;font-weight:600;">.MP4</td><td style="padding:7px 4px;color:var(--muted);">Universal — plays everywhere. Supports H.264, H.265 codecs.</td></tr>
+              <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 4px;font-weight:600;">.MOV</td><td style="padding:7px 4px;color:var(--muted);">Apple/Final Cut Pro native. High quality, large files.</td></tr>
+              <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 4px;font-weight:600;">.MKV</td><td style="padding:7px 4px;color:var(--muted);">Open standard. Supports multiple audio tracks, subtitles.</td></tr>
+              <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 4px;font-weight:600;">.WebM</td><td style="padding:7px 4px;color:var(--muted);">Google's open web format — efficient for HTML5 video.</td></tr>
+              <tr><td style="padding:7px 4px;font-weight:600;">.AVI</td><td style="padding:7px 4px;color:var(--muted);">Older Windows format. Large files, broad compatibility.</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">⚙️ Video Codecs (Compression Engines)</div>
+          <div class="card-text" style="margin-top:10px;">
+            <table style="width:100%;font-size:12px;border-collapse:collapse;">
+              <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 4px;font-weight:600;">H.264</td><td style="padding:7px 4px;color:var(--muted);">Most widely used. Excellent quality-to-size ratio. Supported on every device.</td></tr>
+              <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 4px;font-weight:600;">H.265 (HEVC)</td><td style="padding:7px 4px;color:var(--muted);">50% better compression than H.264 at the same quality. Used for 4K/HDR.</td></tr>
+              <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 4px;font-weight:600;">VP9</td><td style="padding:7px 4px;color:var(--muted);">Google's open-source codec. Used by YouTube. Similar to H.265.</td></tr>
+              <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 4px;font-weight:600;">AV1</td><td style="padding:7px 4px;color:var(--muted);">Next-gen open-source. 30% better than VP9. Slow to encode but best quality.</td></tr>
+              <tr><td style="padding:7px 4px;font-weight:600;">ProRes</td><td style="padding:7px 4px;color:var(--muted);">Apple's near-lossless production codec. Used in professional editing.</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ QUIZ ══════════ -->
+
+    <!-- SLIDE 19 -->
+    <div class="slide quiz-sec content-slide" data-title="Knowledge Check">
+      <div class="slide-tag">Final Assessment</div>
+      <div class="slide-h">Knowledge Check</div>
+      <div class="slide-lead">Test your understanding across all four modules.</div>
+      <div class="quiz-wrap" id="quiz-wrap">
+        <div id="quiz-card">
+          <div class="quiz-q-text" id="q-text"></div>
+          <div class="q-opts" id="q-opts"></div>
+          <div class="q-feedback" id="q-fb"></div>
+          <button class="q-next" id="q-next" onclick="nextQ()">Next Question →</button>
+        </div>
+        <div class="quiz-meta">
+          Question <span id="q-num">1</span> / <span id="q-tot">10</span> &nbsp;·&nbsp; Score: <span id="q-score">0</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end slides-area -->
+
+  <!-- BOTTOM NAV -->
+  <div id="nav-bar">
+    <button class="nav-btn" id="btn-prev" onclick="prevSlide()">← Previous</button>
+    <div id="progress-dots"></div>
+    <button class="nav-btn primary" id="btn-next" onclick="nextSlide()">Next →</button>
+  </div>
+</div><!-- end main -->
+</div><!-- end app -->
+
+<script>
+const slideData = [
+  { title: "Cover", module: "" },
+  { title: "CMS · Overview", module: "01 · Content Management Systems" },
+  { title: "CMS · Architecture", module: "01 · Content Management Systems" },
+  { title: "CMS · Types", module: "01 · Content Management Systems" },
+  { title: "CMS · Key Features", module: "01 · Content Management Systems" },
+  { title: "CMS · Deployment", module: "01 · Content Management Systems" },
+  { title: "Web Dev · Overview", module: "02 · Web Development Technologies" },
+  { title: "Web Dev · HTML & CSS", module: "02 · Web Development Technologies" },
+  { title: "Web Dev · JavaScript", module: "02 · Web Development Technologies" },
+  { title: "Web Dev · Frameworks", module: "02 · Web Development Technologies" },
+  { title: "Web Dev · Databases & APIs", module: "02 · Web Development Technologies" },
+  { title: "Compression · Overview", module: "03 · Compression Algorithms" },
+  { title: "Compression · Lossless", module: "03 · Compression Algorithms" },
+  { title: "Compression · Lossy", module: "03 · Compression Algorithms" },
+  { title: "Compression · Comparison", module: "03 · Compression Algorithms" },
+  { title: "Formats · Overview", module: "04 · Multimedia Formats" },
+  { title: "Formats · Image", module: "04 · Multimedia Formats" },
+  { title: "Formats · Audio", module: "04 · Multimedia Formats" },
+  { title: "Formats · Video", module: "04 · Multimedia Formats" },
+  { title: "Knowledge Check", module: "Final Assessment" }
+];
+
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const sidebtns = document.querySelectorAll('.slide-btn');
+
+function goTo(n) {
+  slides[current].classList.remove('active');
+  sidebtns[current].classList.remove('active');
+  current = Math.max(0, Math.min(n, slides.length - 1));
+  slides[current].classList.add('active');
+  sidebtns[current].classList.add('active');
+  document.getElementById('cur-num').textContent = current + 1;
+  document.getElementById('slide-path').textContent =
+    slideData[current].module || 'Multimedia Technology';
+  document.getElementById('btn-prev').disabled = current === 0;
+  document.getElementById('btn-next').textContent = current === slides.length - 1 ? '✓ Done' : 'Next →';
+  document.getElementById('slides-area').scrollTop = 0;
+  updateDots();
+}
+
+function nextSlide() { if (current < slides.length - 1) goTo(current + 1); }
+function prevSlide() { if (current > 0) goTo(current - 1); }
+
+// Dots (sample 10)
+function updateDots() {
+  const dots = document.querySelectorAll('.pdot');
+  const step = (slides.length - 1) / (dots.length - 1);
+  dots.forEach((d, i) => {
+    const target = Math.round(i * step);
+    d.classList.toggle('active', current === target || (i === dots.length - 1 && current === slides.length - 1));
+  });
+}
+
+function buildDots() {
+  const c = document.getElementById('progress-dots');
+  for (let i = 0; i < 10; i++) {
+    const d = document.createElement('div');
+    d.className = 'pdot';
+    const step = (slides.length - 1) / 9;
+    d.onclick = () => goTo(Math.round(i * step));
+    c.appendChild(d);
+  }
+  updateDots();
+}
+buildDots();
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+});
+
+// Init
+goTo(0);
+document.getElementById('tot-num').textContent = slides.length;
+
+// ─── QUIZ ───
+const questions = [
+  { q: "Which CMS architecture type delivers content via API to any frontend framework?", opts: ["Traditional / Coupled CMS", "Headless / Decoupled CMS", "SaaS CMS", "Enterprise CMS"], ans: 1, exp: "Headless CMS separates the content backend from the frontend entirely. Content is accessed via API, so any framework — React, Vue, iOS app — can consume it." },
+  { q: "In a CMS architecture, which layer stores all content, metadata, users, and settings?", opts: ["Presentation Layer", "Security Module", "Application Layer", "Database Layer"], ans: 3, exp: "The Database Layer is the foundation of CMS architecture — it stores all content, metadata, user data, and configuration in SQL/NoSQL databases." },
+  { q: "Which programming language runs natively in web browsers and enables interactivity without page reloads?", opts: ["PHP", "Python", "JavaScript", "TypeScript"], ans: 2, exp: "JavaScript is the only language natively executed by web browsers, enabling DOM manipulation, AJAX requests, and dynamic behaviour client-side." },
+  { q: "What is the main advantage of GraphQL over a traditional REST API?", opts: ["It uses XML instead of JSON", "Clients request exactly the data they need, avoiding over-fetching", "It is faster because it skips the database", "It only works with Node.js"], ans: 1, exp: "GraphQL lets clients specify exactly what fields they want in a query, eliminating over-fetching (getting too much data) and under-fetching (needing multiple requests)." },
+  { q: "Which lossless compression algorithm assigns shorter binary codes to more frequently occurring symbols?", opts: ["Run-Length Encoding (RLE)", "LZW Algorithm", "Huffman Coding", "Wavelet Transform"], ans: 2, exp: "Huffman Coding builds a variable-length code tree where the most common symbols get the shortest codes — the foundation of ZIP, PNG, and DEFLATE compression." },
+  { q: "JPEG compression uses which algorithm to transform image data before discarding high-frequency details?", opts: ["Run-Length Encoding", "Discrete Cosine Transform (DCT)", "Huffman Coding", "LZW"], ans: 1, exp: "JPEG uses DCT (Discrete Cosine Transform) to convert image blocks into frequency components. High-frequency detail components are then quantised (reduced), creating the characteristic JPEG 'blocking' artefact at low quality." },
+  { q: "Which image format supports transparency (alpha channel) AND uses lossless compression?", opts: ["JPEG", "GIF", "PNG", "BMP"], ans: 2, exp: "PNG (Portable Network Graphics) supports full 8-bit alpha channel transparency with lossless compression — making it ideal for logos, icons, and UI graphics that need a transparent background." },
+  { q: "What is the difference between a video 'container' and a video 'codec'?", opts: ["They are the same thing", "Container is the file format (.mp4, .mkv); codec is the compression algorithm (H.264, VP9)", "Codec is the file extension; container is the editing software", "Containers are for audio; codecs are for video"], ans: 1, exp: "A container (.mp4, .mkv, .mov) is a wrapper that holds multiple streams. A codec (H.264, H.265, VP9) is the algorithm that compresses/decompresses the video data inside that container." },
+  { q: "Which audio format is lossless and compressed, making it ideal for archiving music at full quality with smaller file sizes than WAV?", opts: ["MP3", "AAC", "FLAC", "OGG"], ans: 2, exp: "FLAC (Free Lossless Audio Codec) compresses audio data 30–60% compared to WAV while preserving every bit of the original audio — perfect for archiving." },
+  { q: "Which next-generation video codec offers approximately 30% better compression efficiency than VP9 and is fully open-source?", opts: ["H.265 / HEVC", "H.264 / AVC", "ProRes", "AV1"], ans: 3, exp: "AV1 (AOMedia Video 1) is an open-source codec developed by a consortium including Google, Netflix, and Amazon. It achieves ~30% better compression than VP9 at equivalent quality, though it requires more time to encode." }
+];
+
+let qi = 0, score = 0, answered = false;
+function loadQ() {
+  const q = questions[qi];
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-num').textContent = qi + 1;
+  document.getElementById('q-score').textContent = score;
+  const opts = document.getElementById('q-opts');
+  opts.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'q-opt';
+    btn.innerHTML = `<span class="q-letter">${letters[i]}</span>${opt}`;
+    btn.onclick = () => doAnswer(i);
+    opts.appendChild(btn);
+  });
+  document.getElementById('q-fb').className = 'q-feedback';
+  document.getElementById('q-fb').textContent = '';
+  document.getElementById('q-next').className = 'q-next';
+  answered = false;
+}
+function doAnswer(i) {
+  if (answered) return;
+  answered = true;
+  const q = questions[qi];
+  document.querySelectorAll('.q-opt').forEach((b, idx) => {
+    b.disabled = true;
+    if (idx === q.ans) b.classList.add('correct');
+    else if (idx === i) b.classList.add('wrong');
+  });
+  const fb = document.getElementById('q-fb');
+  if (i === q.ans) { score++; fb.className = 'q-feedback show ok'; fb.textContent = '✓ Correct! ' + q.exp; }
+  else { fb.className = 'q-feedback show no'; fb.textContent = '✗ ' + q.exp; }
+  document.getElementById('q-score').textContent = score;
+  const nb = document.getElementById('q-next');
+  nb.className = 'q-next show';
+  nb.textContent = qi < questions.length - 1 ? 'Next Question →' : 'View My Score →';
+}
+function nextQ() {
+  qi++;
+  if (qi >= questions.length) {
+    const pct = Math.round(score / questions.length * 100);
+    document.getElementById('quiz-card').innerHTML = `
+      <div class="score-screen">
+        <div class="score-num" style="color:${pct>=80?'#1d6348':pct>=60?'#b8860b':'#c53a1e'}">${pct}%</div>
+        <div class="score-label">${score} / ${questions.length} correct</div>
+        <div class="score-sub">${pct>=80?'Excellent! You have strong command of all four modules.':pct>=60?'Good understanding — revisit any modules where you struggled.':'Review the tutorial again — focus on each module carefully.'}</div>
+        <button class="score-restart" onclick="restartQuiz()">↺ Retake Quiz</button>
+      </div>`;
+  } else loadQ();
+}
+function restartQuiz() {
+  qi = 0; score = 0;
+  document.getElementById('quiz-card').innerHTML = `
+    <div class="quiz-q-text" id="q-text"></div>
+    <div class="q-opts" id="q-opts"></div>
+    <div class="q-feedback" id="q-fb"></div>
+    <button class="q-next" id="q-next" onclick="nextQ()">Next Question →</button>`;
+  loadQ();
+}
+loadQ();
+</script>
+</body>
+</html>
