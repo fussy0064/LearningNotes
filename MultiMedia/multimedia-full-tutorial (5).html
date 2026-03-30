@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multimedia Technology — Full Interactive Tutorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1117; --surface:#161b27; --panel:#1e2535; --card:#242d3e;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
+  --text:#dce4f0; --muted:#7a8ba0; --faint:rgba(220,228,240,0.35);
+  --gold:#e8b94a; --gold-d:rgba(232,185,74,0.12); --gold-b:rgba(232,185,74,0.25);
+  --red:#e05252; --red-d:rgba(224,82,82,0.1); --red-b:rgba(224,82,82,0.25);
+  --green:#4caf82; --green-d:rgba(76,175,130,0.1); --green-b:rgba(76,175,130,0.25);
+  --blue:#4a90d9; --blue-d:rgba(74,144,217,0.1); --blue-b:rgba(74,144,217,0.25);
+  --teal:#38b2ac; --orange:#e07d42; --pink:#d970a0;
+  --sidebar:260px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px;height:100%;overflow:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;height:100%;overflow:hidden}
+
+/* ── LAYOUT ── */
+#app{display:flex;height:100vh;height:100dvh;width:100%;overflow:hidden}
+#sidebar{width:var(--sidebar);flex-shrink:0;background:var(--surface);display:flex;flex-direction:column;overflow-y:auto;border-right:1px solid var(--border)}
+#sidebar::-webkit-scrollbar{width:4px}
+#sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+#main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;position:relative}
+
+/* ── SIDEBAR ── */
+#s-head{padding:22px 20px 16px;border-bottom:1px solid var(--border)}
+#s-logo{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:#fff;line-height:1.3}
+#s-sub{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.s-group{padding:12px 10px 6px}
+.s-mod-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;padding:0 10px;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.s-mod-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.sb{width:100%;background:none;border:none;cursor:pointer;text-align:left;padding:7px 10px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);transition:all .15s;display:flex;align-items:center;gap:8px;line-height:1.3}
+.sb:hover{background:rgba(255,255,255,.04);color:var(--text)}
+.sb.active{background:rgba(255,255,255,.07);color:#fff}
+.sb .sn{font-family:'JetBrains Mono',monospace;font-size:9px;width:18px;text-align:right;flex-shrink:0;opacity:.4}
+.sb .sd{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* ── TOP BAR ── */
+#topbar{height:48px;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+#t-path{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px}
+#t-counter{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+#t-counter b{color:var(--text)}
+
+/* ── SLIDES AREA ── */
+#slides-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:32px 40px 56px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;min-height:0}
+#slides-area::-webkit-scrollbar{width:4px}
+#slides-area::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* ── BOTTOM NAV ── */
+#bot-nav{height:56px;flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:100}
+.nav-b{display:flex;align-items:center;gap:7px;background:none;border:1px solid var(--border2);padding:7px 18px;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--muted);transition:all .18s}
+.nav-b:hover:not(:disabled){border-color:var(--text);color:var(--text)}
+.nav-b:disabled{opacity:.25;cursor:not-allowed}
+.nav-b.prim{background:var(--gold);border-color:var(--gold);color:#000;font-weight:600}
+.nav-b.prim:hover:not(:disabled){opacity:.88}
+#pdots{display:flex;gap:5px;align-items:center}
+.pd{width:5px;height:5px;border-radius:50%;background:var(--border2);cursor:pointer;transition:all .2s}
+.pd.active{width:18px;border-radius:3px;background:var(--gold)}
+
+/* ── SLIDE ── */
+.slide{display:none;animation:sIn .3s ease}
+.slide.active{display:block}
+@keyframes sIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── COVER ── */
+.cover{min-height:68vh;background:var(--surface);border-radius:10px;padding:56px 60px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;border:1px solid var(--border)}
+.cover::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 20% 50%,rgba(232,185,74,.06) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 80% 30%,rgba(74,144,217,.05) 0%,transparent 60%)}
+.cover-deco{position:absolute;right:-20px;top:50%;transform:translateY(-50%);font-family:'Libre Baskerville',serif;font-size:200px;font-weight:700;color:rgba(255,255,255,.02);line-height:1;pointer-events:none;user-select:none}
+.c-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;opacity:0;animation:sIn .7s .3s forwards}
+.c-title{font-family:'Libre Baskerville',serif;font-size:clamp(36px,5vw,68px);font-weight:700;line-height:1.05;color:#fff;margin-bottom:18px;opacity:0;animation:sIn .8s .5s forwards}
+.c-title em{color:var(--gold);font-style:italic}
+.c-sub{font-size:15px;color:var(--muted);max-width:520px;line-height:1.75;margin-bottom:36px;opacity:0;animation:sIn .8s .7s forwards}
+.c-chips{display:flex;gap:8px;flex-wrap:wrap;opacity:0;animation:sIn .8s .9s forwards}
+.chip{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;padding:6px 12px;border:1px solid var(--border2);border-radius:3px;color:var(--muted)}
+
+/* ── SECTION TITLE SLIDE ── */
+.sec-slide{min-height:50vh;border-radius:10px;padding:48px 56px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;border:1px solid var(--border)}
+.sec-bg-num{position:absolute;right:40px;top:30px;font-family:'Libre Baskerville',serif;font-size:140px;font-weight:700;color:rgba(255,255,255,.04);line-height:1;pointer-events:none;user-select:none}
+.sec-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:12px}
+.sec-slide h2{font-family:'Libre Baskerville',serif;font-size:clamp(28px,4vw,52px);font-weight:700;color:#fff;line-height:1.1;margin-bottom:14px}
+.sec-slide p{font-size:14px;color:rgba(255,255,255,.5);max-width:580px;line-height:1.7}
+
+/* ── CONTENT SLIDE ── */
+.cs{padding:2px 0 16px}
+.stag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;display:inline-block;padding:4px 10px;border-radius:3px;margin-bottom:14px}
+.sh{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;margin-bottom:14px;line-height:1.2}
+.slead{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.75;max-width:760px}
+
+/* ── CARDS ── */
+.cards{display:grid;gap:14px;margin:18px 0}
+.c2{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:repeat(3,1fr)}
+.c4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.c4,.c3{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.c2,.c3,.c4{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:20px;transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.25)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.card:hover::before{transform:scaleX(1)}
+.ci{font-size:24px;margin-bottom:10px}
+.ct{font-weight:700;font-size:14px;margin-bottom:7px}
+.cx{font-size:12.5px;color:var(--muted);line-height:1.7}
+
+/* ── PROS CONS ── */
+.pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+.pc-box{border-radius:6px;padding:20px;border:1px solid}
+.pro-box{background:var(--green-d);border-color:var(--green-b)}
+.con-box{background:var(--red-d);border-color:var(--red-b)}
+.pc-head{font-weight:700;font-size:13px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.pro-box .pc-head{color:var(--green)}
+.con-box .pc-head{color:var(--red)}
+.pcl{list-style:none;display:flex;flex-direction:column;gap:7px}
+.pcl li{font-size:12.5px;color:var(--muted);padding-left:18px;position:relative;line-height:1.6}
+.pcl li::before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%}
+.pro-box .pcl li::before{background:var(--green)}
+.con-box .pcl li::before{background:var(--red)}
+
+/* ── TWO COL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media(max-width:800px){.two-col{grid-template-columns:1fr}}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin:16px 0}
+.tbl th{padding:10px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;border-bottom:2px solid;white-space:nowrap}
+.tbl td{padding:10px 16px;border-bottom:1px solid var(--border);color:var(--muted)}
+.tbl td:first-child{color:var(--text);font-weight:600}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.tbl tr:last-child td{border-bottom:none}
+
+/* ── CODE BLOCK ── */
+.code{background:#0a0d14;border:1px solid var(--border);border-radius:6px;padding:18px 22px;margin:14px 0;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;color:#c9d7e8;overflow-x:auto;position:relative}
+.code .cl{position:absolute;top:10px;right:14px;font-size:9px;letter-spacing:2px;opacity:.3;text-transform:uppercase}
+.kw{color:#e8a0a0} .str{color:#7ec6a0} .cm{color:#4a5568} .tag{color:#7ab8e8} .at{color:#e8d08a} .val{color:#c8a0e8} .fn{color:#e8c97a} .nu{color:#f0a070}
+
+/* ── LIVE CODE EDITOR ── */
+.editor-wrap{background:#0a0d14;border:1px solid var(--border);border-radius:6px;margin:0;overflow:hidden}
+.editor-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--panel)}
+.editor-tab{padding:7px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;color:var(--muted);border:none;background:none;transition:all .15s;border-right:1px solid var(--border)}
+.editor-tab.active{background:#0a0d14;color:var(--gold)}
+.editor-tab:last-child{border-right:none}
+.editor-static{display:block}
+.editor-live{display:none;flex-direction:column}
+.editor-textarea{width:100%;background:#0a0d14;border:none;outline:none;padding:18px 22px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;color:#c9d7e8;resize:vertical;min-height:260px;tab-size:2;-moz-tab-size:2}
+.editor-textarea:focus{background:#0b0e16}
+.editor-footer{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--panel);border-top:1px solid var(--border)}
+.run-btn{padding:6px 16px;background:var(--gold);border:none;border-radius:3px;color:#000;font-weight:700;font-size:11px;font-family:'JetBrains Mono',monospace;cursor:pointer;letter-spacing:1px;transition:opacity .2s}
+.run-btn:hover{opacity:.85}
+.reset-code-btn{padding:6px 14px;background:none;border:1px solid var(--border2);border-radius:3px;color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:all .15s}
+.reset-code-btn:hover{border-color:var(--text);color:var(--text)}
+.editor-status{font-family:'JetBrains Mono',monospace;font-size:10px;margin-left:auto;padding:4px 10px;border-radius:3px;opacity:0;transition:opacity .3s}
+.editor-status.ok{background:var(--green-d);color:var(--green);border:1px solid var(--green-b);opacity:1}
+.editor-status.err{background:var(--red-d);color:var(--red);border:1px solid var(--red-b);opacity:1}
+
+/* ── CALLOUT ── */
+.callout{border-radius:6px;padding:16px 20px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;border:1px solid}
+.co-icon{font-size:18px;flex-shrink:0;padding-top:1px}
+.co-body .co-title{font-weight:700;font-size:13px;margin-bottom:4px}
+.co-body p{font-size:13px;line-height:1.7;color:var(--muted)}
+.co-body p strong{color:var(--text)}
+
+/* ── ICON LIST ── */
+.il{list-style:none;display:flex;flex-direction:column;gap:9px;margin:14px 0}
+.il li{display:flex;gap:10px;align-items:flex-start;font-size:13px}
+.il li .ico{font-size:16px;flex-shrink:0;width:22px;text-align:center;padding-top:1px}
+.il li strong{display:block;font-weight:600;color:var(--text);font-size:13px}
+.il li span{color:var(--muted);font-size:12px}
+
+/* ── PLATFORM CARDS ── */
+.platform-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:22px;transition:all .2s}
+.platform-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.plat-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.plat-icon{font-size:28px}
+.plat-name{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:#fff}
+.plat-type{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.plat-desc{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:12px}
+.feat-chips{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 8px;border-radius:2px;letter-spacing:1px}
+
+/* ── COMPARISON BAR ── */
+.cmp{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:16px 0}
+.cmp-row{display:flex;border-bottom:1px solid var(--border)}
+.cmp-row:last-child{border-bottom:none}
+.cmp-lbl{padding:12px 16px;font-size:12.5px;font-weight:600;width:140px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);display:flex;align-items:center}
+.cmp-a,.cmp-b{flex:1;padding:12px 16px;font-size:12px;color:var(--muted);display:flex;align-items:center;border-right:1px solid var(--border)}
+.cmp-b{border-right:none}
+.cmp-head{background:var(--surface);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase}
+
+/* ── HTTP VISUAL ── */
+.http-flow{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:20px;margin:16px 0;flex-wrap:wrap}
+.hf-box{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:12px 16px;text-align:center;flex:1;min-width:100px}
+.hf-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.hf-val{font-size:13px;font-weight:600}
+.hf-arrow{font-size:18px;color:var(--muted);flex-shrink:0}
+
+/* ── LIVE DEMO FORM ── */
+.demo-wrap{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;margin:16px 0}
+.demo-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--panel);border:1px solid var(--border2);border-radius:4px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .2s}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--gold)}
+.form-group input.err,.form-group textarea.err{border-color:var(--red)}
+.form-group input.ok,.form-group textarea.ok{border-color:var(--green)}
+.err-msg{font-size:11.5px;color:var(--red);margin-top:5px;display:none}
+.ok-msg{font-size:11.5px;color:var(--green);margin-top:5px;display:none}
+.char-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:5px;text-align:right}
+.demo-btn{padding:10px 24px;background:var(--gold);border:none;border-radius:4px;color:#000;font-weight:700;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .2s}
+.demo-btn:hover{opacity:.85}
+.pattern-hint{font-size:11px;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace}
+
+/* ── QUIZ ── */
+.q-text{font-family:'Libre Baskerville',serif;font-size:18px;margin-bottom:20px;line-height:1.55;color:#fff}
+.q-opts{display:flex;flex-direction:column;gap:9px}
+.q-opt{padding:13px 18px;background:var(--card);border:1px solid var(--border);border-radius:5px;cursor:pointer;font-size:13px;color:var(--muted);text-align:left;transition:all .18s;display:flex;align-items:center;gap:10px;font-family:'DM Sans',sans-serif}
+.q-opt:hover:not(:disabled){border-color:var(--border2);color:var(--text)}
+.q-opt.correct{background:var(--green-d);border-color:var(--green-b);color:var(--green)}
+.q-opt.wrong{background:var(--red-d);border-color:var(--red-b);color:var(--red)}
+.q-lt{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;border:1px solid var(--border);color:var(--muted)}
+.q-fb{margin-top:14px;padding:13px 16px;border-radius:5px;font-size:13px;line-height:1.7;display:none;border:1px solid}
+.q-fb.show-ok{display:block;background:var(--green-d);border-color:var(--green-b);color:var(--green)}
+.q-fb.show-no{display:block;background:var(--red-d);border-color:var(--red-b);color:var(--red)}
+.q-next{margin-top:14px;padding:9px 22px;border:none;border-radius:4px;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;display:none;background:var(--gold);color:#000}
+.q-next.show{display:inline-block}
+.q-meta{margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+.score-scr{text-align:center;padding:40px 20px}
+.score-big{font-family:'Libre Baskerville',serif;font-size:88px;font-weight:700;line-height:1}
+.score-lbl{font-size:17px;font-weight:600;margin:10px 0 6px}
+.score-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.score-restart{padding:11px 28px;background:var(--gold);border:none;border-radius:5px;cursor:pointer;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;color:#000}
+
+/* ── PILL ── */
+.pill{display:inline-block;padding:2px 8px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:10px}
+
+/* ── STREAMING VISUAL ── */
+.stream-vis{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:20px;margin:14px 0}
+.stream-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.stream-row:last-child{margin-bottom:0}
+.sv-label{font-family:'JetBrains Mono',monospace;font-size:10px;width:100px;flex-shrink:0;color:var(--muted)}
+.sv-bar-wrap{flex:1;background:var(--panel);border-radius:3px;height:12px;overflow:hidden;position:relative;min-width:80px}
+.sv-bar{height:100%;border-radius:3px;animation:barAnim 3s ease-in-out infinite}
+@keyframes barAnim{0%{width:20%}50%{width:85%}100%{width:60%}}
+.sv-val{font-family:'JetBrains Mono',monospace;font-size:10px;width:50px;flex-shrink:0;text-align:right}
+
+/* BUFFER BLOCKS */
+.buf-demo{display:flex;gap:4px;margin:14px 0;flex-wrap:wrap}
+.buf-b{width:36px;height:20px;border-radius:3px;transition:background .3s}
+.buf-loaded{background:var(--gold)}
+.buf-buffering{background:var(--orange);animation:blink .8s ease-in-out infinite}
+.buf-empty{background:var(--panel);border:1px solid var(--border)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* UTILITIES */
+h3{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;margin:22px 0 12px;color:#fff}
+h4{font-size:13px;font-weight:700;margin:14px 0 8px;color:var(--text)}
+p{font-size:13.5px;color:var(--muted);line-height:1.75;margin-bottom:12px}
+strong{color:var(--text);font-weight:600}
+.mt{margin-top:22px}
+.mb{margin-bottom:22px}
+.sep{height:1px;background:var(--border);margin:20px 0}
+
+/* MODULE COLORS */
+.m1-color{color:#e88a4a}.m1-bg{background:rgba(232,138,74,.1)}.m1-bd{border-color:rgba(232,138,74,.25)}
+.m2-color{color:#4a90d9}.m2-bg{background:rgba(74,144,217,.1)}.m2-bd{border-color:rgba(74,144,217,.25)}
+.m3-color{color:#38b2ac}.m3-bg{background:rgba(56,178,172,.1)}.m3-bd{border-color:rgba(56,178,172,.25)}
+.m4-color{color:#d970a0}.m4-bg{background:rgba(217,112,160,.1)}.m4-bd{border-color:rgba(217,112,160,.25)}
+.m5-color{color:#4caf82}.m5-bg{background:rgba(76,175,130,.1)}.m5-bd{border-color:rgba(76,175,130,.25)}
+.m6-color{color:var(--gold)}.m6-bg{background:var(--gold-d)}.m6-bd{border-color:var(--gold-b)}
+
+@media(max-width:700px){
+  /* ── LAYOUT ── */
+  html,body{height:100%;height:100dvh}
+  #app{height:100%;height:100dvh}
+  #sidebar{display:none}
+  #main{height:100%;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+  #topbar{padding:0 14px;height:44px;flex-shrink:0}
+  #slides-area{
+    flex:1;
+    overflow-y:scroll;
+    -webkit-overflow-scrolling:touch;
+    overflow-x:hidden;
+    padding:16px 14px 24px;
+    min-height:0;
+  }
+  #bot-nav{
+    flex-shrink:0;
+    height:56px;
+    padding:0 10px;
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+
+  /* ── NAV BUTTONS ── */
+  #t-path{font-size:9px;max-width:55vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #t-counter{font-size:9px}
+  .nav-b{
+    padding:0 18px;
+    font-size:14px;
+    height:42px;
+    min-width:88px;
+    border-radius:6px;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+  }
+  #pdots{gap:3px}
+  .pd{width:6px;height:6px}
+  .pd.active{width:20px;border-radius:3px}
+
+  /* ── COVER SLIDE ── */
+  .cover{min-height:auto;padding:28px 18px 32px}
+  .c-title{font-size:clamp(26px,8vw,40px)}
+  .c-sub{font-size:13px}
+  .cover-deco{display:none}
+  .c-chips{gap:6px}
+
+  /* ── SECTION SLIDE ── */
+  .sec-slide{min-height:auto;padding:28px 18px}
+  .sec-slide h2{font-size:clamp(22px,6vw,34px)}
+  .sec-bg-num{display:none}
+
+  /* ── CONTENT ── */
+  .cs{padding:2px 0 8px}
+  .sh{font-size:20px}
+  .slead{font-size:13px;margin-bottom:16px}
+
+  /* ── ALL MULTI-COL → SINGLE COL ── */
+  .two-col,.c2,.c3,.c4,.pc-grid{grid-template-columns:1fr !important;gap:12px}
+
+  /* ── CARDS ── */
+  .card{padding:14px}
+  .cards{gap:10px}
+
+  /* ── CODE / EDITOR ── */
+  .code{font-size:11px;padding:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;word-break:normal}
+  .editor-wrap{font-size:11px}
+  .editor-textarea{font-size:11px;min-height:200px;padding:12px}
+  .editor-footer{flex-wrap:wrap;gap:8px}
+  .run-btn,.reset-code-btn{min-height:40px;padding:8px 18px;touch-action:manipulation}
+  .editor-status{width:100%;text-align:center}
+
+  /* ── TABLES ── */
+  .tbl-wrap,.tbl{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap}
+
+  /* ── COMPARISON BARS ── */
+  .cmp{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .cmp-row{min-width:480px}
+
+  /* ── HTTP FLOW ── */
+  .http-flow{flex-direction:column;gap:6px}
+  .hf-arrow{transform:rotate(90deg)}
+
+  /* ── DEMO FORMS ── */
+  .demo-wrap{padding:14px}
+  .demo-btn{display:block;width:100%;margin-left:0 !important;margin-top:8px}
+
+  /* ── PLATFORM CARDS ── */
+  .platform-card{padding:14px}
+
+  /* ── QUIZ ── */
+  .q-text{font-size:15px}
+  .q-opt{padding:11px 14px;font-size:13px}
+
+  /* ── CALLOUT ── */
+  .callout{flex-direction:column;gap:6px;padding:14px}
+
+  /* ── PROS/CONS ── */
+  .pc-box{padding:14px}
+
+  /* ── GENERAL ── */
+  h3{font-size:15px}
+  p{font-size:13px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div id="s-head">
+    <div id="s-logo">Multimedia<br>Technology</div>
+    <div id="s-sub">Full Interactive Tutorial</div>
+  </div>
+
+  <div class="s-group">
+    <div class="s-mod-label" style="color:rgba(255,255,255,.25);">Intro</div>
+    <button class="sb active" onclick="goTo(0)"><span class="sn">—</span><span class="sd" style="background:#fff;opacity:.3"></span>Cover</button>
+  </div>
+
+  <div class="s-group">
+    <div class="s-mod-label" style="color:#e88a4a;">01 · VR & AR</div>
+    <button class="sb" onclick="goTo(1)"><span class="sn">1</span><span class="sd m1-color" style="background:#e88a4a"></span>Introduction</button>
+    <button class="sb" onclick="goTo(2)"><span class="sn">2</span><span class="sd" style="background:#e88a4a"></span>VR: Features & Examples</button>
+    <button class="sb" onclick="goTo(3)"><span class="sn">3</span><span class="sd" style="background:#e88a4a"></span>VR: Pros & Cons</button>
+    <button class="sb" onclick="goTo(4)"><span class="sn">4</span><span class="sd" style="background:#e88a4a"></span>AR: Features & Examples</button>
+    <button class="sb" onclick="goTo(5)"><span class="sn">5</span><span class="sd" style="background:#e88a4a"></span>AR: Pros & Cons</button>
+  </div>
+
+  <div class="s-group">
+    <div class="s-mod-label" style="color:#4a90d9;">02 · Platforms</div>
+    <button class="sb" onclick="goTo(6)"><span class="sn">6</span><span class="sd" style="background:#4a90d9"></span>Online vs Offline</button>
+    <button class="sb" onclick="goTo(7)"><span class="sn">7</span><span class="sd" style="background:#4a90d9"></span>Netflix & Amazon</button>
+    <button class="sb" onclick="goTo(8)"><span class="sn">8</span><span class="sd" style="background:#4a90d9"></span>YouTube & TikTok</button>
+    <button class="sb" onclick="goTo(9)"><span class="sn">9</span><span class="sd" style="background:#4a90d9"></span>Twitch & Comparison</button>
+  </div>
+
+  <div class="s-group">
+    <div class="s-mod-label" style="color:#38b2ac;">03 · Streaming</div>
+    <button class="sb" onclick="goTo(10)"><span class="sn">10</span><span class="sd" style="background:#38b2ac"></span>Live Streaming</button>
+    <button class="sb" onclick="goTo(11)"><span class="sn">11</span><span class="sd" style="background:#38b2ac"></span>Buffering</button>
+  </div>
+
+  <div class="s-group">
+    <div class="s-mod-label" style="color:#d970a0;">04 · CMS</div>
+    <button class="sb" onclick="goTo(12)"><span class="sn">12</span><span class="sd" style="background:#d970a0"></span>CMS Features & Examples</button>
+    <button class="sb" onclick="goTo(13)"><span class="sn">13</span><span class="sd" style="background:#d970a0"></span>CMS Pros & Cons</button>
+  </div>
+
+  <div class="s-group">
+    <div class="s-mod-label" style="color:#4caf82;">05 · Web Tech</div>
+    <button class="sb" onclick="goTo(14)"><span class="sn">14</span><span class="sd" style="background:#4caf82"></span>Browser & Website</button>
+    <button class="sb" onclick="goTo(15)"><span class="sn">15</span><span class="sd" style="background:#4caf82"></span>Web Hosting</button>
+    <button class="sb" onclick="goTo(16)"><span class="sn">16</span><span class="sd" style="background:#4caf82"></span>HTTP vs HTTPS</button>
+  </div>
+
+  <div class="s-group">
+    <div class="s-mod-label" style="color:var(--gold);">06 · Form Validation</div>
+    <button class="sb" onclick="goTo(17)"><span class="sn">17</span><span class="sd" style="background:var(--gold)"></span>Empty Field Validation</button>
+    <button class="sb" onclick="goTo(18)"><span class="sn">18</span><span class="sd" style="background:var(--gold)"></span>Pattern Validation</button>
+    <button class="sb" onclick="goTo(19)"><span class="sn">19</span><span class="sd" style="background:var(--gold)"></span>Character Count</button>
+  </div>
+
+  <div class="s-group">
+    <div class="s-mod-label" style="color:rgba(255,255,255,.25);">Assessment</div>
+    <button class="sb" onclick="goTo(20)"><span class="sn">★</span><span class="sd" style="background:var(--gold)"></span>Knowledge Quiz</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="topbar">
+    <div id="t-path">Multimedia Technology</div>
+    <div id="t-counter">Slide <b id="cur-n">1</b> / <b id="tot-n">21</b></div>
+  </div>
+
+  <div id="slides-area">
+
+<!-- ═══ SLIDE 0: COVER ═══ -->
+<div class="slide active" data-t="Cover">
+<div class="cover">
+  <div class="cover-deco">MM</div>
+  <div class="c-tag">CBE · Multimedia Technology · Complete Tutorial</div>
+  <div class="c-title">Multimedia<br>Technology —<br><em>Full Guide</em></div>
+  <div class="c-sub">Covering VR & AR, streaming platforms, live streaming, buffering, CMS, web technologies, HTTP/S, and form validation — with live code examples.</div>
+  <div class="c-chips">
+    <div class="chip" style="border-color:rgba(232,138,74,.3);color:#e88a4a">01 · VR & AR</div>
+    <div class="chip" style="border-color:rgba(74,144,217,.3);color:#4a90d9">02 · Platforms</div>
+    <div class="chip" style="border-color:rgba(56,178,172,.3);color:#38b2ac">03 · Streaming</div>
+    <div class="chip" style="border-color:rgba(217,112,160,.3);color:#d970a0">04 · CMS</div>
+    <div class="chip" style="border-color:rgba(76,175,130,.3);color:#4caf82">05 · Web Tech</div>
+    <div class="chip" style="border-color:var(--gold-b);color:var(--gold)">06 · Form Validation</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 1: VR/AR INTRO ═══ -->
+<div class="slide" data-t="VR & AR · Introduction">
+<div class="sec-slide" style="background:linear-gradient(135deg,#1a1208 0%,#0e1117 100%)">
+  <div class="sec-bg-num">01</div>
+  <div class="sec-tag">Module One</div>
+  <h2 style="color:#e88a4a">Virtual Reality<br>&amp; Augmented Reality</h2>
+  <p>Immersive technologies that transform how multimedia content is created, experienced, and interacted with — from fully synthetic worlds to digital overlays on reality.</p>
+</div>
+</div>
+
+<!-- ═══ SLIDE 2: VR FEATURES ═══ -->
+<div class="slide" data-t="VR · Features & Dev Examples">
+<div class="cs">
+  <span class="stag m1-bg m1-color m1-bd">Module 01 · Virtual Reality</span>
+  <div class="sh m1-color">Virtual Reality — Features &amp; Development Examples</div>
+  <p class="slead">VR creates a <strong>fully synthetic, immersive digital environment</strong> that replaces the real world. The user wears a headset that renders a 360° scene, tracking every head movement in real time.</p>
+  <div class="two-col">
+    <div>
+      <h3>Core Features</h3>
+      <ul class="il">
+        <li><div class="ico">🥽</div><div><strong>360° Stereoscopic Display</strong><span>Two offset images (one per eye) create realistic 3D depth perception at 90+ FPS to prevent motion sickness.</span></div></li>
+        <li><div class="ico">📡</div><div><strong>6-DoF Head Tracking</strong><span>6 Degrees of Freedom — tracks rotation (pitch, yaw, roll) AND position (left/right, up/down, forward/back) simultaneously.</span></div></li>
+        <li><div class="ico">🎵</div><div><strong>Spatial/Binaural Audio</strong><span>Sound appears to come from specific 3D positions, reinforcing the sense of physical presence.</span></div></li>
+        <li><div class="ico">🤲</div><div><strong>Hand/Controller Tracking</strong><span>Users interact with virtual objects naturally via motion controllers or optical hand-tracking cameras.</span></div></li>
+        <li><div class="ico">⚡</div><div><strong>Haptic Feedback</strong><span>Vibration and resistance in controllers simulate the sensation of touching or holding virtual objects.</span></div></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Development Examples</h3>
+      <div class="cards c2" style="margin:0">
+        <div class="card" style="border-color:rgba(232,138,74,.2)"><div class="ci">🎮</div><div class="ct">Half-Life: Alyx</div><div class="cx">Valve's groundbreaking VR game; full room-scale physics interaction, spatial audio, advanced controller haptics.</div></div>
+        <div class="card" style="border-color:rgba(232,138,74,.2)"><div class="ci">🏥</div><div class="ct">Osso VR</div><div class="cx">Surgical training platform used by hospitals worldwide. Surgeons practice procedures in risk-free virtual operating rooms.</div></div>
+        <div class="card" style="border-color:rgba(232,138,74,.2)"><div class="ci">🏗️</div><div class="ct">IrisVR Prospect</div><div class="cx">Architects walk clients through 3D building models before construction. Identifies design issues at the planning stage.</div></div>
+        <div class="card" style="border-color:rgba(232,138,74,.2)"><div class="ci">🎓</div><div class="ct">Labster</div><div class="cx">Virtual science laboratory for students. Experiments in chemistry, biology, and physics — impossible in real classrooms.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 3: VR PROS CONS ═══ -->
+<div class="slide" data-t="VR · Pros & Cons">
+<div class="cs">
+  <span class="stag m1-bg m1-color m1-bd">Module 01 · VR</span>
+  <div class="sh m1-color">VR — Pros &amp; Cons</div>
+  <div class="pc-grid">
+    <div class="pc-box pro-box">
+      <div class="pc-head">✅ Advantages</div>
+      <ul class="pcl">
+        <li><strong>Total Immersion:</strong> Users feel physically present inside content — unmatched engagement.</li>
+        <li><strong>Safe Training:</strong> Practice dangerous scenarios (surgery, flight, military) at zero real-world risk or cost.</li>
+        <li><strong>Enhanced Learning:</strong> Studies show 3D spatial learning improves retention by up to 75% over 2D.</li>
+        <li><strong>Emotional Impact:</strong> VR experiences generate genuine emotional responses — used in empathy training and therapy.</li>
+        <li><strong>Remote Collaboration:</strong> Teams meet in virtual spaces regardless of physical location.</li>
+        <li><strong>Scalable Simulation:</strong> One VR setup can replicate thousands of different scenarios cheaply.</li>
+      </ul>
+    </div>
+    <div class="pc-box con-box">
+      <div class="pc-head">❌ Disadvantages</div>
+      <ul class="pcl">
+        <li><strong>High Cost:</strong> Quality headsets (Meta Quest Pro, HTC Vive) cost $500–$3,500 each.</li>
+        <li><strong>Motion Sickness:</strong> Latency above 20ms causes nausea in many users — especially beginners.</li>
+        <li><strong>Physical Isolation:</strong> Completely cuts user off from real environment — safety and social concern.</li>
+        <li><strong>Limited Session Time:</strong> Eye strain and discomfort limit comfortable use to 20–30 min sessions.</li>
+        <li><strong>Content Gap:</strong> High-quality VR content is expensive and time-consuming to produce.</li>
+        <li><strong>Hardware Requirements:</strong> High-end PC VR needs powerful GPU (RTX 3070+) for smooth rendering.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout" style="background:rgba(232,138,74,.07);border-color:rgba(232,138,74,.2)">
+    <div class="co-icon">💡</div>
+    <div class="co-body"><div class="co-title" style="color:#e88a4a">VR Development Tools</div><p><strong>Unity</strong> and <strong>Unreal Engine</strong> are the dominant VR development platforms. SDKs include <strong>OpenXR</strong> (cross-platform standard), <strong>Meta SDK</strong> (Quest), <strong>SteamVR SDK</strong>, and <strong>WebXR API</strong> for browser-based VR.</p></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 4: AR FEATURES ═══ -->
+<div class="slide" data-t="AR · Features & Dev Examples">
+<div class="cs">
+  <span class="stag m1-bg m1-color m1-bd">Module 01 · Augmented Reality</span>
+  <div class="sh m1-color">Augmented Reality — Features &amp; Development Examples</div>
+  <p class="slead">AR <strong>overlays digital content onto the real world</strong>. Users keep full awareness of their surroundings while digital objects, data, or animations are composited on top through a phone, glasses, or headset.</p>
+  <div class="two-col">
+    <div>
+      <h3>Core Features</h3>
+      <ul class="il">
+        <li><div class="ico">📷</div><div><strong>Computer Vision / SLAM</strong><span>Simultaneous Localisation and Mapping — device understands 3D space, detects planes, walls, and surfaces in real time.</span></div></li>
+        <li><div class="ico">🎯</div><div><strong>World Anchoring</strong><span>Digital objects are pinned to real-world positions — they stay fixed when the camera moves.</span></div></li>
+        <li><div class="ico">💡</div><div><strong>Lighting Estimation</strong><span>AR engines sample real-world light conditions and apply matching lighting to virtual objects for realistic blending.</span></div></li>
+        <li><div class="ico">🎭</div><div><strong>Face / Object Tracking</strong><span>Detect and track faces (Snapchat filters), hands (gesture control), or specific marker images.</span></div></li>
+        <li><div class="ico">🌐</div><div><strong>WebAR</strong><span>AR delivered through a web browser via WebXR API — no app installation required.</span></div></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Development Examples</h3>
+      <div class="cards c2" style="margin:0">
+        <div class="card" style="border-color:rgba(232,138,74,.2)"><div class="ci">🛋️</div><div class="ct">IKEA Place App</div><div class="cx">Place true-to-scale 3D furniture models anywhere in your room before purchasing. Built on ARKit with LiDAR scanning.</div></div>
+        <div class="card" style="border-color:rgba(232,138,74,.2)"><div class="ci">🎮</div><div class="ct">Pokémon GO</div><div class="cx">350M+ downloads. AR overlays virtual Pokémon onto real streets using GPS and camera. Redefined mobile gaming.</div></div>
+        <div class="card" style="border-color:rgba(232,138,74,.2)"><div class="ci">🏥</div><div class="ct">AccuVein</div><div class="cx">Projects real-time venous map onto patient's skin to help nurses locate veins for injections — 45% fewer failures.</div></div>
+        <div class="card" style="border-color:rgba(232,138,74,.2)"><div class="ci">👻</div><div class="ct">Snapchat Lenses</div><div class="cx">Real-time face-tracking AR filters using ML-based facial landmark detection. 6 billion Lens plays per day.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 5: AR PROS CONS ═══ -->
+<div class="slide" data-t="AR · Pros & Cons">
+<div class="cs">
+  <span class="stag m1-bg m1-color m1-bd">Module 01 · AR</span>
+  <div class="sh m1-color">AR — Pros &amp; Cons</div>
+  <div class="pc-grid">
+    <div class="pc-box pro-box">
+      <div class="pc-head">✅ Advantages</div>
+      <ul class="pcl">
+        <li><strong>No Isolation:</strong> Users remain aware of real environment — much safer for mobile use and work settings.</li>
+        <li><strong>Universal Reach:</strong> Billions of AR-capable smartphones via ARKit (iOS) and ARCore (Android) — no special hardware.</li>
+        <li><strong>Enhanced Decision Making:</strong> Overlay specifications, warnings, or instructions directly onto real objects (factory, medicine).</li>
+        <li><strong>Retail Impact:</strong> Virtual try-on increases purchase confidence; IKEA saw 35% fewer returns with AR placement.</li>
+        <li><strong>Real-Time Data:</strong> Navigate, measure, identify objects — all overlaid instantly onto what you see.</li>
+        <li><strong>Low Barrier to Entry:</strong> WebAR runs in browsers; filter-based AR requires no developer setup.</li>
+      </ul>
+    </div>
+    <div class="pc-box con-box">
+      <div class="pc-head">❌ Disadvantages</div>
+      <ul class="pcl">
+        <li><strong>Limited Field of View:</strong> Phone screens show AR in a small frame — smart glasses are expensive and nascent.</li>
+        <li><strong>Battery Drain:</strong> Real-time CV, rendering, and GPS heavily drain mobile batteries.</li>
+        <li><strong>Privacy Concerns:</strong> Always-on cameras and location tracking raise serious data privacy issues.</li>
+        <li><strong>Occlusion Problems:</strong> Virtual objects pass through real ones — complex to fix, requires depth sensors.</li>
+        <li><strong>Sunlight Visibility:</strong> Screen-based AR is nearly unusable in bright sunlight.</li>
+        <li><strong>Dependent on Tracking:</strong> Loses object placement when camera loses the surface or marker.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout" style="background:rgba(232,138,74,.07);border-color:rgba(232,138,74,.2)">
+    <div class="co-icon">🛠️</div>
+    <div class="co-body"><div class="co-title" style="color:#e88a4a">AR Development Platforms</div><p><strong>ARKit</strong> (Apple iOS), <strong>ARCore</strong> (Google Android), <strong>Vuforia</strong> (marker-based), <strong>8th Wall</strong> (WebAR), <strong>Snap Lens Studio</strong> (social AR), <strong>Microsoft Mixed Reality Toolkit</strong> (HoloLens)</p></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 6: PLATFORMS OVERVIEW ═══ -->
+<div class="slide" data-t="Platforms · Online vs Offline">
+<div class="sec-slide" style="background:linear-gradient(135deg,#080e1a 0%,#0e1117 100%)">
+  <div class="sec-bg-num">02</div>
+  <div class="sec-tag">Module Two</div>
+  <h2 style="color:#4a90d9">Online &amp; Offline<br>Multimedia Platforms</h2>
+  <p>From on-demand streaming giants to live broadcasting and user-generated content — the landscape of multimedia delivery platforms and their technical underpinnings.</p>
+</div>
+<div class="cs mt">
+  <div class="cmp">
+    <div class="cmp-row cmp-head"><div class="cmp-lbl" style="background:var(--panel)"></div><div class="cmp-a" style="color:#4a90d9">Online Platforms</div><div class="cmp-b" style="color:#4caf82">Offline Platforms</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Connectivity</div><div class="cmp-a">Requires internet; streams live</div><div class="cmp-b">Downloaded; works without internet</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Content Update</div><div class="cmp-a">Instant — always current library</div><div class="cmp-b">Manual sync required</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Quality Control</div><div class="cmp-a">Adaptive bitrate (fluctuates)</div><div class="cmp-b">Fixed — full quality always</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Storage</div><div class="cmp-a">Minimal device storage needed</div><div class="cmp-b">Significant local storage required</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Examples</div><div class="cmp-a">Netflix streaming, YouTube live</div><div class="cmp-b">Netflix Downloads, Spotify Offline</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 7: NETFLIX & AMAZON ═══ -->
+<div class="slide" data-t="Platforms · Netflix & Amazon">
+<div class="cs">
+  <span class="stag m2-bg m2-color m2-bd">Module 02 · Streaming Platforms</span>
+  <div class="sh m2-color">Netflix &amp; Amazon Prime Video</div>
+  <div class="cards c2">
+    <div class="platform-card" style="border-color:rgba(229,9,20,.3)">
+      <div class="plat-head"><div class="plat-icon">🎬</div><div><div class="plat-name">Netflix</div><div class="plat-type">SVoD · Est. 1997</div></div></div>
+      <div class="plat-desc">World's largest paid streaming service — 260M+ subscribers across 190 countries. Pioneered subscription video-on-demand and binge-watching culture.</div>
+      <h4>Key Features</h4>
+      <ul class="il" style="margin:0 0 12px">
+        <li><div class="ico">📺</div><div><strong>Adaptive Bitrate Streaming</strong><span>Netflix VMAF algorithm adjusts quality in real time from 235 kbps (mobile) to 25 Mbps (4K Ultra HD) based on network speed.</span></div></li>
+        <li><div class="ico">🤖</div><div><strong>AI Recommendation Engine</strong><span>Machine learning analyses 80%+ of watch activity; personalised rows, thumbnails, and trailers per user.</span></div></li>
+        <li><div class="ico">📥</div><div><strong>Smart Downloads</strong><span>Automatically downloads next episode while on Wi-Fi. Offline viewing available on mobile.</span></div></li>
+        <li><div class="ico">🎭</div><div><strong>Original Content</strong><span>$17B/year production budget — Stranger Things, The Crown, Squid Game. Owns IP and global rights.</span></div></li>
+      </ul>
+      <div class="feat-chips">
+        <span class="fchip" style="background:rgba(229,9,20,.12);color:#e50914">4K HDR</span>
+        <span class="fchip" style="background:rgba(229,9,20,.12);color:#e50914">Dolby Atmos</span>
+        <span class="fchip" style="background:rgba(229,9,20,.12);color:#e50914">Offline</span>
+        <span class="fchip" style="background:rgba(229,9,20,.12);color:#e50914">5 Profiles</span>
+      </div>
+    </div>
+    <div class="platform-card" style="border-color:rgba(0,168,225,.3)">
+      <div class="plat-head"><div class="plat-icon">📦</div><div><div class="plat-name">Amazon Prime Video</div><div class="plat-type">SVoD + TVoD · Est. 2006</div></div></div>
+      <div class="plat-desc">Amazon's streaming platform bundled with Prime membership. 200M+ subscribers. Integrates shopping, IMDb X-Ray, and third-party channel subscriptions.</div>
+      <h4>Key Features</h4>
+      <ul class="il" style="margin:0 0 12px">
+        <li><div class="ico">🔎</div><div><strong>X-Ray (IMDb Integration)</strong><span>Pause any scene to see cast names, character info, soundtrack details, and trivia — powered by IMDb database.</span></div></li>
+        <li><div class="ico">📺</div><div><strong>Live Sports</strong><span>Thursday Night Football (NFL), Premier League rights in some markets, tennis. Live streaming with DVR-style rewind.</span></div></li>
+        <li><div class="ico">🛒</div><div><strong>Add-On Channels</strong><span>Subscribe to HBO, Paramount+, and 100+ channels within one interface. Centralised billing and streaming.</span></div></li>
+        <li><div class="ico">🌍</div><div><strong>Regional Content</strong><span>Vast international library with local-language originals (Mirzapur, LOL India) for regional markets.</span></div></li>
+      </ul>
+      <div class="feat-chips">
+        <span class="fchip" style="background:rgba(0,168,225,.12);color:#00a8e1">X-Ray</span>
+        <span class="fchip" style="background:rgba(0,168,225,.12);color:#00a8e1">Live Sports</span>
+        <span class="fchip" style="background:rgba(0,168,225,.12);color:#00a8e1">TVoD Rentals</span>
+      </div>
+    </div>
+  </div>
+  <div class="pc-grid mt">
+    <div class="pc-box pro-box"><div class="pc-head">✅ Pros (Both)</div><ul class="pcl"><li>Vast content library updated constantly</li><li>High-quality adaptive streaming on any device</li><li>Personalised discovery via AI recommendations</li><li>Original exclusive content unavailable elsewhere</li><li>Offline mode for travel and poor connectivity</li></ul></div>
+    <div class="pc-box con-box"><div class="pc-head">❌ Cons (Both)</div><ul class="pcl"><li>Monthly subscription cost — rising annually</li><li>Content removed when licensing deals expire</li><li>Requires stable high-speed internet for 4K</li><li>Password sharing crackdowns reduce access</li><li>Algorithm creates "filter bubble" — limits discovery</li></ul></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 8: YOUTUBE & TIKTOK ═══ -->
+<div class="slide" data-t="Platforms · YouTube & TikTok">
+<div class="cs">
+  <span class="stag m2-bg m2-color m2-bd">Module 02 · UGC Platforms</span>
+  <div class="sh m2-color">YouTube &amp; TikTok</div>
+  <div class="cards c2">
+    <div class="platform-card" style="border-color:rgba(255,0,0,.25)">
+      <div class="plat-head"><div class="plat-icon">▶️</div><div><div class="plat-name">YouTube</div><div class="plat-type">UGC Video · Est. 2005</div></div></div>
+      <div class="plat-desc">2.7 billion monthly active users. 500 hours of video uploaded every minute. World's #2 search engine and largest video platform. Free ad-supported with premium tier.</div>
+      <h4>Key Features</h4>
+      <ul class="il" style="margin:0 0 12px">
+        <li><div class="ico">📡</div><div><strong>YouTube Live</strong><span>Real-time streaming with live chat, Super Chats (paid messages), and up to 4K60 live quality.</span></div></li>
+        <li><div class="ico">🩳</div><div><strong>YouTube Shorts</strong><span>Vertical short-form video (up to 60 seconds) competing directly with TikTok. 70B Shorts views/day.</span></div></li>
+        <li><div class="ico">💰</div><div><strong>Creator Monetisation</strong><span>YPP: ads, memberships, Super Thanks, merchandise shelf, and YouTube Shopping integration.</span></div></li>
+        <li><div class="ico">📊</div><div><strong>YouTube Studio Analytics</strong><span>Deep analytics: CTR, watch time, audience retention curves, traffic sources, revenue breakdown.</span></div></li>
+      </ul>
+    </div>
+    <div class="platform-card" style="border-color:rgba(105,201,208,.25)">
+      <div class="plat-head"><div class="plat-icon">🎵</div><div><div class="plat-name">TikTok</div><div class="plat-type">Short-form Video · Est. 2016</div></div></div>
+      <div class="plat-desc">1.5B+ monthly active users. The fastest-growing social media platform in history. Pioneered the algorithmic For You Page (FYP) that democratised content discovery.</div>
+      <h4>Key Features</h4>
+      <ul class="il" style="margin:0 0 12px">
+        <li><div class="ico">🔮</div><div><strong>For You Page (FYP) Algorithm</strong><span>ML-driven feed personalised from first use, not follower-based. New creators can go viral with 0 followers.</span></div></li>
+        <li><div class="ico">🎬</div><div><strong>In-App Creation Suite</strong><span>Multi-clip editing, green screen, text-to-speech, speed control, stitch, duet — all without external tools.</span></div></li>
+        <li><div class="ico">🛍️</div><div><strong>TikTok Shop</strong><span>In-video product tagging and live shopping — creators sell products during streams without leaving the app.</span></div></li>
+        <li><div class="ico">🎙️</div><div><strong>TikTok Live</strong><span>Live streaming with virtual gifts (coins), Q&A, co-hosting, and multi-stream with guests.</span></div></li>
+      </ul>
+    </div>
+  </div>
+  <div class="pc-grid mt">
+    <div class="pc-box pro-box"><div class="pc-head">✅ Pros</div><ul class="pcl"><li>Free access for viewers — massive audience reach</li><li>Powerful creator monetisation tools</li><li>Algorithmic discovery enables new creators to grow</li><li>Rich analytics to optimise content strategy</li><li>TikTok: fastest route to viral reach of any platform</li></ul></div>
+    <div class="pc-box con-box"><div class="pc-head">❌ Cons</div><ul class="pcl"><li>Ad-supported model interrupts viewing experience</li><li>TikTok: data privacy concerns (ByteDance/China)</li><li>YouTube: ad revenue fluctuates; complex monetisation rules</li><li>Algorithm changes can wipe out creator reach overnight</li><li>Copyright ID systems frequently incorrectly flag content</li></ul></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 9: TWITCH ═══ -->
+<div class="slide" data-t="Platforms · Twitch">
+<div class="cs">
+  <span class="stag m2-bg m2-color m2-bd">Module 02 · Live Platforms</span>
+  <div class="sh m2-color">Twitch — Live Streaming Platform</div>
+  <div class="cards c2 mb">
+    <div class="platform-card" style="border-color:rgba(145,70,255,.3)">
+      <div class="plat-head"><div class="plat-icon">🎮</div><div><div class="plat-name">Twitch</div><div class="plat-type">Live Streaming · Est. 2011</div></div></div>
+      <div class="plat-desc">Amazon-owned live streaming platform. 35M+ daily active users. Originally gaming-focused, now covers music, art, cooking, and "IRL" content. Real-time interaction is the core differentiator.</div>
+      <h4>Key Features</h4>
+      <ul class="il" style="margin:0 0 12px">
+        <li><div class="ico">💬</div><div><strong>Real-Time Chat</strong><span>Synchronised chat scrolling with the stream. Custom emotes, channel points, predictions, and polls create unique community culture.</span></div></li>
+        <li><div class="ico">🔔</div><div><strong>Subscriptions & Bits</strong><span>Viewers subscribe ($4.99–$24.99/mo) or send Bits (micropayments). Channel Points reward loyalty.</span></div></li>
+        <li><div class="ico">🎯</div><div><strong>Raids & Hosting</strong><span>Streamers send their audience to another streamer's channel — community-building mechanism unique to Twitch.</span></div></li>
+        <li><div class="ico">🏆</div><div><strong>Drops & Events</strong><span>Game publishers give in-game items to viewers who watch official streams — incentivising viewership.</span></div></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Platform Comparison Summary</h3>
+      <table class="tbl" style="margin:0">
+        <thead><tr><th style="color:#4a90d9;border-color:#4a90d9">Platform</th><th style="color:#4a90d9;border-color:#4a90d9">Type</th><th style="color:#4a90d9;border-color:#4a90d9">Revenue Model</th><th style="color:#4a90d9;border-color:#4a90d9">Strength</th></tr></thead>
+        <tbody>
+          <tr><td>Netflix</td><td>SVoD</td><td>Subscription</td><td>Premium originals</td></tr>
+          <tr><td>Amazon</td><td>SVoD+</td><td>Sub + Rental</td><td>X-Ray + live sports</td></tr>
+          <tr><td>YouTube</td><td>UGC + Live</td><td>Ads + Premium</td><td>Search + long-form</td></tr>
+          <tr><td>TikTok</td><td>Short UGC</td><td>Ads + Shop</td><td>Discovery algorithm</td></tr>
+          <tr><td>Twitch</td><td>Live only</td><td>Subs + Ads</td><td>Real-time community</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 10: LIVE STREAMING ═══ -->
+<div class="slide" data-t="Live Streaming · How it works">
+<div class="sec-slide" style="background:linear-gradient(135deg,#061614 0%,#0e1117 100%);margin-bottom:20px">
+  <div class="sec-bg-num">03</div>
+  <div class="sec-tag">Module Three</div>
+  <h2 style="color:#38b2ac">Live Streaming<br>&amp; Buffering</h2>
+  <p>How real-time video is captured, encoded, transmitted, and played — and why buffering happens.</p>
+</div>
+<div class="cs">
+  <span class="stag m3-bg m3-color m3-bd">Module 03 · Live Streaming</span>
+  <div class="sh m3-color">Live Streaming — How It Works</div>
+  <p class="slead">Live streaming transmits video in real time across the internet. Unlike on-demand streaming, content is generated and delivered simultaneously — there is no pre-recorded file.</p>
+  <div class="stream-vis">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:14px;text-transform:uppercase">Live Signal Flow</div>
+    <div class="stream-row"><div class="sv-label">Capture</div><div class="sv-bar-wrap"><div class="sv-bar" style="background:#38b2ac;animation-delay:0s"></div></div><div class="sv-val" style="color:#38b2ac">1080p60</div></div>
+    <div class="stream-row"><div class="sv-label">Encode</div><div class="sv-bar-wrap"><div class="sv-bar" style="background:#4a90d9;animation-delay:.5s"></div></div><div class="sv-val" style="color:#4a90d9">H.264</div></div>
+    <div class="stream-row"><div class="sv-label">Transmit</div><div class="sv-bar-wrap"><div class="sv-bar" style="background:#e8b94a;animation-delay:1s"></div></div><div class="sv-val" style="color:#e8b94a">RTMP</div></div>
+    <div class="stream-row"><div class="sv-label">CDN</div><div class="sv-bar-wrap"><div class="sv-bar" style="background:#d970a0;animation-delay:1.5s"></div></div><div class="sv-val" style="color:#d970a0">HLS/DASH</div></div>
+    <div class="stream-row"><div class="sv-label">Playback</div><div class="sv-bar-wrap"><div class="sv-bar" style="background:#4caf82;animation-delay:2s"></div></div><div class="sv-val" style="color:#4caf82">Viewer</div></div>
+  </div>
+  <div class="two-col">
+    <div>
+      <h3>Key Technical Concepts</h3>
+      <ul class="il">
+        <li><div class="ico">📸</div><div><strong>Capture & Encoding</strong><span>Camera captures frames → encoder (OBS, Streamlabs) compresses to H.264/H.265 at target bitrate (e.g. 6000 kbps).</span></div></li>
+        <li><div class="ico">📤</div><div><strong>RTMP Protocol</strong><span>Real-Time Messaging Protocol sends the encoded stream from encoder to ingest server (Twitch/YouTube).</span></div></li>
+        <li><div class="ico">🌐</div><div><strong>CDN Distribution</strong><span>Content Delivery Network splits stream to servers worldwide, minimising latency for viewers in different regions.</span></div></li>
+        <li><div class="ico">🔀</div><div><strong>HLS / DASH</strong><span>Stream is segmented into small chunks (2–6 seconds). Viewers' players request next chunk continuously.</span></div></li>
+        <li><div class="ico">📊</div><div><strong>Adaptive Bitrate</strong><span>Player monitors download speed and switches quality tier (1080p → 720p → 480p) automatically to prevent stalling.</span></div></li>
+      </ul>
+    </div>
+    <div>
+      <div class="pc-grid" style="grid-template-columns:1fr">
+        <div class="pc-box pro-box"><div class="pc-head">✅ Pros of Live Streaming</div><ul class="pcl"><li>Real-time audience interaction — live chat, Q&A, polls</li><li>Creates urgency and FOMO (fear of missing out)</li><li>Authentic, unedited — builds trust and community</li><li>No post-production cost or time</li><li>Global reach — viewers from any country</li><li>Monetisable immediately via donations and subs</li></ul></div>
+        <div class="pc-box con-box"><div class="pc-head">❌ Cons of Live Streaming</div><ul class="pcl"><li>No editing — mistakes are permanent and public</li><li>Requires stable high-upload internet (&gt;6 Mbps)</li><li>Technical failures (crash, freeze) visible to viewers</li><li>Latency (5–30s) makes true real-time interaction delayed</li><li>Limited discoverability after stream ends</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 11: BUFFERING ═══ -->
+<div class="slide" data-t="Buffering — Causes & Solutions">
+<div class="cs">
+  <span class="stag m3-bg m3-color m3-bd">Module 03 · Buffering</span>
+  <div class="sh m3-color">Buffering — What It Is &amp; Why It Happens</div>
+  <p class="slead">Buffering is the process of <strong>pre-loading a portion of a video stream</strong> into memory before playback — ensuring smooth playback by creating a safety buffer against network fluctuations.</p>
+  <div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">Buffer Status Visualisation</div>
+    <div class="buf-demo" id="buf-demo"></div>
+    <div style="display:flex;gap:16px;margin-top:8px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace">
+      <span><span style="display:inline-block;width:10px;height:10px;background:var(--gold);border-radius:2px;margin-right:4px"></span>Loaded</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:var(--orange);border-radius:2px;margin-right:4px"></span>Buffering</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:var(--panel);border:1px solid var(--border);border-radius:2px;margin-right:4px"></span>Not loaded</span>
+    </div>
+  </div>
+  <div class="two-col mt">
+    <div>
+      <h3>Causes of Buffering</h3>
+      <ul class="il">
+        <li><div class="ico">📶</div><div><strong>Slow Internet Connection</strong><span>Download speed below the required bitrate for the selected quality (e.g. 4K needs 25+ Mbps).</span></div></li>
+        <li><div class="ico">🌐</div><div><strong>Network Congestion</strong><span>Peak hours (evenings) overload ISP infrastructure, reducing effective bandwidth for all users.</span></div></li>
+        <li><div class="ico">📡</div><div><strong>Wi-Fi Interference</strong><span>Walls, microwaves, neighbouring networks, and distance from router reduce wireless throughput.</span></div></li>
+        <li><div class="ico">🖥️</div><div><strong>Device Performance</strong><span>Slow CPU/GPU cannot decode high-resolution video fast enough, creating a software bottleneck.</span></div></li>
+        <li><div class="ico">🏢</div><div><strong>Server Overload</strong><span>Streaming servers overwhelmed during popular live events (sports finals, premieres) — CDN mitigates this.</span></div></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Solutions to Buffering</h3>
+      <ul class="il">
+        <li><div class="ico">📉</div><div><strong>Reduce Quality Setting</strong><span>Switch from 4K/1080p to 720p or 480p. Adaptive bitrate does this automatically.</span></div></li>
+        <li><div class="ico">🔌</div><div><strong>Use Wired Connection</strong><span>Ethernet cable provides consistent, lower-latency connection vs. Wi-Fi.</span></div></li>
+        <li><div class="ico">🔄</div><div><strong>Close Background Apps</strong><span>Other applications consuming bandwidth (downloads, cloud sync) compete with streaming.</span></div></li>
+        <li><div class="ico">🌐</div><div><strong>CDN Optimisation</strong><span>Platforms route traffic through nearest CDN edge server to minimise round-trip time.</span></div></li>
+        <li><div class="ico">⏸️</div><div><strong>Pre-Buffer Technique</strong><span>Pause stream for 30 seconds to build up buffer, then resume smooth playback.</span></div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 12: CMS FEATURES ═══ -->
+<div class="slide" data-t="CMS · Features & Examples">
+<div class="sec-slide" style="background:linear-gradient(135deg,#12061a 0%,#0e1117 100%);margin-bottom:20px">
+  <div class="sec-bg-num">04</div>
+  <div class="sec-tag">Module Four</div>
+  <h2 style="color:#d970a0">Content Management<br>Systems (CMS)</h2>
+  <p>Software platforms enabling creation, management, and publishing of digital content without technical coding knowledge.</p>
+</div>
+<div class="cs">
+  <span class="stag m4-bg m4-color m4-bd">Module 04 · CMS</span>
+  <div class="sh m4-color">CMS Features &amp; Development Examples</div>
+  <div class="two-col">
+    <div>
+      <h3>Core CMS Features</h3>
+      <ul class="il">
+        <li><div class="ico">✏️</div><div><strong>WYSIWYG Editor</strong><span>Visual editing — see formatted result while editing, no HTML knowledge required.</span></div></li>
+        <li><div class="ico">🖼️</div><div><strong>Media Library</strong><span>Centralized storage for images, video, audio, docs with tagging, search, and CDN delivery.</span></div></li>
+        <li><div class="ico">👥</div><div><strong>User Roles & Permissions</strong><span>Admin → Editor → Author → Contributor → Subscriber with granular access control.</span></div></li>
+        <li><div class="ico">🔄</div><div><strong>Version Control</strong><span>Full edit history; rollback to any previous version with one click.</span></div></li>
+        <li><div class="ico">📅</div><div><strong>Content Scheduling</strong><span>Set exact publish/unpublish date and time for automated content release.</span></div></li>
+        <li><div class="ico">🔍</div><div><strong>SEO Tools</strong><span>Meta titles, XML sitemaps, canonical URLs, schema markup, Open Graph tags built in.</span></div></li>
+        <li><div class="ico">🔌</div><div><strong>Plugin/Extension System</strong><span>Extend functionality with thousands of plugins: e-commerce, forms, analytics, payments.</span></div></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Platform Development Examples</h3>
+      <div class="cards" style="margin:0">
+        <div class="card" style="border-color:rgba(217,112,160,.2)"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="ct">WordPress</div><div class="cx">43% of all websites. Themes + plugins. PHP + MySQL. Powers everything from blogs to BBC America.</div></div><span class="pill" style="background:rgba(33,117,155,.15);color:#21759b;flex-shrink:0">Open Source</span></div></div>
+        <div class="card" style="border-color:rgba(217,112,160,.2)"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="ct">Drupal</div><div class="cx">Enterprise-grade. Used by NASA, White House, The Economist. Highly customizable with complex permissions.</div></div><span class="pill" style="background:rgba(0,114,184,.15);color:#0072b8;flex-shrink:0">Open Source</span></div></div>
+        <div class="card" style="border-color:rgba(217,112,160,.2)"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="ct">Contentful</div><div class="cx">Headless CMS. API-first — delivers content to any frontend. Used by Spotify, Urban Outfitters.</div></div><span class="pill" style="background:rgba(255,214,0,.1);color:#f5c518;flex-shrink:0">Headless</span></div></div>
+        <div class="card" style="border-color:rgba(217,112,160,.2)"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="ct">Adobe Experience Manager</div><div class="cx">Enterprise platform with AI-powered personalisation. Used by Nike, BMW, financial institutions.</div></div><span class="pill" style="background:rgba(255,0,0,.1);color:#ff0000;flex-shrink:0">Enterprise</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 13: CMS PROS CONS ═══ -->
+<div class="slide" data-t="CMS · Pros & Cons">
+<div class="cs">
+  <span class="stag m4-bg m4-color m4-bd">Module 04 · CMS</span>
+  <div class="sh m4-color">CMS — Pros &amp; Cons</div>
+  <div class="pc-grid">
+    <div class="pc-box pro-box"><div class="pc-head">✅ Advantages</div><ul class="pcl">
+      <li><strong>No Coding Required:</strong> Non-technical staff manage content independently — saves developer time and cost.</li>
+      <li><strong>Rapid Deployment:</strong> Launch a full website in hours using themes and plugins vs. weeks of custom development.</li>
+      <li><strong>Collaboration:</strong> Multiple editors work simultaneously with role-based access and workflow approvals.</li>
+      <li><strong>SEO-Friendly:</strong> Built-in tools for metadata, sitemaps, structured data — improves search rankings automatically.</li>
+      <li><strong>Scalability:</strong> From personal blog to enterprise platform — same CMS scales with plugins and hosting upgrades.</li>
+      <li><strong>Security Updates:</strong> Core, theme, and plugin updates patch vulnerabilities automatically.</li>
+    </ul></div>
+    <div class="pc-box con-box"><div class="pc-head">❌ Disadvantages</div><ul class="pcl">
+      <li><strong>Performance Overhead:</strong> CMS layers add database queries and PHP processing — slower than static HTML without optimisation.</li>
+      <li><strong>Plugin Conflicts:</strong> Too many plugins create compatibility issues, security vulnerabilities, and site crashes.</li>
+      <li><strong>Limited Customisation:</strong> Pre-built themes restrict unique design — deep customisation requires developer skills.</li>
+      <li><strong>Security Target:</strong> WordPress powers 43% of the web — makes it a prime target for automated attacks.</li>
+      <li><strong>Vendor Lock-In:</strong> Content structure tied to platform — migrating CMS is complex and costly.</li>
+      <li><strong>Learning Curve:</strong> Enterprise CMS (AEM, Sitecore) require significant training time.</li>
+    </ul></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 14: BROWSER & WEBSITE ═══ -->
+<div class="slide" data-t="Browser & Website">
+<div class="sec-slide" style="background:linear-gradient(135deg,#061208 0%,#0e1117 100%);margin-bottom:20px">
+  <div class="sec-bg-num">05</div>
+  <div class="sec-tag">Module Five</div>
+  <h2 style="color:#4caf82">Browser, Website,<br>Hosting &amp; HTTP/S</h2>
+  <p>The fundamental infrastructure of the web — how browsers work, how websites are structured, how they're hosted, and how data travels securely.</p>
+</div>
+<div class="cs">
+  <span class="stag m5-bg m5-color m5-bd">Module 05 · Web Browser</span>
+  <div class="sh m5-color">Web Browser — Features &amp; How It Works</div>
+  <p class="slead">A web browser is an application that retrieves, renders, and displays web content. It interprets HTML, CSS, and JavaScript to build the visual interface users see.</p>
+  <div class="two-col">
+    <div>
+      <h3>How a Browser Renders a Page</h3>
+      <ul class="il">
+        <li><div class="ico">1️⃣</div><div><strong>DNS Lookup</strong><span>Browser resolves domain name (google.com) to an IP address via DNS servers.</span></div></li>
+        <li><div class="ico">2️⃣</div><div><strong>TCP/TLS Handshake</strong><span>Establishes encrypted connection to server. HTTPS adds TLS layer for security.</span></div></li>
+        <li><div class="ico">3️⃣</div><div><strong>HTTP Request</strong><span>Browser sends GET request for the HTML document.</span></div></li>
+        <li><div class="ico">4️⃣</div><div><strong>Parse HTML → DOM</strong><span>Browser parses HTML and builds Document Object Model tree.</span></div></li>
+        <li><div class="ico">5️⃣</div><div><strong>CSSOM + Render Tree</strong><span>CSS parsed into CSSOM. Combined with DOM to create Render Tree.</span></div></li>
+        <li><div class="ico">6️⃣</div><div><strong>Layout → Paint</strong><span>Calculate positions, then paint pixels to screen. JavaScript runs and can modify DOM at any stage.</span></div></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Browser Comparison</h3>
+      <table class="tbl" style="margin:0">
+        <thead><tr><th style="color:#4caf82;border-color:#4caf82">Browser</th><th style="color:#4caf82;border-color:#4caf82">Engine</th><th style="color:#4caf82;border-color:#4caf82">Market Share</th><th style="color:#4caf82;border-color:#4caf82">Key Feature</th></tr></thead>
+        <tbody>
+          <tr><td>Chrome</td><td>Blink/V8</td><td>~65%</td><td>Speed, DevTools, extensions</td></tr>
+          <tr><td>Safari</td><td>WebKit/JSC</td><td>~19%</td><td>Battery efficiency, privacy</td></tr>
+          <tr><td>Firefox</td><td>Gecko/SM</td><td>~3%</td><td>Open-source, privacy</td></tr>
+          <tr><td>Edge</td><td>Blink/V8</td><td>~4%</td><td>Microsoft 365 integration</td></tr>
+          <tr><td>Opera</td><td>Blink/V8</td><td>~2%</td><td>Built-in VPN & ad blocker</td></tr>
+        </tbody>
+      </table>
+      <div class="callout mt" style="background:var(--green-d);border-color:var(--green-b)">
+        <div class="co-icon">💡</div>
+        <div class="co-body"><div class="co-title" style="color:var(--green)">Website Types</div>
+        <p><strong>Static:</strong> Pre-built HTML/CSS files — fast, cheap, no database. (GitHub Pages, Netlify)<br>
+        <strong>Dynamic:</strong> Generated server-side per request — personalised, CMS-driven. (WordPress, Django)<br>
+        <strong>SPA:</strong> Single Page Application — JavaScript loads content without full page reload. (React, Vue)<br>
+        <strong>PWA:</strong> Progressive Web App — installable, offline-capable web app.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 15: WEB HOSTING ═══ -->
+<div class="slide" data-t="Web Hosting">
+<div class="cs">
+  <span class="stag m5-bg m5-color m5-bd">Module 05 · Web Hosting</span>
+  <div class="sh m5-color">Web Hosting — Types &amp; Examples</div>
+  <p class="slead">Web hosting is a service that stores website files on a server connected to the internet, making the site accessible to anyone with a browser and the domain name.</p>
+  <div class="cards c2">
+    <div class="card" style="border-color:rgba(76,175,130,.2)"><div class="ci">🏠</div><div class="ct">Shared Hosting</div><div class="cx">Multiple websites share one server's resources (CPU, RAM). Cheapest option — $2–$10/month. Performance affected by neighbours. <strong>Best for:</strong> small blogs, portfolios. <strong>Examples:</strong> Bluehost, Hostinger, SiteGround.</div></div>
+    <div class="card" style="border-color:rgba(76,175,130,.2)"><div class="ci">🏢</div><div class="ct">VPS Hosting</div><div class="cx">Virtual Private Server — dedicated slice of a physical server. Isolated resources, root access, fully configurable. $15–$100/month. <strong>Best for:</strong> growing apps, e-commerce. <strong>Examples:</strong> DigitalOcean, Linode, Vultr.</div></div>
+    <div class="card" style="border-color:rgba(76,175,130,.2)"><div class="ci">🖥️</div><div class="ct">Dedicated Server</div><div class="cx">Entire physical server for one client. Maximum performance, full control, high cost ($80–$400/month). <strong>Best for:</strong> high-traffic sites, databases. <strong>Examples:</strong> Liquid Web, OVHcloud.</div></div>
+    <div class="card" style="border-color:rgba(76,175,130,.2)"><div class="ci">☁️</div><div class="ct">Cloud Hosting</div><div class="cx">Resources distributed across multiple servers. Scales instantly, pay-per-use, 99.99% uptime SLA. <strong>Best for:</strong> variable traffic, global apps. <strong>Examples:</strong> AWS, Google Cloud, Azure.</div></div>
+    <div class="card" style="border-color:rgba(76,175,130,.2)"><div class="ci">🌐</div><div class="ct">CDN + Static Hosting</div><div class="cx">Static files served from global edge network — ultra-fast, free/cheap, automatic HTTPS. <strong>Best for:</strong> static sites, JAMstack. <strong>Examples:</strong> Netlify, Vercel, Cloudflare Pages.</div></div>
+    <div class="card" style="border-color:rgba(76,175,130,.2)"><div class="ci">🛒</div><div class="ct">Managed Hosting</div><div class="cx">Provider handles all updates, backups, security, and optimisation. <strong>Best for:</strong> WordPress sites needing zero maintenance. <strong>Examples:</strong> WP Engine, Kinsta, Flywheel.</div></div>
+  </div>
+  <div class="pc-grid mt">
+    <div class="pc-box pro-box"><div class="pc-head">✅ Good Hosting = Good Multimedia</div><ul class="pcl"><li>Fast load times improve user experience and SEO</li><li>99.9%+ uptime keeps streams and downloads reliable</li><li>CDN reduces latency for global users</li><li>SSL certificates included with modern plans</li></ul></div>
+    <div class="pc-box con-box"><div class="pc-head">❌ Poor Hosting Problems</div><ul class="pcl"><li>Slow server causes video buffering and high bounce rates</li><li>Shared hosting neighbours crash your site</li><li>No CDN = slow media for international visitors</li><li>Missing SSL = browser security warnings deter visitors</li></ul></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 16: HTTP/S ═══ -->
+<div class="slide" data-t="HTTP vs HTTPS">
+<div class="cs">
+  <span class="stag m5-bg m5-color m5-bd">Module 05 · Protocols</span>
+  <div class="sh m5-color">HTTP vs HTTPS</div>
+  <p class="slead"><strong>HTTP</strong> (HyperText Transfer Protocol) is the foundation of data communication on the web. <strong>HTTPS</strong> adds Transport Layer Security (TLS) encryption to make the connection private and secure.</p>
+  <div class="http-flow">
+    <div class="hf-box"><div class="hf-label">Client</div><div class="hf-val">🖥️ Browser</div></div>
+    <div class="hf-arrow">——→</div>
+    <div class="hf-box" style="border-color:rgba(76,175,130,.3)"><div class="hf-label">HTTP Request</div><div class="hf-val" style="color:var(--green);font-size:11px">GET /page HTTP/1.1</div></div>
+    <div class="hf-arrow">——→</div>
+    <div class="hf-box"><div class="hf-label">DNS</div><div class="hf-val">🌐 Resolve IP</div></div>
+    <div class="hf-arrow">——→</div>
+    <div class="hf-box"><div class="hf-label">Server</div><div class="hf-val">🏢 Web Host</div></div>
+    <div class="hf-arrow">←——</div>
+    <div class="hf-box" style="border-color:rgba(76,175,130,.3)"><div class="hf-label">HTTP Response</div><div class="hf-val" style="color:var(--green);font-size:11px">200 OK + HTML</div></div>
+  </div>
+  <div class="cmp mt">
+    <div class="cmp-row cmp-head"><div class="cmp-lbl" style="background:var(--panel)"></div><div class="cmp-a" style="color:var(--red)">HTTP (Port 80)</div><div class="cmp-b" style="color:var(--green)">HTTPS (Port 443)</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Encryption</div><div class="cmp-a">❌ None — data in plain text</div><div class="cmp-b">✅ TLS 1.3 — fully encrypted</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Data Integrity</div><div class="cmp-a">Can be altered in transit</div><div class="cmp-b">Tamper-evident — any change detected</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Authentication</div><div class="cmp-a">No server verification</div><div class="cmp-b">SSL certificate proves server identity</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Browser Indicator</div><div class="cmp-a">⚠️ "Not Secure" warning</div><div class="cmp-b">🔒 Padlock icon in address bar</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">SEO Impact</div><div class="cmp-a">Google penalises HTTP sites</div><div class="cmp-b">Google ranking boost for HTTPS</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Speed</div><div class="cmp-a">Slightly faster (no TLS handshake)</div><div class="cmp-b">HTTP/2 + TLS 1.3 = effectively same</div></div>
+    <div class="cmp-row"><div class="cmp-lbl">Use Case</div><div class="cmp-a">Local development only</div><div class="cmp-b">All production websites, mandatory for login/payment</div></div>
+  </div>
+  <div class="callout" style="background:var(--green-d);border-color:var(--green-b)">
+    <div class="co-icon">🔒</div>
+    <div class="co-body"><div class="co-title" style="color:var(--green)">HTTP Status Codes You Must Know</div><p><strong>200 OK</strong> — Success. <strong>301</strong> — Permanent redirect. <strong>304</strong> — Not Modified (cached). <strong>400</strong> — Bad Request. <strong>401</strong> — Unauthorized. <strong>403</strong> — Forbidden. <strong>404</strong> — Not Found. <strong>500</strong> — Internal Server Error. <strong>503</strong> — Service Unavailable.</p></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 17: EMPTY VALIDATION ═══ -->
+<div class="slide" data-t="Form Validation · Empty Fields">
+<div class="sec-slide" style="background:linear-gradient(135deg,#0e0d04 0%,#0e1117 100%);margin-bottom:20px">
+  <div class="sec-bg-num">06</div>
+  <div class="sec-tag">Module Six</div>
+  <h2 style="color:var(--gold)">Form Validation</h2>
+  <p>Ensuring data entered into web forms is correct, complete, and safe before it reaches the server — with live interactive code examples.</p>
+</div>
+<div class="cs">
+  <span class="stag m6-bg m6-color m6-bd">Module 06 · Empty Field Validation</span>
+  <div class="sh m6-color">Empty Field Validation</div>
+  <p class="slead">Empty field validation checks that required fields are not left blank before form submission. It prevents incomplete data from reaching the database.</p>
+  <div class="two-col">
+    <div>
+      <div class="editor-wrap" id="editor1">
+        <div class="editor-tabs">
+          <button class="editor-tab active" onclick="switchTab(1,'static')">📖 View Code</button>
+          <button class="editor-tab" onclick="switchTab(1,'live')">✏️ Edit &amp; Run</button>
+        </div>
+        <div id="editor1-static" class="editor-static">
+          <div class="code" style="border:none;border-radius:0;margin:0"><div class="cl">HTML + JS</div>
+<span class="cm">&lt;!-- HTML --&gt;</span>
+<span class="tag">&lt;form</span> <span class="at">id</span>=<span class="str">"myForm"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;label&gt;</span>Full Name *<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="at">type</span>=<span class="str">"text"</span>
+         <span class="at">id</span>=<span class="str">"name"</span>
+         <span class="at">placeholder</span>=<span class="str">"Enter your name"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;span</span> <span class="at">id</span>=<span class="str">"nameErr"</span> <span class="at">class</span>=<span class="str">"error"</span><span class="tag">&gt;</span>
+    Name is required!
+  <span class="tag">&lt;/span&gt;</span>
+  <span class="tag">&lt;button</span> <span class="at">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Submit<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
+
+<span class="cm">// JavaScript validation</span>
+document.getElementById(<span class="str">'myForm'</span>)
+  .addEventListener(<span class="str">'submit'</span>, <span class="kw">function</span>(e) {
+    e.preventDefault();
+    <span class="kw">const</span> name = document
+      .getElementById(<span class="str">'name'</span>).value;
+    <span class="kw">const</span> err = document
+      .getElementById(<span class="str">'nameErr'</span>);
+
+    <span class="kw">if</span> (name.trim() === <span class="str">''</span>) {
+      err.style.display = <span class="str">'block'</span>;
+      <span class="cm">// field is empty!</span>
+    } <span class="kw">else</span> {
+      err.style.display = <span class="str">'none'</span>;
+      <span class="cm">// proceed with form</span>
+    }
+  });</div>
+        </div>
+        <div id="editor1-live" class="editor-live">
+          <textarea class="editor-textarea" id="editor1-code" spellcheck="false">// Edit this code — it controls the demo on the right!
+// Changes take effect when you click ▶ Run
+
+function validateEmpty() {
+  var fields = ['d1-name', 'd1-email', 'd1-msg'];
+  var allOk = true;
+
+  fields.forEach(function(id) {
+    var el = document.getElementById(id);
+    var errEl = document.getElementById(id + 'Err');
+    var okEl  = document.getElementById(id + 'Ok');
+    if (!el) return;
+
+    if (el.value.trim() === '') {
+      // Field is empty — show error
+      el.style.borderColor = 'var(--red)';
+      if (errEl) errEl.style.display = 'block';
+      if (okEl)  okEl.style.display  = 'none';
+      allOk = false;
+    } else {
+      // Field has content — show success
+      el.style.borderColor = 'var(--green)';
+      if (errEl) errEl.style.display = 'none';
+      if (okEl)  okEl.style.display  = 'block';
+    }
+  });
+}
+
+function clearDemo1() {
+  ['d1-name', 'd1-email', 'd1-msg'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.value = ''; el.style.borderColor = ''; }
+    var e = document.getElementById(id + 'Err');
+    var o = document.getElementById(id + 'Ok');
+    if (e) e.style.display = 'none';
+    if (o) o.style.display = 'none';
+  });
+}</textarea>
+          <div class="editor-footer">
+            <button class="run-btn" onclick="runEditorCode(1)">▶ Run</button>
+            <button class="reset-code-btn" onclick="resetEditorCode(1)">↺ Reset</button>
+            <span class="editor-status" id="editor1-status"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="demo-wrap">
+        <div class="demo-title">▶ Live Demo — Empty Field Validation</div>
+        <div class="form-group">
+          <label>Full Name <span style="color:var(--red)">*</span></label>
+          <input type="text" id="d1-name" placeholder="Enter your name">
+          <div class="err-msg" id="d1-nameErr">⚠ Name cannot be empty!</div>
+          <div class="ok-msg" id="d1-nameOk">✓ Name accepted</div>
+        </div>
+        <div class="form-group">
+          <label>Email Address <span style="color:var(--red)">*</span></label>
+          <input type="text" id="d1-email" placeholder="Enter your email">
+          <div class="err-msg" id="d1-emailErr">⚠ Email cannot be empty!</div>
+          <div class="ok-msg" id="d1-emailOk">✓ Email accepted</div>
+        </div>
+        <div class="form-group">
+          <label>Message <span style="color:var(--red)">*</span></label>
+          <textarea id="d1-msg" rows="3" placeholder="Enter your message" style="resize:vertical"></textarea>
+          <div class="err-msg" id="d1-msgErr">⚠ Message cannot be empty!</div>
+          <div class="ok-msg" id="d1-msgOk">✓ Message accepted</div>
+        </div>
+        <button class="demo-btn" onclick="validateEmpty()">Validate Form</button>
+        <button class="demo-btn" style="background:var(--panel);color:var(--text);margin-left:8px" onclick="clearDemo1()">Reset</button>
+      </div>
+      <div class="callout" style="background:var(--gold-d);border-color:var(--gold-b)">
+        <div class="co-icon">💡</div>
+        <div class="co-body"><div class="co-title" style="color:var(--gold)">HTML5 Required Attribute</div><p>The simplest empty validation: <code style="font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(255,255,255,.07);padding:2px 5px;border-radius:2px">&lt;input required&gt;</code> — browser blocks submission if empty. Use JS for custom messages and styling.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 18: PATTERN VALIDATION ═══ -->
+<div class="slide" data-t="Form Validation · Pattern">
+<div class="cs">
+  <span class="stag m6-bg m6-color m6-bd">Module 06 · Pattern Validation</span>
+  <div class="sh m6-color">Pattern Validation</div>
+  <p class="slead">Pattern validation checks that data matches a specific <strong>Regular Expression (RegEx) format</strong>. Used to validate emails, phone numbers, passwords, postcodes, and any structured input.</p>
+  <div class="two-col">
+    <div>
+      <div class="editor-wrap" id="editor2">
+        <div class="editor-tabs">
+          <button class="editor-tab active" onclick="switchTab(2,'static')">📖 View Code</button>
+          <button class="editor-tab" onclick="switchTab(2,'live')">✏️ Edit &amp; Run</button>
+        </div>
+        <div id="editor2-static" class="editor-static">
+          <div class="code" style="border:none;border-radius:0;margin:0"><div class="cl">HTML + JS</div>
+<span class="cm">// Common RegEx patterns</span>
+<span class="kw">const</span> patterns = {
+  email: <span class="str">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>,
+  phone: <span class="str">/^(\+255|0)[67]\d{8}$/</span>,
+  password: <span class="str">/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&amp;]).{8,}$/</span>,
+  username: <span class="str">/^[a-zA-Z0-9_]{3,16}$/</span>
+};
+
+<span class="kw">function</span> <span class="fn">liveValidate</span>(id, type) {
+  <span class="kw">const</span> el = document.getElementById(id);
+  <span class="kw">const</span> isValid = patterns[type].test(el.value);
+  el.style.borderColor = isValid
+    ? <span class="str">'var(--green)'</span> : <span class="str">'var(--red)'</span>;
+}</div>
+        </div>
+        <div id="editor2-live" class="editor-live">
+          <textarea class="editor-textarea" id="editor2-code" spellcheck="false">// Edit the regex patterns — then click ▶ Run to test them live!
+
+var patterns = {
+  // Email: user@domain.ext
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+
+  // Phone: Tanzania (+255 or 07xx/06xx + 8 digits)
+  phone: /^(\+255|0)[67]\d{8}$/,
+
+  // Password: min 8 chars, 1 uppercase, 1 lowercase, 1 digit, 1 symbol
+  password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&]).{8,}$/,
+
+  // Username: 3-16 chars, letters/numbers/underscore only
+  username: /^[a-zA-Z0-9_]{3,16}$/
+};
+
+function liveValidate(id, type) {
+  var el = document.getElementById(id);
+  var errEl = document.getElementById(id + 'Err');
+  var okEl  = document.getElementById(id + 'Ok');
+  if (!el || !patterns[type]) return;
+
+  var val = el.value;
+  if (val === '') {
+    el.style.borderColor = '';
+    if (errEl) errEl.style.display = 'none';
+    if (okEl)  okEl.style.display  = 'none';
+    return;
+  }
+  if (patterns[type].test(val)) {
+    el.style.borderColor = 'var(--green)';
+    if (errEl) errEl.style.display = 'none';
+    if (okEl)  okEl.style.display  = 'block';
+  } else {
+    el.style.borderColor = 'var(--red)';
+    if (errEl) errEl.style.display = 'block';
+    if (okEl)  okEl.style.display  = 'none';
+  }
+}</textarea>
+          <div class="editor-footer">
+            <button class="run-btn" onclick="runEditorCode(2)">▶ Run</button>
+            <button class="reset-code-btn" onclick="resetEditorCode(2)">↺ Reset</button>
+            <span class="editor-status" id="editor2-status"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="demo-wrap">
+        <div class="demo-title">▶ Live Demo — Pattern Validation</div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="text" id="d2-email" placeholder="user@example.com" oninput="liveValidate('d2-email','email')">
+          <div class="pattern-hint">Pattern: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9ce9eff9eedcf8f3f1fdf5f2b2f9e4e8f9f2eff5f3f2">[email&#160;protected]</a></div>
+          <div class="err-msg" id="d2-emailErr">⚠ Invalid email format</div>
+          <div class="ok-msg" id="d2-emailOk">✓ Valid email</div>
+        </div>
+        <div class="form-group">
+          <label>Phone Number (Tanzania)</label>
+          <input type="text" id="d2-phone" placeholder="+255712345678 or 0712345678" oninput="liveValidate('d2-phone','phone')">
+          <div class="pattern-hint">Pattern: +255 or 07xx/06xx + 8 digits</div>
+          <div class="err-msg" id="d2-phoneErr">⚠ Invalid phone number</div>
+          <div class="ok-msg" id="d2-phoneOk">✓ Valid phone number</div>
+        </div>
+        <div class="form-group">
+          <label>Password (Strong)</label>
+          <input type="password" id="d2-pass" placeholder="Min 8 chars, upper, lower, digit, symbol" oninput="liveValidate('d2-pass','password')">
+          <div class="pattern-hint">Min 8 chars · 1 uppercase · 1 digit · 1 symbol</div>
+          <div class="err-msg" id="d2-passErr">⚠ Password does not meet requirements</div>
+          <div class="ok-msg" id="d2-passOk">✓ Strong password</div>
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="d2-user" placeholder="letters, numbers, underscore (3–16)" oninput="liveValidate('d2-user','username')">
+          <div class="pattern-hint">3–16 characters, letters/numbers/underscore only</div>
+          <div class="err-msg" id="d2-userErr">⚠ Invalid username format</div>
+          <div class="ok-msg" id="d2-userOk">✓ Valid username</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 19: CHARACTER COUNT ═══ -->
+<div class="slide" data-t="Form Validation · Character Count">
+<div class="cs">
+  <span class="stag m6-bg m6-color m6-bd">Module 06 · Character Count Validation</span>
+  <div class="sh m6-color">Character Count Validation</div>
+  <p class="slead">Character count validation enforces <strong>minimum and maximum length</strong> on text inputs — preventing too-short usernames, too-long comments, or passwords that don't meet length requirements.</p>
+  <div class="two-col">
+    <div>
+      <div class="editor-wrap" id="editor3">
+        <div class="editor-tabs">
+          <button class="editor-tab active" onclick="switchTab(3,'static')">📖 View Code</button>
+          <button class="editor-tab" onclick="switchTab(3,'live')">✏️ Edit &amp; Run</button>
+        </div>
+        <div id="editor3-static" class="editor-static">
+          <div class="code" style="border:none;border-radius:0;margin:0"><div class="cl">JS Character Counter</div>
+<span class="kw">function</span> <span class="fn">charCount</span>(fieldId, counterId, min, max) {
+  <span class="kw">const</span> el = document.getElementById(fieldId);
+  <span class="kw">const</span> cEl = document.getElementById(counterId);
+  <span class="kw">const</span> len = el.value.length;
+  cEl.textContent = len + <span class="str">' / '</span> + max;
+
+  <span class="kw">if</span> (len &lt; min)
+    cEl.style.color = <span class="str">'var(--red)'</span>;
+  <span class="kw">else if</span> (len &gt;= max - <span class="nu">10</span>)
+    cEl.style.color = <span class="str">'var(--gold)'</span>;
+  <span class="kw">else</span>
+    cEl.style.color = <span class="str">'var(--green)'</span>;
+}</div>
+        </div>
+        <div id="editor3-live" class="editor-live">
+          <textarea class="editor-textarea" id="editor3-code" spellcheck="false">// Edit this function — click ▶ Run then type in the demo fields to see your changes!
+
+function charCount(fieldId, counterId, min, max) {
+  var el   = document.getElementById(fieldId);
+  var cEl  = document.getElementById(counterId);
+  var errEl = document.getElementById(fieldId + 'Err');
+  var okEl  = document.getElementById(fieldId + 'Ok');
+  if (!el) return;
+
+  var len = el.value.length;
+
+  // Update the counter display
+  if (cEl) {
+    cEl.textContent = len + ' / ' + max;
+
+    if (len < min)
+      cEl.style.color = 'var(--red)';       // too short
+    else if (len >= max - 10)
+      cEl.style.color = 'var(--gold)';      // approaching limit
+    else
+      cEl.style.color = 'var(--green)';     // just right
+  }
+
+  // Show error or success message
+  if (errEl && okEl) {
+    if (len === 0) {
+      el.style.borderColor = '';
+      errEl.style.display = 'none';
+      okEl.style.display  = 'none';
+    } else if (len < min || len > max) {
+      el.style.borderColor = 'var(--red)';
+      errEl.style.display  = 'block';
+      okEl.style.display   = 'none';
+    } else {
+      el.style.borderColor = 'var(--green)';
+      errEl.style.display  = 'none';
+      okEl.style.display   = 'block';
+    }
+  }
+}</textarea>
+          <div class="editor-footer">
+            <button class="run-btn" onclick="runEditorCode(3)">▶ Run</button>
+            <button class="reset-code-btn" onclick="resetEditorCode(3)">↺ Reset</button>
+            <span class="editor-status" id="editor3-status"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="demo-wrap">
+        <div class="demo-title">▶ Live Demo — Character Count Validation</div>
+        <div class="form-group">
+          <label>Username <span style="color:var(--muted);font-size:11px">(3–16 chars)</span></label>
+          <input type="text" id="d3-user" placeholder="Choose a username" maxlength="16" oninput="charCount('d3-user','d3-userC',3,16)">
+          <div class="char-count"><span id="d3-userC" style="color:var(--muted)">0 / 16</span></div>
+          <div class="err-msg" id="d3-userErr">⚠ Must be 3–16 characters</div>
+          <div class="ok-msg" id="d3-userOk">✓ Good length</div>
+        </div>
+        <div class="form-group">
+          <label>Bio / About Me <span style="color:var(--muted);font-size:11px">(20–200 chars)</span></label>
+          <textarea id="d3-bio" rows="4" placeholder="Tell us about yourself (at least 20 characters)..." maxlength="200" oninput="charCount('d3-bio','d3-bioC',20,200)" style="resize:vertical"></textarea>
+          <div class="char-count"><span id="d3-bioC" style="color:var(--muted)">0 / 200</span></div>
+          <div class="err-msg" id="d3-bioErr">⚠ Bio must be 20–200 characters</div>
+          <div class="ok-msg" id="d3-bioOk">✓ Perfect length</div>
+        </div>
+        <div class="form-group">
+          <label>SMS Message <span style="color:var(--muted);font-size:11px">(max 160 chars)</span></label>
+          <textarea id="d3-sms" rows="3" placeholder="Type your SMS message (max 160 chars)..." maxlength="160" oninput="charCount('d3-sms','d3-smsC',1,160)" style="resize:vertical"></textarea>
+          <div class="char-count"><span id="d3-smsC" style="color:var(--muted)">0 / 160</span></div>
+        </div>
+        <button class="demo-btn" onclick="submitCharDemo()">Submit Form</button>
+        <div id="d3-result" style="margin-top:12px;font-size:13px;display:none"></div>
+      </div>
+      <div class="callout" style="background:var(--gold-d);border-color:var(--gold-b)">
+        <div class="co-icon">📏</div>
+        <div class="co-body"><div class="co-title" style="color:var(--gold)">HTML5 Attributes for Length</div><p><code style="font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(255,255,255,.07);padding:2px 5px;border-radius:2px">maxlength="200"</code> prevents typing beyond limit.<br><code style="font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(255,255,255,.07);padding:2px 5px;border-radius:2px">minlength="20"</code> native browser validation.<br>JavaScript gives you <strong>live feedback</strong> as the user types.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 20: QUIZ ═══ -->
+<div class="slide" data-t="Knowledge Quiz">
+<div class="cs">
+  <span class="stag" style="background:var(--gold-d);color:var(--gold);border:1px solid var(--gold-b)">Final Assessment · Knowledge Quiz</span>
+  <div class="sh" style="color:var(--gold)">Knowledge Check — All Modules</div>
+  <p class="slead">Test your understanding across VR/AR, platforms, streaming, CMS, web technologies, and form validation.</p>
+  <div style="max-width:700px">
+    <div id="q-card">
+      <div class="q-text" id="q-text"></div>
+      <div class="q-opts" id="q-opts"></div>
+      <div class="q-fb" id="q-fb"></div>
+      <button class="q-next" id="q-next" onclick="nextQ()">Next →</button>
+    </div>
+    <div class="q-meta">Question <span id="qn">1</span> of <span id="qt">12</span> &nbsp;·&nbsp; Score: <span id="qs">0</span></div>
+  </div>
+</div>
+</div>
+
+  </div><!-- /slides-area -->
+
+  <div id="bot-nav">
+    <button class="nav-b" id="bn-prev" onclick="prevSlide()">← Previous</button>
+    <div id="pdots"></div>
+    <button class="nav-b prim" id="bn-next" onclick="nextSlide()">Next →</button>
+  </div>
+</div>
+</div>
+
+<script>
+// ── SLIDES ──
+const slides=document.querySelectorAll('.slide');
+const sbs=document.querySelectorAll('.sb');
+let cur=0;
+function goTo(n){
+  if(slides[cur]) slides[cur].classList.remove('active');
+  if(sbs[cur]) sbs[cur].classList.remove('active');
+  cur=Math.max(0,Math.min(n,slides.length-1));
+  if(slides[cur]) slides[cur].classList.add('active');
+  if(sbs[cur]) sbs[cur].classList.add('active');
+  var cnEl=document.getElementById('cur-n');
+  var pathEl=document.getElementById('t-path');
+  var prevBtn=document.getElementById('bn-prev');
+  var nextBtn=document.getElementById('bn-next');
+  var area=document.getElementById('slides-area');
+  if(cnEl) cnEl.textContent=cur+1;
+  if(pathEl) pathEl.textContent=(slides[cur]&&slides[cur].dataset.t)||'Multimedia Technology';
+  if(prevBtn) prevBtn.disabled=cur===0;
+  if(nextBtn) nextBtn.textContent=cur===slides.length-1?'✓ Done':'Next →';
+  if(area) area.scrollTop=0;
+  updateDots();
+}
+function nextSlide(){if(cur<slides.length-1)goTo(cur+1);}
+function prevSlide(){if(cur>0)goTo(cur-1);}
+
+// Attach nav button listeners in JS (more reliable than onclick attributes on mobile)
+(function(){
+  var prev=document.getElementById('bn-prev');
+  var next=document.getElementById('bn-next');
+  if(prev) prev.addEventListener('click',function(){prevSlide();});
+  if(next) next.addEventListener('click',function(){nextSlide();});
+})();
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')nextSlide();
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')prevSlide();
+});
+
+// ── TOUCH SWIPE ──
+(function(){
+  let tx=0,ty=0,target=null;
+  const area=document.getElementById('slides-area');
+  area.addEventListener('touchstart',e=>{
+    target=e.target;
+    tx=e.touches[0].clientX;
+    ty=e.touches[0].clientY;
+  },{passive:true});
+  area.addEventListener('touchend',e=>{
+    // Don't swipe if touch started on an input, textarea, button, or scrollable code block
+    if(target&&(target.closest('input,textarea,button,select,.code,.editor-textarea,.tbl,.cmp')))return;
+    const dx=tx-e.changedTouches[0].clientX;
+    const dy=ty-e.changedTouches[0].clientY;
+    // Only trigger if clearly horizontal (dx > dy*1.5) and long enough
+    if(Math.abs(dx)>Math.abs(dy)*1.5&&Math.abs(dx)>55){dx>0?nextSlide():prevSlide();}
+  },{passive:true});
+})();
+
+// ── DOTS ──
+function buildDots(){
+  const c=document.getElementById('pdots');
+  for(let i=0;i<12;i++){
+    const d=document.createElement('div');d.className='pd';
+    d.onclick=()=>goTo(Math.round(i*(slides.length-1)/11));
+    c.appendChild(d);
+  }
+  updateDots();
+}
+function updateDots(){
+  const ds=document.querySelectorAll('.pd');
+  ds.forEach((d,i)=>d.classList.toggle('active',Math.round(cur*11/(slides.length-1))===i));
+}
+buildDots();
+goTo(0);
+document.getElementById('tot-n').textContent=slides.length;
+
+
+// ── LIVE CODE EDITOR ──
+var editorDefaults = {};
+document.addEventListener('DOMContentLoaded', function() {
+  [1,2,3].forEach(function(n) {
+    var ta = document.getElementById('editor'+n+'-code');
+    if (ta) editorDefaults[n] = ta.value;
+  });
+});
+
+function switchTab(n, mode) {
+  var staticEl = document.getElementById('editor'+n+'-static');
+  var liveEl   = document.getElementById('editor'+n+'-live');
+  var tabs     = document.querySelectorAll('#editor'+n+' .editor-tab');
+  if (!staticEl || !liveEl) return;
+  if (mode === 'live') {
+    staticEl.style.display = 'none';
+    liveEl.style.display   = 'flex';
+  } else {
+    staticEl.style.display = 'block';
+    liveEl.style.display   = 'none';
+  }
+  tabs.forEach(function(t, i) {
+    t.classList.toggle('active', (mode === 'live') ? i === 1 : i === 0);
+  });
+}
+
+function runEditorCode(n) {
+  var ta     = document.getElementById('editor'+n+'-code');
+  var status = document.getElementById('editor'+n+'-status');
+  if (!ta || !status) return;
+  try {
+    // eslint-disable-next-line no-new-func
+    (new Function(ta.value))();
+    status.textContent = '✓ Code applied!';
+    status.className = 'editor-status ok';
+  } catch(e) {
+    status.textContent = '✗ ' + e.message;
+    status.className = 'editor-status err';
+  }
+  clearTimeout(status._t);
+  status._t = setTimeout(function() {
+    status.style.opacity = '0';
+    setTimeout(function() { status.className = 'editor-status'; }, 300);
+  }, 3000);
+}
+
+function resetEditorCode(n) {
+  var ta     = document.getElementById('editor'+n+'-code');
+  var status = document.getElementById('editor'+n+'-status');
+  if (!ta) return;
+  if (editorDefaults[n]) ta.value = editorDefaults[n];
+  runEditorCode(n);
+  if (status) {
+    status.textContent = '↺ Reset to default';
+    status.className = 'editor-status ok';
+    clearTimeout(status._t);
+    status._t = setTimeout(function() {
+      status.style.opacity = '0';
+      setTimeout(function() { status.className = 'editor-status'; }, 300);
+    }, 2000);
+  }
+}
+
+(function(){
+  const wrap=document.getElementById('buf-demo');
+  if(!wrap)return;
+  const total=20;let loaded=8;
+  for(let i=0;i<total;i++){const b=document.createElement('div');b.className='buf-b';wrap.appendChild(b);}
+  function update(){
+    const bs=wrap.querySelectorAll('.buf-b');
+    bs.forEach((b,i)=>{
+      if(i<loaded-1)b.className='buf-b buf-loaded';
+      else if(i===loaded-1)b.className='buf-b buf-buffering';
+      else b.className='buf-b buf-empty';
+    });
+  }
+  update();
+  setInterval(()=>{if(loaded<total){loaded++;update();}},600);
+})();
+
+// ── FORM VALIDATION DEMOS ──
+function validateEmpty(){
+  const fields=[
+    {id:'d1-name',err:'d1-nameErr',ok:'d1-nameOk'},
+    {id:'d1-email',err:'d1-emailErr',ok:'d1-emailOk'},
+    {id:'d1-msg',err:'d1-msgErr',ok:'d1-msgOk'}
+  ];
+  let allOk=true;
+  fields.forEach(f=>{
+    const el=document.getElementById(f.id);
+    const errEl=document.getElementById(f.err);
+    const okEl=document.getElementById(f.ok);
+    if(!el||!errEl||!okEl)return;
+    if(el.value.trim()===''){
+      el.className='form-group input err';el.style.borderColor='var(--red)';
+      errEl.style.display='block';okEl.style.display='none';allOk=false;
+    }else{
+      el.style.borderColor='var(--green)';
+      errEl.style.display='none';okEl.style.display='block';
+    }
+  });
+  return allOk;
+}
+function clearDemo1(){
+  ['d1-name','d1-email','d1-msg'].forEach(id=>{
+    const el=document.getElementById(id);if(el){el.value='';el.style.borderColor='';}
+  });
+  ['d1-nameErr','d1-emailErr','d1-msgErr','d1-nameOk','d1-emailOk','d1-msgOk'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.style.display='none';
+  });
+}
+
+const patterns={
+  email:/^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  phone:/^(\+255|0)[67]\d{8}$/,
+  password:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&]).{8,}$/,
+  username:/^[a-zA-Z0-9_]{3,16}$/
+};
+function liveValidate(id,type){
+  const el=document.getElementById(id);if(!el)return;
+  const val=el.value;
+  const errEl=document.getElementById(id+'Err');
+  const okEl=document.getElementById(id+'Ok');
+  if(!errEl||!okEl)return;
+  if(val===''){ el.style.borderColor='';errEl.style.display='none';okEl.style.display='none';return; }
+  if(patterns[type]&&patterns[type].test(val)){
+    el.style.borderColor='var(--green)';errEl.style.display='none';okEl.style.display='block';
+  }else{
+    el.style.borderColor='var(--red)';errEl.style.display='block';okEl.style.display='none';
+  }
+}
+
+function charCount(fieldId,counterId,min,max){
+  const el=document.getElementById(fieldId);if(!el)return;
+  const cEl=document.getElementById(counterId);
+  const errEl=document.getElementById(fieldId+'Err');
+  const okEl=document.getElementById(fieldId+'Ok');
+  const len=el.value.length;
+  if(cEl){
+    cEl.textContent=len+' / '+max;
+    if(len<min)cEl.style.color='var(--red)';
+    else if(len>=max-10)cEl.style.color='var(--gold)';
+    else cEl.style.color='var(--green)';
+  }
+  if(errEl&&okEl){
+    if(len===0){el.style.borderColor='';errEl.style.display='none';okEl.style.display='none';}
+    else if(len<min||len>max){el.style.borderColor='var(--red)';errEl.style.display='block';okEl.style.display='none';}
+    else{el.style.borderColor='var(--green)';errEl.style.display='none';okEl.style.display='block';}
+  }
+}
+function submitCharDemo(){
+  const user=document.getElementById('d3-user');
+  const bio=document.getElementById('d3-bio');
+  const res=document.getElementById('d3-result');
+  let ok=true;
+  if(!user||!bio||!res)return;
+  charCount('d3-user','d3-userC',3,16);
+  charCount('d3-bio','d3-bioC',20,200);
+  if(user.value.length<3||user.value.length>16)ok=false;
+  if(bio.value.length<20||bio.value.length>200)ok=false;
+  res.style.display='block';
+  if(ok){res.style.color='var(--green)';res.textContent='✓ Form submitted successfully! All fields are valid.';}
+  else{res.style.color='var(--red)';res.textContent='✗ Please fix the errors above before submitting.';}
+}
+
+// ── QUIZ ──
+const Qs=[
+  {q:"VR stands for Virtual Reality. Which technology overlays digital content ON TOP of the real world rather than replacing it?",opts:["Mixed Reality","Augmented Reality","Extended Reality","Simulated Reality"],ans:1,exp:"Augmented Reality (AR) overlays digital objects onto the real world. VR replaces it entirely. MR/XR are broader terms."},
+  {q:"Which VR development SDK is used as a cross-platform standard, supporting multiple headsets including Quest, Vive, and PlayStation VR?",opts:["Steam SDK","ARCore","OpenXR","Oculus SDK"],ans:2,exp:"OpenXR is the Khronos Group open standard for VR/AR development — one API targets all major headsets, reducing fragmentation."},
+  {q:"Netflix uses Adaptive Bitrate Streaming. What does this mean?",opts:["The video plays at a fixed 1080p regardless of internet speed","The platform automatically adjusts video quality based on available bandwidth","The user manually selects quality before each video","Netflix compresses all video to the same file size"],ans:1,exp:"ABR continuously monitors the viewer's download speed and switches between quality tiers (4K → 1080p → 720p) to maintain uninterrupted playback."},
+  {q:"What unique feature does Twitch have that differentiates it from YouTube and Netflix as a multimedia platform?",opts:["It has the largest content library","Real-time synchronised live chat that creates interactive community during streams","It supports offline downloads","It uses the highest video bitrate"],ans:1,exp:"Twitch's real-time chat is synchronised to the stream, creating shared moments, community culture, and direct creator-viewer interaction impossible on on-demand platforms."},
+  {q:"In live streaming, what protocol is typically used to send the encoded video from OBS/encoder to the streaming server?",opts:["HTTP","FTP","RTMP (Real-Time Messaging Protocol)","BitTorrent"],ans:2,exp:"RTMP (Real-Time Messaging Protocol) is the standard ingest protocol — encoders like OBS send the compressed video stream via RTMP to YouTube/Twitch ingest servers."},
+  {q:"Buffering occurs when the video player runs out of pre-loaded data. Which solution directly addresses slow internet causing buffering?",opts:["Closing the browser tab","Adaptive bitrate switching to lower quality","Refreshing the page","Changing the video title"],ans:1,exp:"Adaptive Bitrate (ABR) automatically detects insufficient bandwidth and reduces quality (e.g. 4K → 480p) to match available speed, eliminating stalls."},
+  {q:"A headless CMS differs from a traditional CMS (like WordPress) because it:",opts:["Has no user interface at all","Delivers content via API to any frontend framework, separated from the display layer","Only works on mobile devices","Is always faster because it has no database"],ans:1,exp:"Headless CMS stores content in a backend and exposes it via REST/GraphQL API — any frontend (React, iOS app, smart TV) can consume it. Traditional CMS couples content and display together."},
+  {q:"Which HTTP status code indicates that a web page was permanently moved to a new URL — important for SEO when restructuring a site?",opts:["200 OK","404 Not Found","301 Moved Permanently","500 Internal Server Error"],ans:2,exp:"301 Moved Permanently tells browsers and search engines the resource has a new permanent URL — search engines transfer PageRank to the new address. Essential for SEO during site migrations."},
+  {q:"What is the key security difference between HTTP and HTTPS?",opts:["HTTPS is faster than HTTP","HTTPS uses TLS encryption, protecting data from interception; HTTP sends data in plain text","HTTPS requires no server","HTTP uses port 443; HTTPS uses port 80"],ans:1,exp:"HTTPS wraps HTTP in TLS (Transport Layer Security). All data exchanged between browser and server is encrypted — passwords, forms, and personal data cannot be intercepted."},
+  {q:"In JavaScript form validation, which Regular Expression correctly validates a standard email address format?",opts:["/^[0-9]+$/","/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/","/^[a-z]+$/","/^.{8,}$/"],ans:1,exp:"The pattern /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/ checks for: non-whitespace/@ chars, then @, then domain, then dot, then extension — the three essential parts of an email address."},
+  {q:"A textarea has maxlength='200' and minlength='20'. The user types 15 characters. What is the correct validation state?",opts:["Valid — minlength is advisory only","Invalid — below minimum length of 20 characters","Valid — maxlength not exceeded","Invalid — must be exactly 20 characters"],ans:1,exp:"The field is invalid. minlength='20' means at least 20 characters are required. With only 15 characters, native browser validation and custom JS should show an error message."},
+  {q:"Which HTML attribute prevents a form from being submitted if an input field is empty, without any JavaScript?",opts:["placeholder","disabled","required","readonly"],ans:2,exp:"The 'required' attribute is an HTML5 built-in validation attribute. The browser automatically blocks form submission and shows a native error tooltip if a required field is empty."}
+];
+let qi=0,score=0,answered=false;
+function loadQ(){
+  const q=Qs[qi];
+  document.getElementById('q-text').textContent=q.q;
+  document.getElementById('qn').textContent=qi+1;
+  document.getElementById('qs').textContent=score;
+  const opts=document.getElementById('q-opts');opts.innerHTML='';
+  const lets=['A','B','C','D'];
+  q.opts.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='q-opt';
+    btn.innerHTML=`<span class="q-lt">${lets[i]}</span>${o}`;
+    btn.onclick=()=>doAnswer(i);
+    opts.appendChild(btn);
+  });
+  document.getElementById('q-fb').className='q-fb';
+  document.getElementById('q-fb').textContent='';
+  document.getElementById('q-next').className='q-next';
+  answered=false;
+}
+function doAnswer(i){
+  if(answered)return;answered=true;
+  const q=Qs[qi];
+  document.querySelectorAll('.q-opt').forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===q.ans)b.classList.add('correct');
+    else if(idx===i)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('q-fb');
+  if(i===q.ans){score++;fb.className='q-fb show-ok';fb.textContent='✓ Correct! '+q.exp;}
+  else{fb.className='q-fb show-no';fb.textContent='✗ '+q.exp;}
+  document.getElementById('qs').textContent=score;
+  const nb=document.getElementById('q-next');
+  nb.className='q-next show';
+  nb.textContent=qi<Qs.length-1?'Next Question →':'View My Score →';
+}
+function nextQ(){
+  qi++;
+  if(qi>=Qs.length){
+    const pct=Math.round(score/Qs.length*100);
+    const col=pct>=80?'var(--green)':pct>=60?'var(--gold)':'var(--red)';
+    const msg=pct>=80?'Excellent! Strong command of all modules.':pct>=60?'Good work — revisit weaker topics.':'Keep studying — review the modules and try again.';
+    document.getElementById('q-card').innerHTML=`<div class="score-scr"><div class="score-big" style="color:${col}">${pct}%</div><div class="score-lbl">${score} / ${Qs.length} Correct</div><div class="score-sub">${msg}</div><button class="q-next show" style="margin-top:24px" onclick="qi=0;score=0;loadQ()">↺ Retake Quiz</button></div>`;
+  } else {
+    loadQ();
+  }
+}
+loadQ();
+</script>
+</body>
+</html>
